@@ -1,0 +1,5 @@
+1:Aleksey::Shichko:fighter
+2:Aleksey::Shomnikov:mage
+3:Nikolay::Mariychenko:thief
+4:Sergey::Petrin:priest
+5:Nikita::Ilminski:djeban

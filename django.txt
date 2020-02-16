@@ -1,0 +1,298 @@
+path():
+  route is a string defining UTL patter to match.
+  this string might include a named variable (in angle brackets), e.g. 'catalog/<id>/'
+
+for models its better to represent selection-list options(e.g. drow down list), 
+  rather than had coding the choices into the website
+
+  fields for models:
+    max_length - states maximum length
+    help_text  ="Enter field documentation" - provides a text label to
+      display to help users
+    default    - value or a callable object
+
+    name         - refer to it in queries and templates
+    verbose_name - display name
+
+    null  - if True, django will store blank values as NULL
+    blank - if True, the field is allowed to be blank in your forms
+
+    choices - a group of choices for this field. If this is provided,
+              the default corresponding form widget will be a select box
+              with these choices instead of the standart text field
+    primary_key - if True, sets the current field as the primary key
+
+    other fiels: https://docs.djangoproject.com/en/2.1/ref/models/fields/#field-options
+    
+  common field types: (must specify = ms)
+    CharField (ms max_length)
+    TextField
+    IntegerField
+    DateField and DateTimeField:
+      auto_now=True to set current date every time the model is saved
+      auto_now_add - set current date only once
+    EmailField 
+    FileField, ImageField (have parameters to define how and where the
+                            uploaded files are stored)
+    AutoField == IntegerField that automatically increments
+    ForeignKey - one-to-many relationship
+    ManyToManyField (on_delete parameter)
+
+    other field types: https://docs.djangoproject.com/en/2.1/ref/models/fields/#field-types
+
+  create objects: object.save or models.objects.create()
+
+  filtering: field_name__match_type
+  other: https://docs.djangoproject.com/en/2.1/ref/models/querysets/#field-lookups
+
+  queries tut: https://docs.djangoproject.com/en/2.1/topics/db/queries/
+
+  examples:
+    def get_absolute_url(self):
+      return reverse('book-detail', args=[str(self.id)])
+
+    LOAN_STATUS = (
+      ('m', 'Maintance'),
+      ('o', 'On loan'),
+      ('a', 'Available'),
+      ('r', 'Reserved'),
+    )
+    status = models.CharField(
+      max_length=1,
+      choices=LOAN_STATUS,
+      default='m',
+      help_text='Book availability',
+    )
+
+  registering models:
+    in admin.py type
+    admine.site.register(Model)
+
+  admin site customization: https://docs.djangoproject.com/en/2.1/ref/contrib/admin/
+  to customize we need to define ModelAdmin class:
+  class AuthorAdmin(admin.ModelAdmin):
+    pass
+  admin.site.register(Author, AuthorAdmin)
+
+  do it all in one step:
+  @admin.register(Book)
+  class BookAdmin(admin.ModelAdmin):
+    pass
+
+  attr inside of class:
+    list_display(tuple) - list of attributes to display:
+      if there's manytomanyfield you could write function and type name
+      short_description attr of function could be used in admin
+    list_filter(tuple) - filtering on side
+    fields(array) - change how fields appear in object creating
+    
+    fieldsets works as follow:
+    fieldsets = (
+      (None, {
+        'fields': ('book', 'imprint', 'id')
+      }),
+      ('Availability', {
+        'fields': ('status', 'due_back')
+      }),
+    )
+
+    add inline children to modify or add:
+    class BooksInstanceInline(admin.TabularInline):
+      model = BookInstance
+
+    class ...():
+      inlines = [BooksInstanceInline]
+    more in https://docs.djangoproject.com/en/dev/ref/contrib/admin/#django.contrib.admin.TabularInline
+
+    STATIC FILES
+    {% load static %} and then relative url.
+    You can append urls into urlpatterns for development and serve
+    staticfiles for production.
+    More in https://docs.djangoproject.com/en/2.1/howto/static-files/
+
+  for class-based views we access an appropriate view function by
+    calling class method as_view()
+  from django.views import generic
+  class BookListView(generic.ListView):
+    model = Book
+  template are called book_list.html
+  and models are accessible throw object_list variable
+
+  parameters:
+    model               - model to show
+    context_object_name - nave of variable
+    queryset            - objects to display
+    template_name       - specify own template name
+
+    paginate_by
+
+  and in template variables are available with pagination:
+    block pagination
+    is_paginated
+    page_obj:
+      page_obj.has_previous
+      page_obj.previous_page_number
+      page_obj.has_next
+      page_obj.next_page_number
+
+  you can override function:
+    def get_queryset(self) 
+    def get_context_data(self, **kwargs):
+      context = super(BookListView, self).get_context_data(**kwargs)
+  more about generic views:
+  https://docs.djangoproject.com/en/2.1/topics/class-based-views/generic-display/
+
+  for detail class-based view
+  in urlpatterns for identify id use <int:pk>
+  if use regular expression in path => use re_path:
+    () - capture the part of the pattern - will be passed as unnamed
+    variable
+    (?P<name>...) - capture the variable with name
+  
+  third parameter to path - dictionary of additional parameters
+  if use same name for extra and captured variables, than only captured
+    will be send
+
+
+  to get object from model in function
+  book = get_object_or_404
+  one property of object var in templates:
+  book.bookinstance_set.all - all objects from one to many relationship
+    it may couse an erro if you dont specify ordering of model
+
+
+
+  advantage of use generic class-based views - it makes all processing
+  and once you learned how to use it, you will spend less time writing
+  code and more time just configuring it
+
+  just like one big class-based shortcut.
+  paginator object:
+  https://docs.djangoproject.com/en/2.1/topics/pagination/#paginator-objects
+
+
+Testing:
+  Django provides 'Client' to simulate a user interacting with view.
+
+  from django.test.utils import setup_test_environment
+    above installs a template renderer which allow us to examine
+  additional attributes, but don't create test database
+
+  from django.test import Client
+  client = Client()
+  django.test.Client arguments:
+    enforce_csrf_checks - True or False
+    HTTP_USER_AGENT
+    json_encoder
+    secure - True or False - emulate HTTPS request
+    
+  methods:
+    get - return response from given url
+    post
+    <other modifications>
+    login
+    force_login - simulate the affect of a user logging into the site
+    logout
+
+  get:
+    extra parameters in get should follow CGI specification
+    follow - follow any redirect
+
+  post:
+    to upload a file use:
+      c = Client()
+      with open('file.doc') as f:
+        c.post("/rand/url/", {'name': 'fred', 'attachment': f})
+    or provide file-like object
+
+  login:
+    creditials argument depends on authentication backend 
+      default - login, password. but  see authenticate() method
+
+    
+    returns True if credintials were accepted and login was successful
+
+  b4 testing login u need to create users:
+    create_user() function will help
+
+
+  response:
+    client
+
+    content(as bytestring)
+    context - get context values using []
+    json - the body of the response parsed as JSON, extra arguments are
+      passed to json.loads()
+
+    request
+    templates - user template.name to get template's file name
+
+    resolver_match - check that correct class based view was rendered
+
+    status_code
+    redirect_chain
+
+    user dictionary syntax on the response object to get HTTP headers
+
+  django integration with selenium = LiveServerTestCase
+
+  asserts: (all starting with self (TestCase))
+    assertEqual
+    assertContains
+    assertQuerysetEqual
+
+  options:
+    --pattern="test_*.py" -- your own pattern for searching tests
+    --failfast -- exit after first failed test
+    --keepdb -- preserbe the test database from being destoyed between
+      runs
+    --noinput -- automatically destroy database on next start
+
+      --parallel (if tests are properly isolated) - run tests in
+        parallel
+
+  exceptions:
+    try ... except block or assertRaises()
+
+  cookies:
+    Client.cookies - SimpleCookie object
+    documentation:
+    https://docs.python.org/3/library/http.cookies.html#module-http.cookies
+
+  good practive for writing tests:
+    separate TestClass for each model or view
+    separate test method for each set of conditions you want to test
+    test method names that describe their function
+
+    run with python-warnings enabled:
+    python -Wa manage.py test
+
+
+
+    DEBUG=False be always
+
+    if authenticating many users in your tests, use anothe password
+      hasher (more faster)
+    PASSWORD_HASHERS = [
+      'django.contrib.auth.hashers.MD5PasswordHasher',
+    ]
+
+
+  overview:
+  https://docs.djangoproject.com/en/2.2/topics/testing/overview/
+
+
+
+
+
+  class TestCase:
+    methods:
+      setUp(self): -- what done b4 testing
+
+  
+  templates:
+    {{ block.super }} to add content of parent template
+
+
+хочешь что-то сделать по ссш, как варик - законнектить систему, сделать
+над ней все операции, и анмаунтить её.
