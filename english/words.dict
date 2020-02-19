@@ -14,7 +14,9 @@ literacy - граммотность
 indefinite - неопределённый
 affirmative - утвердительный
 syllable - слог
-[speaking] stress - ударение
+
+[speaking] 
+stress - ударение
 
 [Colors]
 tan, beige - бежевый, загарелый
@@ -56,6 +58,13 @@ landlord - арендодатель
 thirsty - жаждущий
 asleep - спящий
 
+[Engine]
+gasoline - бензин
+motorway - автомагистраль
+motorcar - автомобиль
+lane - полоса дороги
+fuel - топливо
+
 [Actions]
 sneezed - чихнуть
 signed - подписал
@@ -68,6 +77,20 @@ rant - декламировать
 reward - награждать
 grin - оскал \ усмешка
 mend - чинить
+adjust - регулировать
+
+[Nouns]
+guidance - руководство
+luxury - роскошь
+exhaust - истощение
+feature - особенность
+aerial - антенна
+
+[Articles]
+since - поскольку
+
+[Adverbs]
+direcyly - непосредственно
 
 [Animals]
 squirrels - белочки
