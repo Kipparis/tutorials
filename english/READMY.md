@@ -279,45 +279,65 @@ _Did_ Ann _come_ as six? $rarr; Yes, she did.
 + _ago_ means "in the past." It follows specific lengths of time (e.g.
   _two minutes_ + ago, _five years_ + ago).  
 
-### Irregular verbs  
+### Irregular verbs <!-- {{{ -->
 _Some verbs do not have **ed** forms. The past form is irregular._  
-| Present | Past    |
-| ---     | ---     |
-| come    | came    |
-| do      | did     |
-| eat     | ate     |
-| get     | got     |
-| go      | went    |
-| have    | had     |
-| put     | put     |
-| see     | saw     |
-| sit     | sat     |
-| sleep   | slept   |
-| stand   | stood   |
-| write   | wrote   |
-| bring   | brought |
-| buy     | bought  |
-| catch   | caught  |
-| drink   | drank   |
-| drive   | drove   |
-| read    | read    |
-| ride    | rode    |
-| run     | ran     |
-| teach   | taught  |
-| think   | thought |
-| break   | broke   |
-| fly     | flew    |
-| hear    | heard   |
-| leave   | left    |
-| meet    | met     |
-| pay     | paid    |
-| ring    | rang    |
-| send    | sent    |
-| sing    | sang    |
-| speak   | spoke   |
-| take    | took    |
-| wake up | woke up |
-
+| Present    | Past       |
+| ---        | ---        |
+| come       | came       |
+| do         | did        |
+| eat        | ate        |
+| get        | got        |
+| go         | went       |
+| have       | had        |
+| put        | put        |
+| see        | saw        |
+| sit        | sat        |
+| sleep      | slept      |
+| stand      | stood      |
+| write      | wrote      |
+| bring      | brought    |
+| buy        | bought     |
+| catch      | caught     |
+| drink      | drank      |
+| drive      | drove      |
+| read       | read       |
+| ride       | rode       |
+| run        | ran        |
+| teach      | taught     |
+| think      | thought    |
+| break      | broke      |
+| fly        | flew       |
+| hear       | heard      |
+| leave      | left       |
+| meet       | met        |
+| pay        | paid       |
+| ring       | rang       |
+| send       | sent       |
+| sing       | sang       |
+| speak      | spoke      |
+| take       | took       |
+| wake up    | woke up    |
+| begin      | began      |
+| find       | found      |
+| lose       | lost       |
+| hang       | hung       |
+| say        | said       |
+| sell       | sold       |
+| steal      | stole      |
+| tell       | told       |
+| tear       | tore       |
+| wear       | wore       |
+| cost       | cost       |
+| cut        | cut        |
+| forget     | forgot     |
+| give       | gave       |
+| hit        | hit        |
+| hurt       | hurt       |
+| lend       | lent       |
+| make       | made       |
+| spend      | spent      |
+| understand | understood |
+<!-- }}}  -->
 ### Negative
 (pronoun / noun) + **_did_** **_not_** + main verb\*(simple form).  
 I **_did_** **_not_** **_walk_** to school yesterday.  
@@ -466,6 +486,34 @@ used in everyday spoken English.
 _Incorrect: What means "pretty"?_  
 <!-- }}} -->
 # Spell right <!-- {{{ -->
+## Expressing Ability <!-- {{{ -->
+### Using can  
+I have some money. I **_can buy_** a book. -- **_Can_** expresses
+ability and possibility.  
+The simmple form of the main verb follows **_can_**.  
+Yoko can **_speak_** English.  
+Negative:  
+**_can_** + **_not_** = **_can not_** or **_cannot_** or **_can't_**  
+### Using can: questions  
+Form: (question words) + _can_ + subject + main verb  
+**_Can you speak_** Arabic $rarr; **_Yes, I can._**  
+**_Where can I buy_** a hammer? $rarr; **_At a hardware store._**  
+### Using _know how to_  
+(a) I can swim.  
+(b) I **_know how to swim._**  
+(a) and (b) have basically the same meaning. **_Know how to_** expresses
+ability.  
+Q: **_Do_** you **_know how to cook_**?  
+### Using _could_: past of _can_  
+**_could_** = the past form of **_can_**.  
+I am in Hawaii. I can go to the beach every day.  
+I was in Hawaii **_last month._** I **_could go_** to the beach every
+day when I was there.  
+Negative: **_could_** + **_not_** = **_couldn't_**  
+I **_couldn't go_** to the movie **_last night_**. I had to study.  
+Question: **_could_** + _subject_ + _main verb_  
+**_Could_** you speak English before you came here?  
+<!-- }}} -->
 ## Time <!-- {{{ -->
 ### Using _it_ to talk about time.
 What day is it? -- It's Monday.  
@@ -566,7 +614,7 @@ A: I do fine, thank you. And you?
 <!-- }}} -->
 <!-- }}} -->
 # Combinations of tense and words <!-- {{{ -->
-## Using _a couple of_ or _a few_ with _ago_(past) and _in_(future)  
+## Using _a couple of_ or _a few_ with _ago_(past) and _in_(future) <!-- {{{  -->
 Numbers are often used in time expressions with **_ago_** and **_in_**.  
 + Sam arrived here **_one_**(or: **_a_**) _year ago_.  
 + Jack is going to be here _in **two** minutes_.  
@@ -581,7 +629,8 @@ I began college last year. I'm going to graduate _in **two more**
 years_. My sister is almost finished with her education. She's going to
 graduate _in **a few more** months_. She's going to graduate _in **three
 more** months_.
-## Using today, tonight, and this + morning, afternoon, evening, week, month, year
+<!-- }}} -->
+## Using today, tonight, this + morning, week, month, etc <!-- {{{ -->
 Present: Right now it's 10 a.m. We are in our English class. We **_are
 studying_** English **_this morning._**  
 Past: Right now it's 10 a.m. Nancy left home at 9 a.m. to go downtown.
@@ -589,4 +638,27 @@ She isn't at home right now. Nancy **_went_** downtown **_this morning_**.
 Future: Right now it's 10 a.m. Class ends at 11 a.m. After class today,
 I'm going to go to the post office. I'**_m going to go_** to the post
 office **_this morning._**
+<!-- }}} -->
+## Habitual present with time clauses and **_if_**-clauses <!-- {{{ -->
+Future:  
+After Ann **_gets_** to work today, she **_is going to have_** a cup of coffee. 
+-- expresses a specific activity in the future. The simple present is 
+used in the time clause. _Be going to_ is used in the main clause.  
+Habitual present:  
+After Ann **_gets_** to work (every day), she always **_has_** a cup of
+coffee. -- expresses havitual activities, so the simple present is used
+in both the time clause and the main clause.  
+<!-- }}} -->
+<!-- }}} -->
+# Combinations of words <!-- {{{ -->
+## Using very and too + adjective <!-- {{{ -->
+**_Very_** and **_too_** come in front of adjectives.  
+**_Very_** and **_too_** do NOT have the same meaning.  
++ _very heavy_ = It is difficult but possible for to lift the box.  
++  _too heavy_ = It is impossible to lift it.  
+The box is **_very_** _heavy_, but Tom **_can_** _lift_ it.  
+The box is **_too_** _heavy_. Bob **_can't_** _lift_ it.  
+In the speaker's mind, the use of **_too_** implies a negative result.  
+The  coffee it **_too_** hot. - result: I can't drink it.  
+<!-- }}} -->
 <!-- }}} -->

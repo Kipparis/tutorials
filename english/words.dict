@@ -34,6 +34,7 @@ slacks - широкие брюки
 jewelry - драгоценности 
 neclace - ожерелье
 shoe store - обувной магазин
+sleeve - рукав
 
 [Human parts]
 ear - ухо
@@ -64,6 +65,8 @@ motorway - автомагистраль
 motorcar - автомобиль
 lane - полоса дороги
 fuel - топливо
+tire - шина
+flat tire - спущеннео колесо
 
 [Actions]
 sneezed - чихнуть
@@ -78,6 +81,16 @@ reward - награждать
 grin - оскал \ усмешка
 mend - чинить
 adjust - регулировать
+observe - наблюдать
+warn - предупреждать
+tear - рвать
+whistle - свистеть
+ski - ходить на лыжах
+sew - сшить
+wiggle - покачивать
+
+[Quantity]
+dozen - дюжина
 
 [Nouns]
 guidance - руководство
@@ -85,12 +98,17 @@ luxury - роскошь
 exhaust - истощение
 feature - особенность
 aerial - антенна
+buzzer - звонок
+valve - клапан
 
 [Articles]
 since - поскольку
 
 [Adverbs]
 direcyly - непосредственно
+
+[Adjectives]
+impassable - непроходимый
 
 [Animals]
 squirrels - белочки
@@ -114,6 +132,7 @@ valley - долина
 pencil sharpener - точилка
 tube - тюбик 
 suitcases - чемоданы
+nail - гвозь
 
 [Kitchen]
 bowl - миска
@@ -139,6 +158,7 @@ salt shaker - солонка
 tray - поднос
 can - банка
 jar - баночка
+chopsticks - палочки для еды
 
 [Food]
 flour - мука
