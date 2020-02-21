@@ -1,4 +1,7 @@
 tmux:{
+    https://www.bugsnag.com/blog/tmux-and-vim
+    good source file:
+    https://github.com/Starefossen/dotfiles/blob/master/.tmux.conf
   --b4 all commands <C-b>--
   
   pane {
