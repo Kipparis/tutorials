@@ -5,14 +5,14 @@
 "ut" - remove any tags of the selection  
 
 ### preview
-__programs to preview__:
-	+ lynx, elinks - html;  
-	+ highlight - text/code;  
-	+ img2txt - for images;  
-	+ atool - for archives;  
-	+ pdftotext, mutool - for PDFs;  
-	+ mediainfo - video and audio files;  
-%rangerdir/data/scope.sh - contains detail info.
+__programs to preview__:  
++ lynx, elinks - html;  
++ highlight - text/code;  
++ img2txt - for images;  
++ atool - for archives;  
++ pdftotext, mutool - for PDFs;  
++ mediainfo - video and audio files;  
+`%rangerdir/data/scope.sh` - contains detail info.  
 
 ### selection
 Mark files is done by pressing <Space>, v, etc. __Mrk__ symbol
