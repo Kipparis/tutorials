@@ -6,7 +6,6 @@ _book: Basic English Grammas. second edition._
 ## Prepositions.
 __Preposition phrase__ - a preposition + a noun. _(at the library)_  
 
-
 ## Talk to, talk on
 __talk to__ (someone)  
 __talk on__ the phone  
@@ -170,6 +169,39 @@ __Who__ asks about people.
 _Q_ __Would__ you __like__ some tea? -- In a question, would comes before
 the subject.  
 _A_ Yes, I __would__. (I would like some tea.)  
+### Polite questions: may I, could I, and can I <!-- {{{ -->
+**_May I borrow_** your pen?  
+**_Could I borrow_** your pen?  
+**_Can I borrow_** your pen?  
+This three have the same meaning.  
+_May I **please** borrow_ your pen? -- **_Please_** is often used in
+polite questions.  
+Typical responses:  
++ **_Yes, of course._**  
++ **_Of course._**  
++ **_Certainly._**  
++ **_Sure._**\*  
++ **_No problem._**\*  
+\* informal, it's typically used between friends and family members.  
+Typical conversation:  
+A: _May I please borrow your pen?_  
+B: **_Yes, of course_**. _Here it is._  
+A: _Thank your. | Thanks._  
+<!-- }}} -->
+### Polite questions: could you and would you <!-- {{{ -->
+**_Could you (please) open_** the door?  
+**_Would you (please) open_** the door?  
+This two have the same meaning: I want you to open the door. I am
+politely asking you to open the door.  
+Typical responses:  
++ **_Yes, of course._**  
++ **_Certainly._**  
++ **_I'd be glad to._**  
++ **_I'd be happy to._**  
++ **_Sure._**  
++ **_No problem._**  
+
+<!-- }}} -->
 <!-- }}} -->
 
 ## Progressive form.
@@ -184,6 +216,7 @@ They come in front of nouns.
 ## Nonaction verbs  
 want, hear, undestand, need, see, know, like, smell, believe, love,
 taste, think (meaning believe), hate.
+
 
 # Tenses <!-- {{{ -->
 ## Simple Present <!-- {{{ -->
@@ -418,7 +451,7 @@ not double w,x, and y)_.
 + fix -> fixing  
 <!-- }}} -->
 # Meaning <!-- {{{ -->
-## See, look at, watch, hear, and listen to 
+## See, look at, watch, hear, and listen to <!-- {{{ -->
 I __see__ many things in this room. -- __see__ = a nonaction verb. Seeing
 happens because my eyes are open. Seeing is a physical reaction, not a
 planned action.  
@@ -433,16 +466,19 @@ unplanned act. It expresses a physical reaction
 I'm in my apartment. I'm studying. I have a tape recorder. I __am
 listening to__ music. I like to listen to music when I study. --
 __listen (to)__ = an action verb. Listening happens for a purpose.  
-## Need and want + a noun or an infinitive 
+<!-- }}} -->
+## Need and want + a noun or an infinitive <!-- {{{ -->
 We __need food__.  
 I __want a sandwich__.  
 __Need__ is stronger than __want__. __Need__ gives the idea that
 something is very important.   
-## Would like  
+<!-- }}} -->
+## Would like <!-- {{{ -->
 I'm thirsty. I __want__ a glass of water.  
 I'm thirsty. I __would like__ a glass of water.  
 I _would like_ is a nice way of saying _I want_.
-## _Think about_ and _thing that_
+<!-- }}} -->
+## _Think about_ and _thing that_ <!-- {{{ -->
 I __think about__ my family every day. -- Ideas about my family are in my
 mind every day.  
 I __am thinking about__ grammar right now. -- My mind is busy now. Ideas
@@ -457,7 +493,8 @@ The _present progressive_ is:
 I __think that__ Mike is a nice person.  
 I __think__ Mike is a nice person. -- people often omit __that__ after
 __think__, especially in speaking.  
-## There + be  
+<!-- }}} -->
+## There + be <!-- {{{ -->
 __There is a bird__ in the tree.  
 __There + be__ is used to say that something exists in a particular
 location.  
@@ -465,14 +502,17 @@ Q: __Is there any milk__ in the refrigerator?
 A: Yes, there is. No, there isn't.  
 Asking Q with how many:
 __How many__ chapters __are there__ in this book?  
-## What time, when
+<!-- }}} -->
+## What time, when <!-- {{{ -->
 **_What 09:58 usually asks specifically for time on a clock._**  
 The answer to **_when_** can be various expressions of time.  
-## Using THIS and THAT.
+<!-- }}} -->
+## Using THIS and THAT. <!-- {{{ -->
 _this book_ = the book is near me.  
 _that book_ = the book is not near me.  
 respectively - these and those.  
-## What, who  
+<!-- }}} -->
+## What, who <!-- {{{ -->
 **_What_** is used in a question when you want to dinf out about a
 thing.  
 (c) **_Who_** is used when you want to find out about a person.  
@@ -480,10 +520,21 @@ thing.
 (c) and (d) have the same meaning. **_who_** is usually used in everyday
 English. **_whom_** is used in very formal English. **_Whom_** is rarely
 used in everyday spoken English.  
-## Asking about the meaning of a word  
+<!-- }}} -->
+## Asking about the meaning of a word <!-- {{{ -->
 **_What does_** "pretty" **_mean_**?  
 **_What is the meaning of_** "pretty"?
 _Incorrect: What means "pretty"?_  
+<!-- }}} -->
+## using two, too, and to <!-- {{{ -->
+**_Two, too,_** and **_to_** have the same pronunciation.  
++ I have **_two_** children. -- **_two_** = a number  
++ Timmy is **_too_** young. He can't read -- **_too young_** = **_not
+  old enough_**  
++ Ann saw the movie. I saw the movie **_too_** -- **_too = also_**  
++ I talked **_to_** Jim. -- **_to_** = a preposition  
++ I want **_to_** watch television. -- **_to_** = part of an infinitive.  
+<!-- }}} -->
 <!-- }}} -->
 # Spell right <!-- {{{ -->
 ## Expressing Ability <!-- {{{ -->
@@ -597,6 +648,12 @@ The adverb **_maybe_** (one words) means "possibly".
 **_Maybe_** Abdullah will be here.  
 Abdullah **_may be_** here tomorrow.  
 <!-- }}} -->
+### Enough <!-- {{{ -->
++ Follows an adjective -- Peggy can't go to school. She is not **_old
+  enough_**  
++ Comes in front of a noun -- I can't buy this book. I don't have
+  **_anough money_**  
+<!-- }}} -->
 <!-- }}} -->
 ## Questions <!-- {{{ -->
 Q: How are you today?  
@@ -611,6 +668,9 @@ A: I do fine, thank you. And you?
 | voiceless    | help        | helped      | _help/t/_     |
 | voiced       | rub         | rubbed      | _rub/d/_      |
 | _-d_ or _-t_ | need        | needed      | _need/ed/_    |
+<!-- }}} -->
+## Single words <!-- {{{ -->
+**_Enough_** is pronounced "enuf."  
 <!-- }}} -->
 <!-- }}} -->
 # Combinations of tense and words <!-- {{{ -->
@@ -661,4 +721,61 @@ The box is **_too_** _heavy_. Bob **_can't_** _lift_ it.
 In the speaker's mind, the use of **_too_** implies a negative result.  
 The  coffee it **_too_** hot. - result: I can't drink it.  
 <!-- }}} -->
+## Using too many and too much + noun <!-- {{{ -->
+**_Too_** is frequently used with **_many_** and **_much_**.  
+I ate **_too many sandwiches_** -- **_Too many_** is used in front of count nouns.  
+I ate **_too much food_** -- **_Too much_** is used in fron of noncount
+nouns.  
+<!-- }}} -->
+## Using too + adjective + infinitive <!-- {{{ -->
+(a) Susie can't go to school because she is too young.  
+(b) Susie is **_too young to go_** to school.  
+_(a) and (b) have the same meaning_.  
+<!-- }}} -->
+## Using too + adjective + for(someone) + infinitive <!-- {{{ -->
+(a) Bob can't lift the box because it is too heavy.  
+(b) The box is **_too heavy for Bob to lift_**.  
+_(a) and (b) have the same meaning._  
+<!-- }}} -->
+## Using adjective + enough <!-- {{{ -->
+(a) Peggy can't go to school. She is too young.  
+(b) Peggy can't go to school. She is not **_old enough_**.  
+(a) and (b) give the same meaning. Notice: **_enough_** follows and
+adjective.  
+<!-- }}} -->
+## Using enough + noun and more + noun <!-- {{{ -->
+I can't buy this book. I need **_more money_**. -- **_more_** =
+additional.  
+I can't buy this book. I don't have **_enough money_**. -- **_enough_**
+= sufficient  
+<!-- }}} -->
+## using enough + infinitive <!-- {{{ -->
+(a) Peggy can go to school because she is old enough.  
+(b) Peggy is **_old_** **_enough_** **_to go_** to school.  
+(a) and (b) have the meaning.  
+<!-- }}} -->
+## Using be able to <!-- {{{ -->
+I **_am able to touch_** my toes.  
+I **_can touch_** my toes.  
+I **_will be able to go_** to shopping tomorrow.  
+I **_can go_** shopping tomorrow.  
+I **_wasn't able to finish_** my homework last night.  
+I **_couldn't finish_** my homework last night.  
+They have the same meaning to by two.  
+<!-- }}} -->
+<!-- }}} -->
+## Imperative sentences <!-- {{{ -->
+An imperative sentence uses the simple form of a verb (close, sit, be,
+etc).  
+> "**_Close_** the door, Jimmy. It's cold outside."  
+> "Okay, Mom."  
+  
+**_Close the door_** is an _imperative sentence._ The sentence means,
+"Jimmy, I want you to close the door. I am telling you to close the
+door."  
+Negative: **_don't_** + _simple form of a verb_  
+Imperative sentences give orders, directions, and advice. With the
+addition of **_please_**, as it (i), imperative sentences are used to
+make polite requests.  
+(i) **_Please close_** the door.  
 <!-- }}} -->
