@@ -79,15 +79,17 @@ Use __a few__ with COUNT NOUNS.
 Use __a little__ with NONCOUNT NOUNS.  
 
 ### Common noncount nouns
-| advice      | mail    | bread  | pepper |  
-| furniture   | money   | cheese | rice   |  
-| help        | music   | coffee | salt   |  
-| homework    | peace   | food   | soup   |  
-| information | fraffic | fruit  | sugar  |  
-| jewelry     | weather | meat   | tea    |  
-| luck        | work    | milk   | water  |  
+|             |         |        |        |
+| ---         | ---     | ---    | ---    |
+| advice      | mail    | bread  | pepper |
+| furniture   | money   | cheese | rice   |
+| help        | music   | coffee | salt   |
+| homework    | peace   | food   | soup   |
+| information | fraffic | fruit  | sugar  |
+| jewelry     | weather | meat   | tea    |
+| luck        | work    | milk   | water  |
   
-## Measurements with noncount nouns  
+## Measurements with noncount nouns
 I'd like __some__ water.  
 I'd like __a glass of__ water.  
 I'd like __a cup of__ coffee.  
@@ -109,12 +111,12 @@ _something/someone_ or _anything/anyone_.
 (a) and (b) have the _same_ meaning.  
 _Anything_ is used when the verb is negative.  
 _Nothing_ is used when the verb is affirmative.  
-(c) I **_didn't say anything_**.  
+\(c) I **_didn't say anything_**.  
 (d) I **_said nothing_**.  
-(c) and (d) have the same meaning.  
+\(c) and (d) have the same meaning.  
 
 # Articles <!-- {{{ -->
-## Using AN vs. A  
+## Using AN vs. A
 __A__ and __an__ are used in front of singular count nouns.  
 Use __an__ in front of words that begin with the vowels.  
 In some words that begin with "h", the "h" is not pronounced. Instead,
@@ -147,16 +149,19 @@ Mike has **a** pen and **a** pencil.
 ## Using \_(NO ARTICLE) to make generalizations  
 \_ Apples are good for you. -- no article is used to make
 generalizations with:  
+
 + plural count nouns  
 + noncount nouns  
 Tom and Ann ate some fruit. **The** apples were very good, but **the**
 bananas were to ripe. - here is something specific  
 
 ## Using **_SOME_** and **_ANY_**
-| Statement | Negative | Question |
-| ---       | ---      | ---      |
-| Alice has **some money** | Alice doesn't have **any money** | Does Alice have **any money**?  Does Alice have **some money**?| 
-| Use _some_ in a statement | Use _any_ in a negative sentence. | Use either _some_ or _any_ in a question |  
++ Alice has **some money** - use **_some_** in a statement  
++ Alice doesn't have **any money** - use **_any_** in a negative
+  sentence.  
++ Does Alice have **any money**? Does Alice have **some money**? - use
+  either **_some_** or **_any_** in a question  
+
 I don't have **any money**. (noncount noun)  
 I don't have **any matches**. (plural count noun)   
 _Any_ is used with noncount nouns and plural count nouns.  
@@ -177,6 +182,7 @@ This three have the same meaning.
 _May I **please** borrow_ your pen? -- **_Please_** is often used in
 polite questions.  
 Typical responses:  
+
 + **_Yes, of course._**  
 + **_Of course._**  
 + **_Certainly._**  
@@ -194,6 +200,7 @@ A: _Thank your. | Thanks._
 This two have the same meaning: I want you to open the door. I am
 politely asking you to open the door.  
 Typical responses:  
+
 + **_Yes, of course._**  
 + **_Certainly._**  
 + **_I'd be glad to._**  
@@ -237,8 +244,10 @@ __What time__ do you go to class?
 ### Using frequency adverbs.  
 Subject + frequency adverb + present verb.  
 with __be__:  
+
 + Tom + is + "freq. adverbs" + late for class.  
 + Tom + "freq. adverbs" + __comes__ late.  
+
 Frequency adverbs come before all simple present verbs except be.
 <!-- }}} -->
 ## Present Progressive <!-- {{{ -->
@@ -258,19 +267,22 @@ __Where is__ Mary __sleeping__?
 <!-- }}} -->
 ## Past <!-- {{{ -->
 ### Using be
-| Present time                 | Past time                         |  
-| ---                          | ---                               |  
-| I **am** in class **today**. | I **was** in class **yesterday**. |  
+| Present time                 | Past time                         |
+| ---                          | ---                               |
+| I **am** in class **today**. | I **was** in class **yesterday**. |
+  
 Singular - **was**  
 Plural (and _you_ in all forms) - **were**  
 I **was not** in class yesterday.  
 They **weren't** at home last night.  
-| Present      | Past              |  
-| ---          | ---               |  
-| today        | yesterday         |  
-| this morning | yesterday morning |  
-| tonight      | last night        |  
-| this week    | last week         |  
+
+| Present      | Past              |
+| ---          | ---               |
+| today        | yesterday         |
+| this morning | yesterday morning |
+| tonight      | last night        |
+| this week    | last week         |
+
 Questions:  
 Yes/no que: _(be) + (subject)_  
 **Were** **you** in class yesterday? $rarr; **Yes, I was.** (I was in
@@ -297,9 +309,11 @@ do not change **_-y_** to **_-i_**. play $rarr; played
 ### Simple past tense: using where, when, what time, and why
 _Did_ you _go_ downtown? $rarr; yes, I did. / No, I didn't.  
 **_Where_** _did_ you _go_? $rarr; **_Downtown_**  
+
 ---  
 _Did_ you _run_ because you were late? $rarr; Yes, I did  
 **_Why_** _did_ you _run?_ $rarr; **_Because I was late_**.  
+
 ---  
 _Did_ Ann _come_ as six? $rarr; Yes, she did.  
 **_When/What time_** did Ann come? $rarr; **_At six._**  
@@ -314,6 +328,7 @@ _Did_ Ann _come_ as six? $rarr; Yes, she did.
 
 ### Irregular verbs <!-- {{{ -->
 _Some verbs do not have **ed** forms. The past form is irregular._  
+
 | Present    | Past       |
 | ---        | ---        |
 | come       | came       |
@@ -370,12 +385,24 @@ _Some verbs do not have **ed** forms. The past form is irregular._
 | make       | made       |
 | spend      | spent      |
 | understand | understood |
+| blow       | blew       |
+| draw       | drew       |
+| fall       | fell       |
+| feel       | felt       |
+| grow       | grew       |
+| keep       | kept       |
+| know       | knew       |
+| swim       | swam       |
+| throw      | threw      |
+| win        | won        |
+
 <!-- }}}  -->
 ### Negative
 (pronoun / noun) + **_did_** **_not_** + main verb\*(simple form).  
 I **_did_** **_not_** **_walk_** to school yesterday.  
 Notice that the simple form of the main virb is used with **_did not_**.  
 **_did_** is not used when the main verb is **_be_**.:  
+
 + incorrect: Joe _didn't_ be here yesterday.  
 + correct: Joe _wasn't_ here yesterday.  
 
@@ -390,13 +417,17 @@ _I ate breakfast._ = main clause -- complete sentece
 _**before** I went to class_ = time clause -- incomplete sentence. It
 must be connected to a main clause.  
 A time clause can begin with **_before_** or **_after_**:  
+
 + **_before_** + subject + verb = a time clause  
 + **_after_** + subject + verb = a time clause  
+ 
 We took a walk _**after** we finished our work_.  
 _**After** we finished our work,_ we took a walk.  
 **_Before_** and **_after_** don't always introduce a time clause.  
+
 + We took a walk _after the movie._  
 + I had a cup of coffee _before class._  
+
 _**When** the rain stopped,_ we took a walk -- **_When_** can introduce a time clause.
 
 
@@ -446,9 +477,10 @@ consonant + __*e*__ -> drop the __-e__ and add __-ing__.
 smile -> smiling  
 one vowel + one consonant -> double the consonant and add __-ing__ _(do
 not double w,x, and y)_.  
-+ sit -> sitting   
-+ snow -> snowing  
-+ fix -> fixing  
+
++ sit $rarr; sitting   
++ snow $rarr; snowing  
++ fix $rarr; fixing  
 <!-- }}} -->
 # Meaning <!-- {{{ -->
 ## See, look at, watch, hear, and listen to <!-- {{{ -->
@@ -488,8 +520,10 @@ that Sue is lazy.
 People use __think that__ when they want to say (to state) their
 beliefs.  
 The _present progressive_ is:  
+
 + often used with __think about__  
 + almost never used with __think that__  
+
 I __think that__ Mike is a nice person.  
 I __think__ Mike is a nice person. -- people often omit __that__ after
 __think__, especially in speaking.  
@@ -517,7 +551,7 @@ respectively - these and those.
 thing.  
 (c) **_Who_** is used when you want to find out about a person.  
 (d) **_Whom_** did they see? $rarr; **_Jim._** _(They saw Jim.)_  
-(c) and (d) have the same meaning. **_who_** is usually used in everyday
+\(c) and (d) have the same meaning. **_who_** is usually used in everyday
 English. **_whom_** is used in very formal English. **_Whom_** is rarely
 used in everyday spoken English.  
 <!-- }}} -->
@@ -528,6 +562,7 @@ _Incorrect: What means "pretty"?_
 <!-- }}} -->
 ## using two, too, and to <!-- {{{ -->
 **_Two, too,_** and **_to_** have the same pronunciation.  
+
 + I have **_two_** children. -- **_two_** = a number  
 + Timmy is **_too_** young. He can't read -- **_too young_** = **_not
   old enough_**  
@@ -575,11 +610,13 @@ __at__ + a specific time on the clock; __at__ + night
 We have class __at__ one o'clock.  
 We sleep __at__ night.  
 __in__ + :  
+
 + cpecific month. My birthday is __in__ October.  
 + specific year. I was born __in__ 1960.  
 + the morning.
 + the afternoon.  
 + the evening.  
+
 __on__ + a specific day of the week.  
 __on__ + a specific date.
 I have class __on__ Monday.  
@@ -597,18 +634,40 @@ __How's the weather__ in Moscow in the summer?
 ## Location <!-- {{{ -->
 ### Prepositions of location  
 My book is __on__ my desk.  
+
 + on = a preposition  
 + my desk = object of the preposition  
 + on my desk = prepositional phrase  
+
 Tom lives __in__ _the United States_ .  
+
 + __in__ a country and __in__ a city  
+    * _bed_, _class_, _jailprison_, _hospital_  
+    * rooms  
+    _in the kitchen_, _in the classroom_, _in the hall_, _in my
+    bedroom_, _etc_.  
+    * cities, states/provinces, contries, continents  
+    _in Mexica City_, _in Florida_, _in Italy_, _in Asia_, _etc_.
 + __on__ a streen, avenue, road, etc  
 + __at__ an adress  
+    * an adress  
+    * _home_, _work_, _school_  
+    * locations in city:  
+    _At the post office_, _at the bank_, _at the library_, _ at the
+    bookstore_  
+
+A speaker uses **_in_** with a building only when it is important to say
+the someone is inside, not outside, the building. Usually a speaker uses
+**_at_** with a building. _in the bank_ = inside the bank building.  
+
+Note: in the hospital (American English), in hospital (British English)  
+
 The man is __in back of__ the bus. -- man is outside and begind the bus.  
 The man is __in the back of__ the bus. -- man is inside.  
 <!-- }}} -->
 ## Activities <!-- {{{ -->
 **_What_** + _a formt of **do**_ is used to ask about activities  
+
 + _What **do** you **do** every_ day? $rarr; I _work_ every day.  
 + _What **are**_ you **_doing_** right now? $rarr; I'm _studying
   English._  
@@ -625,17 +684,20 @@ The simple present (not **_will_** or **_be going to_**) is used in an _if_-clau
 + I arrive _in_ a country or _in_ a city  
 + I arrive _at_ a particular place (a building, an airport, a house, an
   apartment, a party, etc.)  
+
 **_Arrive_** is followed by either _in_ or _at_. **_Arrive_** is not
 followed by _to_.  
 <!-- }}} -->
 ### May/ might vs. will <!-- {{{ -->
 **_May_** + _verb_(simple form) expresses a possibility in the future,
 as in (a), or a present possibility, as in (b).  
+
 + (a) It _**may rain** tomorrow._  
 + (b) Anita **_may be_** at home _now._  
 **_Might_** has the same meaning as **_may._**  
 + It **_might rain_** _tomorrow._  
 + Anita **_might be_** a home _now_.  
+
 Use **_will_** when you sure about action in future.  
 Use **_may/might_** to say, "I don't know is it will really happen".  
 **_May_** and **_might_** are not used with **_will_**.  
@@ -658,6 +720,7 @@ Abdullah **_may be_** here tomorrow.
 ## Questions <!-- {{{ -->
 Q: How are you today?  
 A: I do fine, thank you. And you?  
+
 ---  
 <!-- }}} -->
 <!-- }}} -->
@@ -676,8 +739,10 @@ A: I do fine, thank you. And you?
 # Combinations of tense and words <!-- {{{ -->
 ## Using _a couple of_ or _a few_ with _ago_(past) and _in_(future) <!-- {{{  -->
 Numbers are often used in time expressions with **_ago_** and **_in_**.  
+
 + Sam arrived here **_one_**(or: **_a_**) _year ago_.  
 + Jack is going to be here _in **two** minutes_.  
+
 I saw Carlos **_a couple of_** _months ago_. - **_A couple of_** menas
 "two." _A couple of months ago_ = two months ago.  
 I go a letter from Gina _**a few** weeks ago_.  - **_A few_** means "a
@@ -714,8 +779,10 @@ in both the time clause and the main clause.
 ## Using very and too + adjective <!-- {{{ -->
 **_Very_** and **_too_** come in front of adjectives.  
 **_Very_** and **_too_** do NOT have the same meaning.  
+
 + _very heavy_ = It is difficult but possible for to lift the box.  
 +  _too heavy_ = It is impossible to lift it.  
+
 The box is **_very_** _heavy_, but Tom **_can_** _lift_ it.  
 The box is **_too_** _heavy_. Bob **_can't_** _lift_ it.  
 In the speaker's mind, the use of **_too_** implies a negative result.  
@@ -778,4 +845,49 @@ Imperative sentences give orders, directions, and advice. With the
 addition of **_please_**, as it (i), imperative sentences are used to
 make polite requests.  
 (i) **_Please close_** the door.  
+<!-- }}} -->
+## Modifying nouns with adjectives and nouns <!-- {{{ -->
++ Adjectives can modify nouns  
+    I bought an **_expensive_** book.  
++ Nouns can modify other nouns  
+    I bought a **_grammar_** book.  
++ A noun that is used as an adjective is always in its singular form  
+    He works at a **_shoe_** _store_.  
++ Both an adjective and a noun can modify a noun.  
+    I bought an **_expensive_** **_grammar_** _book_.  
+<!-- }}} -->
+## Word order of adjectives <!-- {{{ -->
++ a **_large red_** car  
+    two adjectives (_large_ and _red_) modify a noun. An adjective
+    describing **_size_** comes before **_color_**.  
++ a **_beatiful young_** woman  
++ a **_beautiful red_** car  
++ a **_beautiful Greek_** island  
+    The adjective _beautiful_ expresses an opinion. Opinion adjectives
+    usually come before all other adjectives.  
+
+Opinion ajdectives:  
+
+|           |          |             |
+| ---       | ---      | ---         |
+| dangerous | favorite | important   |
+| difficult | good     | interesting |
+| dirty     | happy    | strong      |
+| expensive | honest   | wonderful   |
+
+Usual word order of adjectives:  
+
++ **opinion**  
+    _beautiful_, _delicious_, _kind_  
++ **size**  
+    _large_, _tall_, _little_  
++ **age**  
+    _young_, _old_, _middle-aged_  
++ **color**  
+    _red_, _blue_, _black_  
++ **nationality**  
+    _Greek_, _Chinese_, _Mexican_  
++ **material**  
+    _metal_, _glass_, _plastic_  
+
 <!-- }}} -->

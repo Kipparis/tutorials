@@ -36,6 +36,9 @@ neclace - ожерелье
 shoe store - обувной магазин
 sleeve - рукав
 
+[Feature]
+wise - мудрый
+
 [Human parts]
 ear - ухо
 eye - глаз
@@ -58,6 +61,7 @@ hiccups - икота
 accountant - бухгалтер
 joggers - бугены
 landlord - арендодатель
+waitress - официантка
 
 [Feelings]
 thirsty - жаждущий
@@ -180,7 +184,11 @@ corn - кукуруза
 pickles - соления
 muesli - мюсли
 pineapple - ананас
+pour - наливать
 
+[Materials]
+cotton - хлопок
+leather - кожа
 
 [Room]
 furniture - мебель
