@@ -14,8 +14,6 @@ literacy - граммотность
 indefinite - неопределённый
 affirmative - утвердительный
 syllable - слог
-
-[speaking] 
 stress - ударение
 
 [Colors]
@@ -75,6 +73,13 @@ lane - полоса дороги
 fuel - топливо
 tire - шина
 flat tire - спущеннео колесо
+brakes - тормоза
+lorries - грузовые автомобили
+aerial - антенна
+valve - клапан
+pistons - поршни
+pressure rings - уплотнительное кольцо
+piston rings - поршневые кольца
 
 [Actions]
 sneezed - чихнуть
@@ -96,6 +101,11 @@ whistle - свистеть
 ski - ходить на лыжах
 sew - сшить
 wiggle - покачивать
+ignition - зажигать
+indicate - указывать
+ensure - обезспечивать\гарантировать
+exceed - превышать
+withstand - выдерживать
 
 [Quantity]
 dozen - дюжина
@@ -105,9 +115,7 @@ guidance - руководство
 luxury - роскошь
 exhaust - истощение
 feature - особенность
-aerial - антенна
 buzzer - звонок
-valve - клапан
 
 [Articles]
 since - поскольку
@@ -258,3 +266,6 @@ Saudi Arabian
 
 [Phrase]
 burn that into your brain
+in many respects - во многих отношениях
+to look like - быть похожим
+to turn on//off - включать//выключать
