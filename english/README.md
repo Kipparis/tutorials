@@ -30,10 +30,10 @@ subject of the sentence._
 (d) The weather is __cold__.  
 
 ## Subject pronouns and object pronouns
-| Subject pronouns     | Object pronouns      |  
-| ---                  | ---                  |  
-| __I__ speak English  | Bob knows __me__.    |  
-| __we__ speak English | Bob talks to __us__. |  
+| Subject pronouns     | Object pronouns      |
+| ---                  | ---                  |
+| __I__ speak English  | Bob knows __me__.    |
+| __we__ speak English | Bob talks to __us__. |
   
 I know __Tony__. __He__ is a friendly person. -- Pronouns has the same
 meaning as a noun.  
@@ -600,6 +600,61 @@ I **_couldn't go_** to the movie **_last night_**. I had to study.
 Question: **_could_** + _subject_ + _main verb_  
 **_Could_** you speak English before you came here?  
 <!-- }}} -->
+## Expressions of quantity <!-- {{{ -->
+### All of, most of, some of <!-- {{{ -->
+**_All of_**, **_most of_**, and **_some of_** express quantities.  
+
++ _all of_ = 100%  
+    Rita ate **_all of_** _the food_ on her plate.  
++ _most of_ = a large part, but not all  
+    Mike ate **_most of_** _his food_.  
++ _some of_ = a small or medium part  
+    Susie ate **_some of_** _her food_.  
+
++ _all of_ = 100%  
++ _almost all of_ = 95-99% - **_Almost_**is used with **_all_**; 
+   **_all_** cannot be omitted.  
+    Matt ate **_almost all of_** his food.  
+<!-- }}} -->
+### Subject-verb agreement<!-- {{{ -->
+_All of my_ **_work is_** finished. - _all of_ + **singular** noun 
++ **singular** verb.  
+_All of my_ **_friends are_** kind. - _all of_ + **plural** noun 
++ **plural** verb.  
+When a subject inclu des an expression of quantity, the verb agrees with
+the noun that immediately follows **_of_**.  
+<!-- }}} -->
+### Common expressions of quantity <!-- {{{ -->
+|                 |            |           |
+| ---             | ---        | ---       |
+| _all of_        | _most of_  | _half of_ |
+| _almost all of_ | _a lot of_ | _some of_ |
+<!-- }}} -->
+### One of, none of <!-- {{{ -->
+**_One of_** is followed by a specific **plural noun**.  
+    Same is **_one_** _of_ my **_friends._**  
+When **_one of_** + _a plural noun_ is the subject of a sentence, it is
+followed by a **singular verb**.  
+    **_One_** _of_ my **_friends_** **_is_** here.  
+**_none of_** = **_not one of_**  
+    **_None of_** _the students_ **_was_** late.  
+<!-- }}} -->
+### Using every <!-- {{{ -->
+Form: **_every_** + **singular** noun + **singular** verb.  
+**_Every_** is immediately followed by a **singular** noun.  
+(a) **_Every student has_** a book.  
+(b) _All of the students_ have books.  
+(a) and (b) have essentially the same meaning.  
+**_Everyone_** and **_everybody_** are followed by a **singular** verb.  
+(e) **_Everyone_** **has** a book.  
+(f) **_Everybody_** **has** a book.  
+(e) and (f) have the same meaning.  
+**_everything_** = each thing  
+    I looked at **_everything_** in the museum.  
+**_everything_** is followed by a **singular** verb.  
+    **_Everything is_** okay.  
+<!-- }}} -->
+<!-- }}} -->
 ## Time <!-- {{{ -->
 ### Using _it_ to talk about time.
 What day is it? -- It's Monday.  
@@ -891,3 +946,39 @@ Usual word order of adjectives:
     _metal_, _glass_, _plastic_  
 
 <!-- }}} -->
+## Possessive nouns <!-- {{{ -->
+To show that a person possesses something, add an apostrophe (\`) 
+and **_-s_** to a singular noun.  
+Possessive noun, singular: noun + apostrophe + **_-s_**  
+    My _friend_ has a car.  
+    My **_friend's_** _car_ is blue.  
+Possessive noun, plural: noun + **_-s_** + apostrophe  
+    The _students_ have books.  
+    The **_students'_** _books_ are red.  
+### Irregular plural nouns<!-- {{{ -->
+Irregular plural nouns _(children, men, women, people)_ have an
+irregular plural possessive form. The apostrophe comes _before_ the
+final **_-s_**.  
+
++ regular plural possessive noun: _the_ **_students'_** _books_  
++ irregular plural possessive noun: _the_ **_women's_** _books_  
+<!-- }}} -->
+<!-- }}} -->
+## Possessive pronouns <!-- {{{ -->
+### Mine, yours, his, hers, ours, theirs <!-- {{{ -->
+| Possessive adjective | Possessive pronoun |
+| ---                  | ---                |
+| **_my_**             | **_mine_**         |
+| **_your_**           | **_yours_**        |
+| **_her_**            | **_hers_**         |
+| **_his_**            | **_his_**          |
+| **_our_**            | **_ours_**         |
+| **_their_**          | **_theirs_**       |
+A possessive adjective is used in front of a noun:  
+    **_my_** _book_.  
+A possessive pronoun is used alone, without a noun following it:  
+    _That book is_ **_mine_**.  
+Incorrect: _That is mine book._  
+<!-- }}} -->
+<!-- }}} -->
+
