@@ -1,98 +1,56 @@
-tmux:{
-    https://www.bugsnag.com/blog/tmux-and-vim
-    good source file:
-    https://github.com/Starefossen/dotfiles/blob/master/.tmux.conf
-  --b4 all commands <C-b>--
-  
-  pane {
-    % open pane horizontally
-    " open pane vertically
-    ; move to previous active pane
-    o next pane in the current window
-    x kill current pane
+# Movement <!-- {{{ -->
+## Cursor history position<!-- {{{ -->
++ `C+o` - go to previous position - helpful when got to definition or something else  
++ `C+i` - got to newer position  
+<!-- }}} -->
+## Position in file<!-- {{{ -->
++ `G`   - end of file  
++ `gg`  - start of file  
+<!-- }}} -->
+## Search<!-- {{{ -->
++ `/` - start search
+    useful to define mapping to turn off highlight of search (after you
+    see it)  
++ `/ignore\c` or `/\c` - ignore case for that search  
++ `n` - search forward  
++ `N` - search backward  
+<!-- }}} -->
+## Options<!-- {{{ -->
++ `:set xxx` - sets the option "xxx"  
+<!-- }}} -->
+<!-- }}} -->
+# Vim windows <!-- {{{ -->
++ `C+w` + `C+w` - move btw windows  
+## Buffers <!-- {{{ -->
+### Split <!-- {{{ -->
++ `:buffers` - view list of buffers  
++ `:vsp | b<number>` - open buffer as split  
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+# Selecting <!-- {{{ -->
++ `v` - visual mode  
++ `C+v` - block visual mode  
++ `V` - select lines  
+<!-- }}} -->
+# Mappings <!-- {{{ -->
+`:verbose imap <Tab>` -- see which plugin is overriding your map  
+<!-- }}} -->
+# Useful things <!-- {{{ -->
++ `:so %` - source current file  
++ `gx` - open link under cursor  
+<!-- }}} -->
+# Where to read <!-- {{{ -->
++ vimtutor  
++ `:help user-manual`  
++ book - Vim- Vi IMproved - by Steve Oulline  
++ how to build vimrc - `:help vimrc-intro`  
++ book - learn vim hardway  
+<!-- }}} -->
+# Pluggins <!-- {{{ -->
 
-    { swap current pane with the previous pane
-    } swap current pane with the next pane
+<!-- }}} -->
 
-    {arrows} change to the pane above/below, to the left/right
-
-    {C-arrows} resize the current pane
-  }
-
-  window {
-    c create new window
-    [0..9] select window
-    l move to previously selected window
-    n change to the next window
-    f search for text in open windows
-
-    & kill the current window
-  }
-
-  I resource conf (or tmux source ~/.tmux.conf)
-  alt+u remove the plugin
-  $ kill the current session
-
-  plugins are installed to ~/.tmux/plugins
-}
-
-code {
-  scoccount <directoryname> -- count lines in direcoty
-}
-
-i3 {
-  mod + enter - open terminal
-  mod + sh + q - kill active
-  mod + F2 - browser
-  mod + d - top menu
-  mod + sh + b - back menu
-  mod + z - top programm menu
-  mod + 1-9 - go to workspace
-  mod + ct + 1-9 - send to workspace
-
-  mod + 0 - exit
-  mod + sh + h - help
-
-  mod + m - hide status bar
-
-  how to know which class? 
-  > xprop 
-}
-
-vim {{{{
-  C+o - go to previous position - helpful when got to definition or something else
-  C+i - got to newer position
-  G   - end of file
-  gg  - start of file
-
-  :so % - source current file
-
-  n - search forward
-  N - search backward
-
-  /ignore\c - ignore case for that search
-
-  :set xxx - sets the option "xxx"
-
-  C+w + C+w - move btw windows
-
-  v - visual mode
-  C+v - block visual mode
-  V - select lines
-
-  :verbose imap <Tab> -- see which plugin is overriding your map
-  gx - open link under cursor
-
-  help {
-    next read - :help user-manual
-    book - Vim - Vi IMproved - by Steve Oulline
-    how to build vimrc - :help vimrc-intro
-  }
-
-  buffers->split {
-    :buffers - view list of buffers
-    :vsp | b<number> - open buffer as split
-  }
 
   pluggins {
     snippets {
@@ -236,7 +194,6 @@ $ Registers ${{{
 }}}}}}
 $$$$ Create Mappings $$$$
 
-
 mappings {
   gc or gcc (for line)
   ga<symbol> - allign by symbol
@@ -248,8 +205,3 @@ mappings {
   C+p - search for something
 }
 
-* add comething here
-
-git {
-  git add [--patch,-p] <filename> -- add only part of specified filename
-}
