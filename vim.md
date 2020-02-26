@@ -48,7 +48,22 @@
 + book - learn vim hardway  
 <!-- }}} -->
 # Pluggins <!-- {{{ -->
+## Ultisnips <!-- {{{ -->
++ `:UltiSnipsEdit` - edit snippets for this particular filetype  
++ `:tabedit ~/.vim/Ultisnips/all.snippets` - edit snippets file for all
+  filetypes  
++ `:help UltiSnips<tab>` - search for all available help pages  
 
+### Snippet syntax <!-- {{{ -->
+snippet _name_ "_description_" _options_
+_what are typed_
+endsnippet
+
+${1:default_value}
+$0 - where you will at the end
+
+<!-- }}} -->
+<!-- }}} -->
 <!-- }}} -->
 
 
@@ -59,13 +74,6 @@
       :tab h UltiSni<tab>
       # - comment
 
-      syntax:
-        snippet _name_ "_description_" _options_
-        _what are typed_
-        endsnippet
-
-        ${1:default_value}
-        $0 - where you will at the end
     }
 
     vim-fugitive {
