@@ -55,26 +55,26 @@
 + `:help UltiSnips<tab>` - search for all available help pages  
 
 ### Snippet syntax <!-- {{{ -->
+```
 snippet _name_ "_description_" _options_
 _what are typed_
 endsnippet
+```
 
-${1:default_value}
-$0 - where you will at the end
+options - `:h UltiSnips-snippet-options`. Most commonly used:
+
++ `i` - allow snippet to expand everywhere
+
+Placeholders:  
+
++ `${1:default_value}`  
++ `$0` - where you will at the end  
+<!-- }}} -->
+<!-- }}} -->
+## Vim-fugitive <!-- {{{ -->
 
 <!-- }}} -->
 <!-- }}} -->
-<!-- }}} -->
-
-
-  pluggins {
-    snippets {
-      :UltiSnipsEdit - edit snippets for this particular filetype
-      :tabedit ~/.vim/Ultisnips/all.snippets 
-      :tab h UltiSni<tab>
-      # - comment
-
-    }
 
     vim-fugitive {
       :G :Gstatus - git status
