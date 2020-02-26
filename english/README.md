@@ -167,13 +167,29 @@ I don't have **any matches**. (plural count noun)
 _Any_ is used with noncount nouns and plural count nouns.  
 <!-- }}} -->
 ## Questions. <!-- {{{ -->
-### What\Who
+### What\Who<!-- {{{ -->
 __What__ asks about things.  
 __Who__ asks about people.  
-### Would
+<!-- }}} -->
+### Would<!-- {{{ -->
 _Q_ __Would__ you __like__ some tea? -- In a question, would comes before
 the subject.  
 _A_ Yes, I __would__. (I would like some tea.)  
+<!-- }}} -->
+### Whose <!-- {{{ -->
+**_Whose_** asks about possession. **_Whose_** is often used with a noun
+(e.h. _whose book_)  
+
++ **_Whose book_** is this? $rarr; Mine. / It's mine. / It's my book.  
++ **_Whose books_** are these? $rarr; Rita's. / They're Rita's. / They're
+Rita's books.  
+
+**_Whose_** can be used without a noun if the meaning is clear.  
+
++ **_Whose_** is this? _(The speaker is pointing to a book.)_  
++ **_Whose_** are these? _(The speaker is pointing to some books.)_  
+
+<!-- }}} -->
 ### Polite questions: may I, could I, and can I <!-- {{{ -->
 **_May I borrow_** your pen?  
 **_Could I borrow_** your pen?  
@@ -395,6 +411,15 @@ _Some verbs do not have **ed** forms. The past form is irregular._
 | swim       | swam       |
 | throw      | threw      |
 | win        | won        |
+| become     | became     |
+| bend       | bent       |
+| bite       | bit        |
+| build      | built      |
+| shake      | shook      |
+| feed       | fed        |
+| fight      | fought     |
+| hide       | hid        |
+| hold       | held       |
 
 <!-- }}}  -->
 ### Negative
@@ -981,4 +1006,83 @@ A possessive pronoun is used alone, without a noun following it:
 Incorrect: _That is mine book._  
 <!-- }}} -->
 <!-- }}} -->
+## Connected nouns: noun + and/or + noun{{{
+**_And_** and **_or_** can connect two or more nouns.  
+    **_Birds_** _and_ **_airplanes_** fly.  
+Three (or more) nouns are separated by commas.  
+    I have _a **book**_, _a **pen**_, _and a **pencil.**_  
+<!-- }}} -->
+## Adjectives and linking verb<!-- {{{ -->
+Adjectives can follow a few other verbs. These verbs are calles "linking
+verbs.". The adjective describes the subject of the sentence.  
+    The flowers **_looked_** **_beautiful._**  
+Common linking verbs are:  
+    _look_, _smell_, _feel_, _taste_, and _sound_.  
+<!-- }}} -->
+## Indirect objects <!-- {{{ -->
+Some verbs are followed by two objects: a dire ct object and an indirect
+object.  
 
++ I wrote _a letter_ **_to Alex._**  
++ I wrote **_Alex_** a letter.  
+
+(a) and (b) have the same meaning.  
+The preposition **_to_** is not used when the indirect object is first
+and the direct object is second.  
+
+A direct object answers the question _What?_  
+    What did you write? $rarr; A letter.  
+An indirect object answers the question _Who(m)?_  
+    Who(m) did you write a letter to? $rarr; Alex.  
+When the direct object is pronoun (e.g. _them_), it must precede the
+indirect object, as in (f).  
+    Did you write a letters to Alex?  
+    Yes, I did. I wrote **_them to him_**.  
+
+Verbs followed by indirect objects introduced by **_to_**:  
+
+|        |         |
+| ---    | ---     |
+| _give_ | _send_  |
+| _hand_ | _show_  |
+| _lend_ | _tell_  |
+| _pass_ | _write_ |
+
+<!-- }}} -->
+## Indirect objects: using for <!-- {{{ -->
+With some verbs, **_for_** is used with the indirect object. With these
+verbs, the indirect object follows the direct object. **_For_** is not
+omitted. The position of the indirect object is not changed.  
+
++ Bob opened _the door_ **_for Mary_**.  
++ Sue answered _a question_ **_for me_**.
+
+Notice in the examples: All of the sentences give the idea that someone
+is helping another person.  
+
+Verbs followed by indirect objects with **_for_**:  
+
++ _answer_ - He _answered_ a question **_for me_**.  
++ _cash_ - The teller _cashed_ a check **_for me_**.  
++ _fix_ - Can you _fix_ my car **_for me_**?  
++ _open_ - Mr. Smith _opened_ the door **_for his wife_**.  
++ _pronounce_ - I _pronounced_ the word **_for the students_**.  
++ _translate_ - I _translated_ a letter **_for my brother_**.  
+<!-- }}} -->
+## Indirect objects with buy, get, make <!-- {{{ -->
+With the berbs **_buy_**, **_get_**, and **_make_**, two patterns are
+possible:  
+
++ **_for_** introduces the indirect object, or  
+    Tina **_bought_** _a gift_ **_for us._**  
++ the indirect object precedes the direct object.  
+    Tina **_bought us_** _a gift._  
+<!-- }}} -->
+## Indirect objects with explain and introduce <!-- {{{ -->
+With the verbs **_explain_** and **_introduce_**:  
+
++ **_to_** is used with the indirect object, and  
+    The teacher **_explained_** the grammar **_to us_**.  
++ the indirect object always follows the direct object.  
+    Incorrect: _She explained us the grammar._  
+<!-- }}} -->
