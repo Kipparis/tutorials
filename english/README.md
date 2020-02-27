@@ -1020,6 +1020,7 @@ Common linking verbs are:
     _look_, _smell_, _feel_, _taste_, and _sound_.  
 <!-- }}} -->
 ## Indirect objects <!-- {{{ -->
+### General <!-- {{{ -->
 Some verbs are followed by two objects: a dire ct object and an indirect
 object.  
 
@@ -1047,9 +1048,8 @@ Verbs followed by indirect objects introduced by **_to_**:
 | _hand_ | _show_  |
 | _lend_ | _tell_  |
 | _pass_ | _write_ |
-
 <!-- }}} -->
-## Indirect objects: using for <!-- {{{ -->
+### Indirect objects: using for <!-- {{{ -->
 With some verbs, **_for_** is used with the indirect object. With these
 verbs, the indirect object follows the direct object. **_For_** is not
 omitted. The position of the indirect object is not changed.  
@@ -1069,7 +1069,7 @@ Verbs followed by indirect objects with **_for_**:
 + _pronounce_ - I _pronounced_ the word **_for the students_**.  
 + _translate_ - I _translated_ a letter **_for my brother_**.  
 <!-- }}} -->
-## Indirect objects with buy, get, make <!-- {{{ -->
+### Indirect objects with buy, get, make <!-- {{{ -->
 With the berbs **_buy_**, **_get_**, and **_make_**, two patterns are
 possible:  
 
@@ -1078,11 +1078,129 @@ possible:
 + the indirect object precedes the direct object.  
     Tina **_bought us_** _a gift._  
 <!-- }}} -->
-## Indirect objects with explain and introduce <!-- {{{ -->
+### Indirect objects with explain and introduce <!-- {{{ -->
 With the verbs **_explain_** and **_introduce_**:  
 
 + **_to_** is used with the indirect object, and  
     The teacher **_explained_** the grammar **_to us_**.  
 + the indirect object always follows the direct object.  
     Incorrect: _She explained us the grammar._  
+<!-- }}} -->
+<!-- }}} -->
+# Making Comparisons <!-- {{{ -->
+## Comparisons: using the same (as), similar (to), and different (from) <!-- {{{ -->
++ **_the same (as)_**  
+    * A and B are **_the same._**  
+    * A is **_the same as_** B.  
++ **_similar (to)_**  
+    * C and D are **_similar._**  
+    * C is **_similar to_** D.  
++ **_different (from)_**  
+    * E and F are **_different._**  
+    * E is **_different from_** F.  
+<!-- }}} -->
+## Comparisons: using like and alike <!-- {{{ -->
+**_like_** = _similar to_  
+**_alike_** = _similar_  
+**_Like_** and **_alike_** have the same meaning, but the sentence
+patterns are different:  
+
++ This + **_be_** + **_like_** + that  
+    You pen **_is like_** my pen.  
++ This and that + **_be_** + **_alike_**  
+    Your pen and my pen **_are alike._**  
+<!-- }}} -->
+## The comparative: using -er and more <!-- {{{ -->
+When we use adjectives (e.g., _old_, _important_) to compare two people
+or two things, the adjectives have special forms:  
+
++ adjectives tiwh one syllable $rarr; add **_-er_**
+    Mary is **_older than_** John.  
+    Spelling note: if an a djective ends in one vowel and one consonant,
+    double the consonant: big-bigger.  
++ adjectives that end in _-y_ $rarr; change the **_-y_** to **_i_** and
+  edd **_-er_**  
+    pretty $rarr; prettier  
++ adjectives with two or more syllables $rarr; use **_more_** in fron of
+  adjectives  
+    Health is **_more important than_** money.  
++ irregular comparative forms:  
+    good-better; bad-worse; far-farther/further  
+
+Notice in the examples: **_than_** follows the comparative form.  
+<!-- }}} -->
+## Using as ... as; using less <!-- {{{ -->
+**_as_** _adjective_ **_as_** have the meaning of "same in respect of
+adjective"  
+John is 21 years old. Mary is 21 years old. John **_is as old as_**
+Mary.  
+
+**_Less_** is the opposite of **_more_**. **_Less_** is usually not used
+with one-syllable adjectives or adjectives that end in **_-y_**.  
+
++ This book **_is less expensive than_** that book.  
++ Incorrect: _Fred is less old than Jean._  
++ Correct: _Fred isn't as old as Jean._  
++ Correct: _Fred is younger than Jean._  
+<!-- }}} -->
+## Using but <!-- {{{ -->
+**_But_** gives the idea that "This is t he opposite of that."  
+    John is rish, **_but_** Mary is poor.  
+A comma usually precedes **_but_**.  
+  
+Often the verb phrase following **_but_** is shortened, as in the
+examples.  
+
++ John **_is_** rich, _but_ Mary **_isn't._**  
++ Mary **_isn't_** rich, _buy_ John **_is._**  
+<!-- }}} -->
+## The superlative: using -est and most <!-- {{{ -->
+The comparative **_(-er/more)_** compares two things or people.  
+The superlative **_(-est/most)_** compares three or more things or
+people.  
+
++ adjectives with one syllable:  
+  **_old_** $rarr; **_older_** _(then)_ $rarr; **_the oldest_** _(of
+  all)_  
+  **_big_** $rarr; **_bigger_** _(then)_ $rarr; **_the biggest_** _(of
+  all)_  
++ adjectives that end in _-y_:  
+  **_easy_** $rarr; **_easier_** _(than)_ $rarr; **_the easiest_** _(of
+  all)_  
++ adjectives with two or more syllables:  
+  **_expensive_** $rarr; **_more expensive_** _(than)_ -> **_the most
+  expensive_** _(of all)_  
++ irregular forms:  
+  **_good_** $rarr; **_better_** _(than)_ $rarr; **_the best_** _(of
+  all)_  
+  **_bad_** $rarr; **_worse_** _(than)_ $rarr; **_the worst_** _(of all)_  
+  **_far_** $rarr; **_farther/further_** _(than)_ $rarr; **_the
+  farthest/furthest_** _(of all)_  
+<!-- }}} -->
+## Using one of + superlative + plural noun <!-- {{{ -->
+The superlative often follows **_one of_**.  
+Notice the pattern: **_one of_** + _superlative_ + _plural noun_  
+
++ The Amazon is **_one of the longest rivers_** in the world.  
++ A Rolls Royce is **_one of the most expensive cars_** in the world.  
+<!-- }}} -->
+<!-- }}} -->
+# Adjectives and adverbs <!-- {{{ -->
++ An adjective describes a noun.  
+    Ann is a **_careful_** driver.  
++ an adverb describes the action of a verb.  
+    Add drives **_carefully._**  
+
+Most adverbs are formad by adding **_-ly_** to an adjective.  
+
+The adjective form and the adverb form are the same for:
+**_fast_**, **_hard_**, **_early_**, **_late_**.  
+
+**_Well_** is the adverb form of **_good.\*_**  
+
++ Linda is a **_good_** writer.  
++ Linda writes **_well._**  
+
+\* **_Well_**can also be used as and adjective to mean "not sick." _Paul
+was sick last week, but now he's well._  
 <!-- }}} -->
