@@ -1,3 +1,4 @@
-git {
-  git add [--patch,-p] <filename> -- add only part of specified filename
-}
+
+# Where to read
++ [git-scm](https://git-scm.com/docs/gittutorial)  
+
