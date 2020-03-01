@@ -1,5 +1,5 @@
 # This file will work for me as reminder to rules in English language.
-_book: Basic English Grammas. second edition._ 
+_book: Basic English Grammas. second edition._  
 <!-- 3-10 -->
 
 <!-- How I understood, at is used when I talk about something specific. -->
@@ -1188,10 +1188,10 @@ Notice the pattern: **_one of_** + _superlative_ + _plural noun_
 # Adjectives and adverbs <!-- {{{ -->
 + An adjective describes a noun.  
     Ann is a **_careful_** driver.  
-+ an adverb describes the action of a verb.  
++ An adverb describes the action of a verb.  
     Add drives **_carefully._**  
 
-Most adverbs are formad by adding **_-ly_** to an adjective.  
+Most adverbs are formed by adding **_-ly_** to an adjective.  
 
 The adjective form and the adverb form are the same for:
 **_fast_**, **_hard_**, **_early_**, **_late_**.  
@@ -1203,4 +1203,101 @@ The adjective form and the adverb form are the same for:
 
 \* **_Well_**can also be used as and adjective to mean "not sick." _Paul
 was sick last week, but now he's well._  
+<!-- }}} -->
+## Making comparisons with adverbs <!-- {{{ -->
+Use **_more_** and **_most_** with adverbs that end in **_-ly\*_**.  
+
++ Kim speaks **_more fluently than_** Ali (does).  
++ Anna speaks **_the most fluently of all._**  
+
+Use **_-er_** and **_-est_** with irregular adverbs: **_hard, fast,
+early, late_**:  
+
++ Mike worked **_harder than_** Sam (did).  
++ Sue worked **_the hardest of all._**  
+
+**_Better_** and **_best_** are forms of the adverb _well_.
+
++ Rosa writes **_better than_** I do.  
++ Kim writes **_the best of all._**  
+
+\* Exception: _early-earlier-earliest_  
+<!-- }}} -->
+## Using as ... as with adverbs <!-- {{{ -->
+Notice the pattern in the examples:  
+**_as_** + _adverb_ + **_as_**  
+
++ Bob doesn't study **_as hard as_** his brother (does).  
++ I didn't finish my work **_as quickly as_** Sue (did).  
+
+Notice the patterns in the examples:  
+**_as_** + _adverb_ + **_as_** is frequently followed by
+_subject_ + **_can/could_** or by **_possibly._**
+
++ I'm working **_as fast as I can._**  
++ I'm working **_as fast as possible._**  
++ Alex came **_as quicly as he could._**  
+<!-- }}} -->
+# Expressing Ideas with Verbs <!-- {{{ -->
+## Using should <!-- {{{ -->
+**_Should_** means "This is a good idea. This is good advice."  
+
++ My clothes are dirty. I **_should wash_** them.  
++ Tom is sleepy. He **_should go_** to bed.  
+
+**_Should_** is followed by the simple form of a verb.  
+Negative: _should not_  
+Contraction: _should_ + _not_ = _shouldn't_  
+<!-- }}} -->
+## Using let's <!-- {{{ -->
+_Let's (do something) = I have a suggestion for you and me. (let's = let
+us)_  
+
+Bob: What should we do tonight?  
+Ann: **_Let's go to a movie._**  
+Bob: Okay.  
+_Let's go to a movie = I think we should go to a movie. Do you want to
+go to a movie?_  
+<!-- }}} -->
+## Using have + infinitive (has to/have to) <!-- {{{ -->
+**_Have_** + _infinitive_ has a special meaning: it expresses the same
+idea as **_need_**.  
+
++ People **_need to eat_** food.  
++ People **_have to eat_** foo.  
+
+Those two have basically the same meaning.  
+
+Past form: **_had_** + _infinitive_:  
+I **_had to study_** last night.  
+
+Questiong form: **_do_**, **_does_**, or **_did_** is used in questions
+with **_have to_**:  
+What time **_does_** Jim **_have to_** _leave?_  
+
+Negative form: **_do_**, **_does_**, or **_did_** is used with **_have
+to_** in the negative:  
+I **_don't have to_** _study_ tonight.  
+<!-- }}} -->
+## Using must <!-- {{{ -->
+**_Must_** is followed by the simple form of a verb  
+
++ People need food. People **_have to eat_** food.  
++ People need food. People **_must eat_** food.  
+
+Those two have the same meaning.  
+
++ You **_must not be_** late for work if you want to keep your job.  
+    **_must not_** = Don't do this! You don't have a choice.  
++ You **_don't have to go_** to the movie with us if you don't want to  
+    **_don't have to_** = It's not necessary, but you have a choice.  
+<!-- }}} -->
+## Modal auxiliaries <!-- {{{ -->
+An auxiliary is a helping verb. It comes in front of the simple form of
+a main verb. The following helping verbs are called "modal auxiliaries":
+**_can_**, **_could_**, **_may_**, **_might_**, **_must_**,
+**_should_**, **_will_**, **_would_**.  
+Expressions that are similar to madoal auxiliaries are: **_be able
+to_**, **_be going to_**, **_have to_**.  
+<!-- }}} -->
 <!-- }}} -->

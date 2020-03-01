@@ -15,9 +15,13 @@ indefinite - неопределённый
 affirmative - утвердительный
 syllable - слог
 stress - ударение
+auxiliary - вспомогательный
 
 [Colors]
 tan, beige - бежевый, загарелый
+
+[Math]
+intersection - пересечение/перекресток
 
 [Clothes]
 belt - пояс
@@ -124,12 +128,17 @@ since - поскольку
 direcyly - непосредственно
 
 [Adjectives]
+prescription - рецепт (на лекарство)
 impassable - непроходимый
 
 [Animals]
 squirrels - белочки
 whale - кит
 yip - тявкать
+
+[Relax]
+nap - вздремнуть
+vacation - отпуск
 
 [Weather]
 humid - влажный
@@ -138,6 +147,7 @@ humid - влажный
 downtown - в центре города
 bench - скамейка
 barbershop - парикмахерская
+jaywalk - неосторожно переходить улицу
 
 [Nature]
 bush - куст
@@ -198,7 +208,7 @@ pour - наливать
 cotton - хлопок
 leather - кожа
 
-[Room]
+[Apartment]
 furniture - мебель
 sofa - диван
 cupboard - шкаф
@@ -210,6 +220,7 @@ rug - коврик\плед
 bed - постель
 pillow - подушка
 ceil - потолок
+plumbing - водопровод
 
 [Preposition of place]
 beside\near - рядом
@@ -225,6 +236,8 @@ librarian - библиотекарь
 circulation desk - ресепшн
 chalk - мелки
 chalkboard - доска
+flunking - завалил
+distract - отвлекать
 
 [Money]
 write a check - выписать чек
@@ -247,9 +260,14 @@ poverty - бедность
 admire - восхищаться
 inch - дюйм
 laundromat - прачечная-автомат
+cruel - жестокий
+prescription - рецепт (на лекарство)
 
 [Verbs]
 absent - отсутствовать
+
+[Adverbs]
+fluently - бегло
 
 [Nationalities] 
 American
