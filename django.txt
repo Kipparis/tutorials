@@ -2,7 +2,7 @@ path():
   route is a string defining UTL patter to match.
   this string might include a named variable (in angle brackets), e.g. 'catalog/<id>/'
 
-for models its better to represent selection-list options(e.g. drow down list), 
+for models its better to represent selection-list options(e.g. drow down list),
   rather than had coding the choices into the website
 
   fields for models:
@@ -23,7 +23,7 @@ for models its better to represent selection-list options(e.g. drow down list),
     primary_key - if True, sets the current field as the primary key
 
     other fiels: https://docs.djangoproject.com/en/2.1/ref/models/fields/#field-options
-    
+
   common field types: (must specify = ms)
     CharField (ms max_length)
     TextField
@@ -31,7 +31,7 @@ for models its better to represent selection-list options(e.g. drow down list),
     DateField and DateTimeField:
       auto_now=True to set current date every time the model is saved
       auto_now_add - set current date only once
-    EmailField 
+    EmailField
     FileField, ImageField (have parameters to define how and where the
                             uploaded files are stored)
     AutoField == IntegerField that automatically increments
