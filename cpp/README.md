@@ -1,13 +1,15 @@
 <!-- книга: с++ premier -->
-# Data types
-## Pointers, reference
+<!-- если какой-либо термин непонятен, в книге, в конце каждой главы есть -->
+<!-- определения -->
+# Data types<!-- {{{ -->
+## Pointers, reference<!-- {{{ -->
 _diff btw pointer and reference_. reference is not an object, hence, once we 
 defined reference, we cannot make that reference refer to another
 object.  
 
 `void*` pointer can hold the address of __any object__.  
-
-## Strings
+<!-- }}} -->
+## Strings<!-- {{{ -->
 include:  
 ```cpp
 #include <string>
@@ -22,8 +24,7 @@ you can use __conditions__ while working with strings:
 while (cin >> word)         { /* body */ }
 while (getline(cin, line))  { /* body */ }
 ```
-
-### Notes
+### Notes<!-- {{{ -->
 `string.size()` returns `string::size_type` type which is unsigned. 
 So don't mix up _int_ and _unsigned_ values.
     
@@ -33,8 +34,9 @@ You need know what type char is __cctype__ library helps.
     + `tolower()`  
     + `isgraph()`  
     + `islower()`  
-
-## Arrays
+<!-- }}} -->
+<!-- }}} -->
+## Arrays<!-- {{{ -->
 when use arrays, the compiler automatically 
 substitutes a __pointer to the first element__.  
 
@@ -44,8 +46,9 @@ __must be references__.
 
 iterating over container:  
 `index != s.size() && !isspace(s[index])`  
-
-# Operations
+<!-- }}} -->
+<!-- }}} -->
+# Operations<!-- {{{ -->
 __Division__ is rounded towards zero.  
 
 __Assignment__ operator is right associative.  
@@ -58,32 +61,34 @@ __Shift__ operators are left associative.
 __Comma operator__ is left associative, the result is right-hand expression 
 will be lvalue if right-hand operand is an lvalue  
 
-## Conditions
+## Conditions<!-- {{{ -->
 Binary operations are left associative <=> first evaluated left assigment.  
 `if (i < j < k)` => _k_ compared to 1 ( bool result of i < j )  
 `if ( val == true )` == `if ( val == 1 )`  
 
 condition operator may result as _rvalue_ as _lvalue_.  
-
-## Explicit conversion
+<!-- }}} -->
+## Explicit conversion<!-- {{{ -->
 _Syntax:_ `cast-name<type>(expression)`  
 where type is:  
-	+ `static_cast`  
-	+ `dynamic_cast`  
-	+ `const_cast`  
-	+ `reinterpret_cast`  
-why? to not loose precision or to cast `void*` to any other pointer  
 
-## Statements
-### Decision branches
++ `static_cast`  
++ `dynamic_cast`  
++ `const_cast`  
++ `reinterpret_cast`  
+
+why? to not loose precision or to cast `void*` to any other pointer  
+<!-- }}} -->
+## Statements<!-- {{{ -->
+### Decision branches<!-- {{{ -->
 __if-else -- wrong path__
 ```cpp
 // execution does not match indentation; the else goes with the inner if
 if (grade % 10 >= 3)
-	if (grade % 10 > 7)
-		lettergrade += '+';
+    if (grade % 10 > 7)
+        lettergrade += '+';
 else
-	lettergrade += '-';
+    lettergrade += '-';
 ```
 
 __define and init variable for a particular case__
@@ -93,8 +98,10 @@ case true:
     string file_name = get_file_name();
   }
 ```
-
-# Exception handling
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+# Exception handling<!-- {{{ -->
 Throw exception - `throw exception;`  
 
 To catch it use:  
@@ -109,25 +116,26 @@ try {
 ```
 
 __exception classes__ defined in `<stdexcept>`:
-	+ `exception`  
-	+ `runtime_error`  
-	+ `range_error`  
-   
-	+ `overflow_error`  
-	+ `underflow_error`  
-	+ `logic_error`  
-	+ `domain_error`  
-	+ `invalid_argument`  
-	+ `length_error`  
-	+ `out_of_range`  
++ `exception`  
++ `runtime_error`  
++ `range_error`  
 
-## Assert
++ `overflow_error`  
++ `underflow_error`  
++ `logic_error`  
++ `domain_error`  
++ `invalid_argument`  
++ `length_error`  
++ `out_of_range`  
+
+## Assert<!-- {{{ -->
 `assert` executes only if _NDEBUG_ is not defined.
 if your want to turn off asserts => provide #define NDEBUG 
   or
 CC -D NDEBUG main.c
-
-# Functions
+<!-- }}} -->
+<!-- }}} -->
+# Functions<!-- {{{ -->
 you may define defaults for parameters, however, if a parameter has a
 __default argument__, all the parameters that follow it must also have
 default arguments.
@@ -138,7 +146,7 @@ cout << shorterString(s1, s2) << endl;
 cout << (s1.size() < s2.size() ? s1 : s2) << endl
 ```
 
-### Pointers to function
+### Pointers to function<!-- {{{ -->
 function that return pointers to function:  
 `auto f1(int) -> int(*)(int*,int);`  
 or make it via typedef:  
@@ -146,14 +154,14 @@ or make it via typedef:
 typedef bool Func(const string&, const string&);	# by type
 typedef decltype(lengthCompare) Func2;	# by another function
 ```
-
-
-# Classes
-
-### Class or struct
+<!-- }}} -->
+<!-- }}} -->
+# Classes<!-- {{{ -->
+### Class vs struct<!-- {{{ -->
 The only difference is that variables before the first access specifier:  
-	+ in class they are private  
-	+ in struct they are public  
+
++ in class they are private  
++ in struct they are public  
 
 assume next struct:
 ```cpp
@@ -167,17 +175,17 @@ struct Sales_data {
   double revenue = 0.0;
 };
 ```
-
-## Access Control and Encapsulation
-	+ Members defined after a public specifier are accessible to all 
-\		parts of the program
-	+ Members defined after a private specifier are accessible to the
-\		member functions of the class
+<!-- }}} -->
+## Access Control and Encapsulation<!-- {{{ -->
++ Members defined after a public specifier are accessible to all 
+parts of the program  
++ Members defined after a private specifier are accessible to the
+member functions of the class  
 
 __To access non public__ members of class precede it's declaration with 
 'friend' keyword
-
-## Functions
+<!-- }}} -->
+## Functions<!-- {{{ -->
 __member functions__ access the object on which they were called through an
 extra implicit parameter named this. So when we call `total.isbn()` 
 the compiler calls `Sales_data::isbn(&total)`  
@@ -189,10 +197,10 @@ _const_ before body).
 To __define Member Function__ outside the Class use following structure:  
 ```cpp
 double Sales_data::avg_price() const {
-	if (units_sold)
-		return revenue/units_sold;
-	else
-		return 0;
+    if (units_sold)
+        return revenue/units_sold;
+    else
+        return 0;
 }
 ```
 
@@ -209,8 +217,8 @@ Returning current object as reference allows
 us __chain operations__ like: `myScreen.move(4,0).set('#');`  
 
 __Member functions defined inside the class are automatically inline!__
-
-## Constructors
+<!-- }}} -->
+## Constructors<!-- {{{ -->
 Force compiler to provide default constructor: `Sales_data() = default;`  
 Constructor initializer list provides initial values for data members:
 ```cpp
@@ -229,12 +237,11 @@ __Delegating contructors *(c++11)*__
 ```cpp
 // deligate-to constructor
 Sales_data(std::string s, unsigned cnt, double price):
-	bookNo(s), units_sold(cnt), revenue(cnt*price) {}
+    bookNo(s), units_sold(cnt), revenue(cnt*price) {}
 // contructor that delegate to another constructor
 Sales_data(): Sales_data("", 0, 0) {}
 ```
-
-### Default Constructor
+### Default Constructor<!-- {{{ -->
 Default constructor is used automatically on object default or value
 initialization.  
 __Default__ initializetion happens:  
@@ -256,8 +263,9 @@ Using default constructor:
 Sales_data obj();   // ok: but it defines a function, not an object
 Sales_data obj;     // ok: object
 ```
-
-## Implicit Class-Type conversions  
+<!-- }}} -->
+<!-- }}} -->
+## Implicit Class-Type conversions  <!-- {{{ -->
 _aka converting contructors._  
 Every constructor that can be called with a __single argument__ defines an
 __implicit conversion__ to a class type.  
@@ -273,8 +281,7 @@ We can do this, by explicitly calling conversion
 item.combine(string("9-999-99999-9"));      // ok
 item.combine(Sales_data("9-999-99999-9"));  // ok
 ```
-
-### Prevent the use of constructor in implicit conversion  
+### Prevent the use of constructor in implicit conversion  <!-- {{{ -->
 ```cpp
 explicit Sales_data(const std::string &s): bookNo(s) { }
 explicit Sales_data(std::istream&);
@@ -292,12 +299,13 @@ We can use explicit constructors for an implicit conversion:
 ```cpp
 item.combine(Sales_data(null_book));
 ```
-
-### Library Classes
+<!-- }}} -->
+### Library Classes<!-- {{{ -->
     + `string` constructor with arg of `const char*` is not explicit  
     + `vector` constructor that takes a size is explicit  
-
-## Aggregate Classes  
+<!-- }}} -->
+<!-- }}} -->
+## Aggregate Classes  <!-- {{{ -->
 __aggregate class__ gives users direct access to its members and has
 special initialization syntax. A class is aggregate if:  
     + All of its data members are public  
@@ -313,33 +321,182 @@ struct Data {
 ```
 Initialize data members by providing a praced list of member
 initializers: `Data val1 = { 0, "Anna" };`  
-
-## Data types  
+<!-- }}} -->
+## Data types <!-- {{{ -->
 __mutable__ data member can be changed inside of const functions
 Defining class member types: `typedef std::string::size_type pos;`  
 or: `using pos = std::string::size_type;`  
 
 to get name __from outer scope__ use ::height;
-
-## Literal Classes  
+<!-- }}} -->
+## Literal Classes<!-- {{{ -->
 Literal class - a class whose data members are __all of literal
 type__.  
 Literal classes may have function members that are `constexpr`. These
 member functions are implicitly `const`.  
 Restrictions to be literal class:   
-    + must have at least one `constexpr` contructor  
-    + must use default definition for its destructor
 
-### Constexpr constructors
++ must have at least one `constexpr` contructor  
++ must use default definition for its destructor
 
-# IO
+### Constexpr constructors<!-- {{{ -->
++ Declared as `= default;`  
++ Or must meet the requirements of a constructur.  
++ the only executable statement it can have is a _return_ statement.  
++ must initilize every data member  
+    * initializers either constexpr constructors  
+    * either constant expression  
+
+Example: `constexpr Debug(book b = true): hw(b), io(b), other(b) {}`  
+<!-- }}} -->
+<!-- }}} -->
+## Static Class Members <!-- {{{ -->
+Use **_static class members_** when value represent more class value
+than object value. When changing **_static_** field it changing in all
+objects.  
+### Declaring  `static` Members <!-- {{{ -->
+```cpp
+class Account {
+public:
+    void calculate() { amount += amount * interestRate; }
+    static double rate() { return interestRate; }
+    static void rate(double);
+private:
+    std::string owner;
+    double amount;
+    static double interestRate;
+    static dou ble initRate();
+};
+```
+
++ `static` members of a class exist outside any object, they are shared
+  by all the _Account_ objects.  
++ `static` member function are not bound to any object &rarr; they do
+  not have a `this` pointer. &rarr; `static` member functions may not be
+  declared as a `const`.  
+
+<!-- }}} -->
+### Defining `static` Members <!-- {{{ -->
+When we define `static` member outside the class, we do not repeat the `static` keyword.  
+Because `static` data members are not part of objects, they are not defined when we
+create objects of the class. They are not initialized by the class' constructor.
+We may not initialize a `static` member inside the class.  
+Instead, we must define and initilize each `static` data member **outside
+the class body**.  
+Like _global objects_, `static` data members are defined outside any
+function &rarr; once they are defined, they continue to exist until the
+program completes.  
+
+Example:  
+```cpp
+// define and initialize a static class member
+double Account::interestRate = initRate();
+```
+
+Once the class name is seen, the remainder of the definition is **_in
+the scope of the class_** &rarr; we can use `initRate` without
+qualification.  
+Not also that even though `initRate` is _private_, we can use this
+function to initialize `interestRate`. The definition of last _(like any
+other member definition)_, has access to the _private_ members of the
+class.  
+<!-- }}} -->
+### In-Class Initialization of `static` Data Members <!-- {{{ -->
+<!-- p. 391 -->
+Example:
+```cpp
+class Account {
+public:
+    static double rate() { return interestRate; }
+    static void rate(double);
+private:
+    static constexpr int period = 30;   // perios is a constant
+    //  expression
+    double daily_tbl[period];
+};
+```
+
+If we use the member in a context in which the value cannot be
+substituted, then there must be a definition for that member.  
+
+**Best Practices.** Even if a `const static` data member is initialized
+in the class body, that member ordinarily should be defined outside the
+class definition.  
+<!-- }}} -->
+### Using a Class `static` Member <!-- {{{ -->
++ Access static member using the scope operator  
+    `double r = Account::rate()`  
++ through object or reference  
+    `r = ac1.rate();`  
++ through pointer to an Account object  
+    `r = ac2->rate();`  
++ **_member functions_** can use `static` members directly, without the
+  scope operator  
+<!-- }}} -->
+### `static` Members Can Be Used in Ways Ordinary Members Can't <!-- {{{ -->
++ Can have **_incomplete_** type:  
+```cpp
+class Bar {
+public:
+    // ...
+private:
+    static Bar mem1;    // ok: static member can have incomplete type
+    Bar *mem1;          // ok:pointer member can have incomplete type
+    Bar mem3;           // error:data members must have complete type
+};
+```
++ A one can use `static` member as a default argument:  
+```cpp
+class Screen {
+public:
+    // bkground refers to the static member
+    // declared later in the class definition
+    Screen& clear(char = bkground);
+private:
+    static const char bkground;
+};
+```
+
+
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+# IO Library<!-- {{{ -->
 manipulating with input and output:
 ```cpp
 istream &read(istream &is, Sales_data &item) {
-	double price = 0;
-	is >> item.bookNo >> item.units_sold >> price;
-	item.revenue = price * item.units_sold;
-	return is;
+    double price = 0;
+    is >> item.bookNo >> item.units_sold >> price;
+    item.revenue = price * item.units_sold;
+    return is;
 }
 ```
+## IO classes <!-- {{{ -->
+All support to different kinds of IO processing in splitted on 3
+headers:  
 
++ `iostream` - defines the basic types used to read from and write to a
+  stream  
+    * `istream`, `wistream` reads from a stream  
+    * `ostream`, `wostream` writes to a stream  
+    * `iostream`, `wiostream` reads and writes a stream  
++ `fstream` - defines the types used to read and write named files  
+    * `ifstream`, `wifstream` reads from a file  
+    * rest two  
++ `sstream` - defines the types used to read and write in-memory
+  _strings_  
+    * `istringstream`, `wistringstream` reads from a _string_  
+    * rest two  
+
+To support languages that use wide characters, the library defines a set
+of types and objects that manipulate `wchar_t` data. The names of the
+wide-character versions begin with a `w` (`wcin`, `wcout`, etc)  
+<!-- }}} -->
+## File Input and Output <!-- {{{ -->
+
+<!-- }}} -->
+## `string` Streams <!-- {{{ -->
+
+<!-- }}} -->
+
+<!-- }}} -->
