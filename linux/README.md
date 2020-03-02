@@ -53,3 +53,121 @@ names into patters, using _**wildcards**_.
 To match **!** itself, place it after the first character in the set, or
 precede it with a backslash, as in `[\!]`  
 <!-- }}} -->
+# Brace Expansion <!-- {{{ -->
+Expands to an arbitrary string of a given form:  
+
++ optional _preable_  
++ comma-separated strings between braces({})  
++ optional _postscript_  
+
+Each instance of a string inside the braces is combined with the preable
+and the postscript. It is also possible to nest the braces.  
+
+```shell
+$ echo b{ed,olt,ar}s
+beds bolts bars
+$ echo b{ar{d,n,k},ed}s
+bards barns barks beds
+# another example of brace expansion
+$ echo {2..5}
+2 3 4 5
+$ echo {d..h}
+d e f g h
+```
+<!-- }}} -->
+# Input and Output <!-- {{{ -->
+Everything on the system that produces or accepts data is treated as a
+file;
+## Standard I/O <!-- {{{ -->
+By convention, each UNIX program has a single way of accepting input
+called _standard input_, a single way of producint output called
+_standard output_, and single way of producing error messages called
+_standard error output_.  
+
+All shells handle standard I/O in basically the same way. Each program
+that you invoke has all three standard I/O channels set to your terminal
+or workstation.  
+
+You can also hook programs together in a _pipeline_, in which the
+standard output of one program feeds directly into the standard input of
+another.  
+
+This makes it possible to use UNIX utilities as building blocks for
+bigger programs:  
+
+| Utility | Purpose                                               |
+| ---     | ---                                                   |
+| _cat_   | Copy input to output                                  |
+| _grep_  | Search for strings in the input                       |
+| _sort_  | Sort lines in the input                               |
+| _cut_   | Extract columns from input                            |
+| _sed_   | Perform editing operations on input                   |
+| _tr_    | Translate characters in the input to other characters |
+<!-- }}} -->
+## I/O Redirection <!-- {{{ -->
+The notation `command < filename>` sets things up so that _command_
+takes standard input from a file instead of from a terminal.  
+Similarly, `command > filename` causes the command's standard output to
+be redirected to the named file.  
+<!-- }}} -->
+## Pipelines <!-- {{{ -->
+To redirect the output of a command into the standard input of another
+command instead of a file use **_pipe_**, notated as "|". Command line
+that contains two or more commands connected with pipes is called a
+pipeline.  
+<!-- }}} -->
+<!-- }}} -->
+# Background Jobs <!-- {{{ -->
+If you want to run a command that does not require user input and you
+want to do other things while the command is running, put an ampersand
+(&) after the command.  
+This is called **_running the command in the background_**, and a
+command that runs in this way is called a **_background job_**; by
+contrast a job run the normal way - foreground job.  
+
+You can overview background jobs with `jobs`, printing an indication
+lines of the job's status.  
+## Background I/O <!-- {{{ -->
+If a background job produces screen output, the output will jsut appear
+on your screen (which will intersperse with foreground job).  
+To solve, use redirect (`>`) to file
+<!-- }}} -->
+## Background Jobs and Priorities <!-- {{{ -->
+Every job on the system is assigned a _priority_, a number that tells
+the operating system how much priority to give the job whe it doles out
+resources (the higher the nubmer, the lower the priority).  
+
+UNIX command that lets you lower (or higher) the priority of any job - `nice`  
+<!-- }}} -->
+<!-- }}} -->
+# Special Characters and Quoting <!-- {{{ -->
+## Table of special characters <!-- {{{ -->
+| Character | Meaning                      |
+| ---       | ---                          |
+| ~         | Home directory               |
+| \`        | Command substitution         |
+| #         | Comment                      |
+| $         | Variable expression          |
+| &         | Background job               |
+| \*        | String wildcard              |
+| (         | Start subshell               |
+| )         | End subshell                 |
+| \         | Quote next character         |
+| \|        | Pipe                         |
+| [         | Start character-set wildcard |
+| ]         | End character-set wildcard   |
+| {         | Start command block          |
+| }         | End command block            |
+| ;         | Shell command separator      |
+| '         | Strong quote                 |
+| "         | Weak quote                   |
+| <         | Input redirect               |
+| >         | Output redirect              |
+| /         | Pathname directory separator |
+| ?         | Single-character wildcard    |
+| !         | Pipeline logical NOT         |
+<!-- }}} -->
+## Quoting <!-- {{{ -->
+
+<!-- }}} -->
+<!-- }}} -->
