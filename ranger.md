@@ -147,4 +147,8 @@ Many key bindings take an additional numeric argument.
 + `5j` - move down 5 lines  
 + `2l` - open a file in mode 2  
 + `10<space>` - to mark 10 files  
+
+### Main bindings <!-- {{{ -->
+
+<!-- }}} -->
 <!-- }}} -->
