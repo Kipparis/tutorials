@@ -3,23 +3,23 @@ _book: Basic English Grammas. second edition._
 <!-- 3-10 -->
 
 <!-- How I understood, at is used when I talk about something specific. -->
-## Prepositions.
+## Prepositions.<!-- {{{ -->
 __Preposition phrase__ - a preposition + a noun. _(at the library)_  
-
-## Talk to, talk on
+<!-- }}} -->
+## Talk to, talk on<!-- {{{ -->
 __talk to__ (someone)  
 __talk on__ the phone  
-__talk to__ each other  
+__talk to__ each other  <!-- }}} -->
 
-# Nouns
-## subject and object
+# Nouns and pronouns<!-- {{{ -->
+## subject and object<!-- {{{ -->
 __Birds__ fly. -- A noun is used as the object of a sentence.  
 __John__ is holding a __pen__. -- pen is a Noun. A pen is used as the
 __object of the verb__ _is holding_.  
 __Birds__ fly in the __sky__ -- A noun is also used as the __object of a
 preposition__.  
-
-## Adjective + noun
+<!-- }}} -->
+## Adjective + noun{{{
 _Adjectives describe nouns. In grammar, we say that adjectives "modify"
 nouns._  
 Adjectives come in front of nouns.   
@@ -28,8 +28,8 @@ Adjectives come in front of nouns.
 _An adjective can also follow **be**; the adjective describes the
 subject of the sentence._   
 (d) The weather is __cold__.  
-
-## Subject pronouns and object pronouns
+<!-- }}} -->
+## Subject pronouns and object pronouns<!-- {{{ -->
 | Subject pronouns     | Object pronouns      |
 | ---                  | ---                  |
 | __I__ speak English  | Bob knows __me__.    |
@@ -37,8 +37,8 @@ subject of the sentence._
   
 I know __Tony__. __He__ is a friendly person. -- Pronouns has the same
 meaning as a noun.  
-
-## Singular and plural  
+<!-- }}} -->
+## Singular and plural  <!-- {{{ -->
 __one pen__ - __two pens__ -- to make the plural form of most nouns: add
 -s   
 __baby__ - __babies__ -- end: _consonant + **-y**_, plural: y -> i, add
@@ -50,8 +50,8 @@ __dish__ - __dishes__ -- end: _-sh, -ch, -ss, -x_, plural: add _-es_,
 pronunciation: /az/  
 __tomato__ - __tomatoes__ -- end: consonant + _-o_, plural: add _-es_  
 __zoo__ - __zoos__ -- end: vowel + _-o_, plural: add _-s_  
-
-## Irregular plural forms
+<!-- }}} -->
+## Irregular plural forms<!-- {{{ -->
 | Singular | Plural       |
 | ---      | ---          |
 | child    | __children__ |
@@ -62,8 +62,8 @@ __zoo__ - __zoos__ -- end: vowel + _-o_, plural: add _-s_
 | woman    | __women__    |
 | fish     | __fish__     |
 | (none)   | __people__   |
-
-## Count and noncount
+<!-- }}} -->
+## Count and noncount<!-- {{{ -->
 __Count__ - we can count this (like books)  
 __Noncount__ - we can't count this (like sand, or luck)  
 A noncount none:  
@@ -78,7 +78,7 @@ Use __much__ with NONCOUNT NOUNS.
 Use __a few__ with COUNT NOUNS.  
 Use __a little__ with NONCOUNT NOUNS.  
 
-### Common noncount nouns
+### Common noncount nouns<!-- {{{ -->
 |             |         |        |        |
 | ---         | ---     | ---    | ---    |
 | advice      | mail    | bread  | pepper |
@@ -88,17 +88,18 @@ Use __a little__ with NONCOUNT NOUNS.
 | information | fraffic | fruit  | sugar  |
 | jewelry     | weather | meat   | tea    |
 | luck        | work    | milk   | water  |
-  
-## Measurements with noncount nouns
+  <!-- }}} -->
+### Measurements with noncount nouns<!-- {{{ -->
 I'd like __some__ water.  
 I'd like __a glass of__ water.  
 I'd like __a cup of__ coffee.  
 I'd like __a piece of__ fruit.  
 Units of measure are used with noncount nouns to __express a specific
 quantity__, for example: _a glass of_, _a cup of_, _a piece of_.  
-
-## Indefinite pronouns
-###  **_something_**, **_someone_**, **_anything_**, **_anyone_**
+<!-- }}} -->
+<!-- }}} -->
+## Indefinite pronouns<!-- {{{ -->
+###  **_something_**, **_someone_**, **_anything_**, **_anyone_**{{{
 Mary bought **_something_** at the store -- In a statement, use
 _something_ or _someone_.  
 Mary didn't buy **_anything_** at the store -- In a negative sentence, use
@@ -114,7 +115,9 @@ _Nothing_ is used when the verb is affirmative.
 \(c) I **_didn't say anything_**.  
 (d) I **_said nothing_**.  
 \(c) and (d) have the same meaning.  
-
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
 # Articles <!-- {{{ -->
 ## Using AN vs. A
 __A__ and __an__ are used in front of singular count nouns.  
@@ -126,7 +129,7 @@ Use __a__ if a word that begins with "u" has a /yu/ sound: _a
 university_, _a usual event_.  
 Use __a__ if the _"h"_ in the beginning of word is pronounced.  
 
-## Using _A/AN_ vs. _SOME_
+## Using _A/AN_ vs. _SOME_<!-- {{{ -->
 __A/An__ is used in front of __singular__ count nouns.  
 > I have __a__ pen. 
   
@@ -135,8 +138,8 @@ __Some__ is used in front of __plural__ count nouns.
   
 __Some__ is used in front of noncount nouns.  
 > I have __some__ rice.  
-
-## Using _THE_
+<!-- }}} -->
+## Using _THE_<!-- {{{ -->
 A: Where's David?  
 B: He's in **the** kitchen.  
 A speaker users **the** when the speaker and the listener have the same
@@ -145,8 +148,8 @@ Mike has **a** pen and **a** pencil.
 **The** pen is blue.  
 **The** pencil is yellow.  
 **_The_** is used with each of the three kinds of nouns.  
-
-## Using \_(NO ARTICLE) to make generalizations  
+<!-- }}} -->
+## Using \_(NO ARTICLE) to make generalizations  <!-- {{{ -->
 \_ Apples are good for you. -- no article is used to make
 generalizations with:  
 
@@ -154,7 +157,7 @@ generalizations with:
 + noncount nouns  
 Tom and Ann ate some fruit. **The** apples were very good, but **the**
 bananas were to ripe. - here is something specific  
-
+<!-- }}} -->
 ## Using **_SOME_** and **_ANY_**
 + Alice has **some money** - use **_some_** in a statement  
 + Alice doesn't have **any money** - use **_any_** in a negative
@@ -226,8 +229,7 @@ Typical responses:
 
 <!-- }}} -->
 <!-- }}} -->
-
-## Progressive form.
+## Progressive form.<!-- {{{ -->
 + I &rarr; my;  
 + you &rarr; your;  
 + she &rarr; her;  
@@ -235,11 +237,11 @@ Typical responses:
 + we &rarr; out;  
 + they &rarr; their;  
 They come in front of nouns.  
-
-## Nonaction verbs  
+<!-- }}} -->
+## Nonaction verbs  <!-- {{{ -->
 want, hear, undestand, need, see, know, like, smell, believe, love,
 taste, think (meaning believe), hate.
-
+<!-- }}} -->
 
 # Tenses <!-- {{{ -->
 ## Simple Present <!-- {{{ -->
@@ -280,6 +282,44 @@ _(incorrect: I am wanting an apple.)_
 ### Questions  
 __Is__ Mary __sleeping__? -> Yes, __she is__. (She's sleeping.)  
 __Where is__ Mary __sleeping__?  
+<!-- }}} -->
+## Past Progressive <!-- {{{ -->
+The past progressive des cribes an activity in progress at a particular
+time in the past.  
+    It was 10:00. Boris **_was sitting_** in class.  
+Form: **_was_**,**_were_** + **_-ing_**. The past progressive uses the
+past forms of **_be_**: **_was_** and **_were_** + **_-ing_**  
+
+### Using while with the past progressive <!-- {{{ -->
+**_while_** + _subject_ + _verb_ = _a time clause_  
+A _while_-clause describes an activity that was in progress at the time
+another activity happened. The verb in a _while_-clause is often past
+progressive.  
+
++ The phone rang **_while_** _I was sleeping_.  
++ **_While_** _I was sleeping_, the phone rang.  
+<!-- }}} -->
+### While vs. When in past time clauses <!-- {{{ -->
+The verb is a _while_-clause is often past progressive, as in (a) and
+(b).  
+The verb in a _when_-clause is often simple past, as in (c) and (d).  
+
++ (a) The mouse appeared _while_ **_I was studying_**.  
++ (b) _While **I was studying**_, the mouse appeared.  
++ (c) _When the mouse **appeared**_, I was studying.  
++ (d) I was studying _when the mouse **appeared**_.  
+<!-- }}} -->
+### Simple past vs. Past progressive <!-- {{{ -->
+The **_simple past_** describes activities or situations that began and
+ended at a particular time in the past.  
+The **_past progressive_** describes an activity that was in progress at
+the time another action happened.  
+
+If both  the _when_-clause and the main clause in a sentence are simple
+past, it means that the action in the _when_-clause happened first and
+the action in the main clause happened second.  
+    I **_opened_** my umbrella when it **_began_** to rain.  
+<!-- }}} -->
 <!-- }}} -->
 ## Past <!-- {{{ -->
 ### Using be
@@ -436,25 +476,6 @@ Notice that the simple form of the main virb is used with **_did not_**.
 structure: _did_ + _subject_ + _main verb_  
 **_Did_** **_Mary_** **_walk_** to school? $rarr; **_Yes, she did_**.  
 
-### Time clauses
-A clause is a group of words that has a subject and a verb.  
-_I ate breakfast._ = main clause -- complete sentece  
-_**before** I went to class_ = time clause -- incomplete sentence. It
-must be connected to a main clause.  
-A time clause can begin with **_before_** or **_after_**:  
-
-+ **_before_** + subject + verb = a time clause  
-+ **_after_** + subject + verb = a time clause  
- 
-We took a walk _**after** we finished our work_.  
-_**After** we finished our work,_ we took a walk.  
-**_Before_** and **_after_** don't always introduce a time clause.  
-
-+ We took a walk _after the movie._  
-+ I had a cup of coffee _before class._  
-
-_**When** the rain stopped,_ we took a walk -- **_When_** can introduce a time clause.
-
 
 <!-- }}} -->
 ## Future <!-- {{{ -->
@@ -483,6 +504,34 @@ When **_will_** **_Ann_** **_arrive?_** $rarr; **_Next Saturday._**
 ### Time clauses with before, after, and when <!-- {{{ -->
 _Before Ann **goes** to work tomorrow,_ she will eat breakfast.  
 A future time clause uses the SIMPLE PRESENT TENSE, not **_will_** or **_be going to_**.
+<!-- }}} -->
+<!-- }}} -->
+## Using have been (the present perfect) <!-- {{{ -->
+**_Have been_** expresses the idea that a situation began in the past
+and still exists at present. **_Have biin_** is used with **_since_** or
+**_for_** to tell how long the situation has existed.  
+
+Situation: I came to this city on February 1st. It is now April 1st. I
+am still in this city.  
+
++ (a) I **_have been_** here **_since_** _February 1st._  
++ (b) I **_have been_** here **_for_** _two months._  
+
+**_Since_** is followed by **_a specific time_**:  
+
++ _since February_ (specific month)  
++ _since nine o'clock_ (specific clock time)  
++ _since 1995_ (specific year)  
+
+**_For_** is followed by **_a length of time:_**  
+
++ _for two months_  
++ _for 30 minutes_  
++ _for four days_  
++ _for three years_  
+
+### Using since-clauses <!-- {{{ -->
+
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
@@ -757,6 +806,25 @@ The man is __in the back of__ the bus. -- man is inside.
 An _if_-clause begins with **_if_** and has a subject and a verb.  
 The simple present (not **_will_** or **_be going to_**) is used in an _if_-clause to express future time.  
 **_If it rains tomorrow, we will stay home._**  
+<!-- }}} -->
+### Time clauses<!-- {{{ -->
+A clause is a group of words that has a subject and a verb.  
+_I ate breakfast._ = main clause -- complete sentece  
+_**before** I went to class_ = time clause -- incomplete sentence. It
+must be connected to a main clause.  
+A time clause can begin with **_before_** or **_after_**:  
+
++ **_before_** + subject + verb = a time clause  
++ **_after_** + subject + verb = a time clause  
+ 
+We took a walk _**after** we finished our work_.  
+_**After** we finished our work,_ we took a walk.  
+**_Before_** and **_after_** don't always introduce a time clause.  
+
++ We took a walk _after the movie._  
++ I had a cup of coffee _before class._  
+
+_**When** the rain stopped,_ we took a walk -- **_When_** can introduce a time clause.
 <!-- }}} -->
 <!-- }}} -->
 ## Single words <!-- {{{ -->
@@ -1087,6 +1155,25 @@ With the verbs **_explain_** and **_introduce_**:
     Incorrect: _She explained us the grammar._  
 <!-- }}} -->
 <!-- }}} -->
+# Adjectives and adverbs <!-- {{{ -->
++ An adjective describes a noun.  
+    Ann is a **_careful_** driver.  
++ An adverb describes the action of a verb.  
+    Add drives **_carefully._**  
+
+Most adverbs are formed by adding **_-ly_** to an adjective.  
+
+The adjective form and the adverb form are the same for:
+**_fast_**, **_hard_**, **_early_**, **_late_**.  
+
+**_Well_** is the adverb form of **_good.\*_**  
+
++ Linda is a **_good_** writer.  
++ Linda writes **_well._**  
+
+\* **_Well_**can also be used as and adjective to mean "not sick." _Paul
+was sick last week, but now he's well._  
+<!-- }}} -->
 # Making Comparisons <!-- {{{ -->
 ## Comparisons: using the same (as), similar (to), and different (from) <!-- {{{ -->
 + **_the same (as)_**  
@@ -1184,25 +1271,20 @@ Notice the pattern: **_one of_** + _superlative_ + _plural noun_
 + The Amazon is **_one of the longest rivers_** in the world.  
 + A Rolls Royce is **_one of the most expensive cars_** in the world.  
 <!-- }}} -->
-<!-- }}} -->
-# Adjectives and adverbs <!-- {{{ -->
-+ An adjective describes a noun.  
-    Ann is a **_careful_** driver.  
-+ An adverb describes the action of a verb.  
-    Add drives **_carefully._**  
+## Using as ... as with adverbs <!-- {{{ -->
+Notice the pattern in the examples:  
+**_as_** + _adverb_ + **_as_**  
 
-Most adverbs are formed by adding **_-ly_** to an adjective.  
++ Bob doesn't study **_as hard as_** his brother (does).  
++ I didn't finish my work **_as quickly as_** Sue (did).  
 
-The adjective form and the adverb form are the same for:
-**_fast_**, **_hard_**, **_early_**, **_late_**.  
+Notice the patterns in the examples:  
+**_as_** + _adverb_ + **_as_** is frequently followed by
+_subject_ + **_can/could_** or by **_possibly._**
 
-**_Well_** is the adverb form of **_good.\*_**  
-
-+ Linda is a **_good_** writer.  
-+ Linda writes **_well._**  
-
-\* **_Well_**can also be used as and adjective to mean "not sick." _Paul
-was sick last week, but now he's well._  
++ I'm working **_as fast as I can._**  
++ I'm working **_as fast as possible._**  
++ Alex came **_as quicly as he could._**  
 <!-- }}} -->
 ## Making comparisons with adverbs <!-- {{{ -->
 Use **_more_** and **_most_** with adverbs that end in **_-ly\*_**.  
@@ -1223,20 +1305,6 @@ early, late_**:
 
 \* Exception: _early-earlier-earliest_  
 <!-- }}} -->
-## Using as ... as with adverbs <!-- {{{ -->
-Notice the pattern in the examples:  
-**_as_** + _adverb_ + **_as_**  
-
-+ Bob doesn't study **_as hard as_** his brother (does).  
-+ I didn't finish my work **_as quickly as_** Sue (did).  
-
-Notice the patterns in the examples:  
-**_as_** + _adverb_ + **_as_** is frequently followed by
-_subject_ + **_can/could_** or by **_possibly._**
-
-+ I'm working **_as fast as I can._**  
-+ I'm working **_as fast as possible._**  
-+ Alex came **_as quicly as he could._**  
 <!-- }}} -->
 # Expressing Ideas with Verbs <!-- {{{ -->
 ## Using should <!-- {{{ -->
@@ -1299,5 +1367,22 @@ a main verb. The following helping verbs are called "modal auxiliaries":
 **_should_**, **_will_**, **_would_**.  
 Expressions that are similar to madoal auxiliaries are: **_be able
 to_**, **_be going to_**, **_have to_**.  
+<!-- }}} -->
+## Summary <!-- {{{ -->
+| Auxiliary         | Meaning                      | Example                         |
+| ---               | ---                          | ---                             |
+| **_can_**         | ability/polite question      | Can you please help me?         |
+| **_could_**       | past ability/polite question | Could you please help me?       |
+| **_may_**         | possibility/polite question  | It may rain tomorrow.           |
+| **_might_**       | possibility                  | It _might_ rain tomorrow.       |
+| **_must_**        | necessity                    | IYou _must_ have a passport.    |
+| **_should_**      | advisability                 | You _should_ see a doctor.      |
+| **_will_**        | future happening             | My sister _will_ meet us ...    |
+| **_would_**       | polite question              | Would you please open the door? |
+| **_be able to_**  | ability                      | I _wasn't able to_ attend ...   |
+| **_be going to_** | future happening             | Tina _is going to_ meet us ...  |
+| **_has/have to_** | necessity                    | I _have to_ study tonight       |
+| **_had to_**      | past necessity               | I had to study last night too.  |
+
 <!-- }}} -->
 <!-- }}} -->
