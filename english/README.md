@@ -1,5 +1,7 @@
 # This file will work for me as reminder to rules in English language.
 _book: Basic English Grammas. second edition._  
+_if you need something specific, just open the book and find at the end
+of book section "index"._  
 <!-- 3-10 -->
 
 <!-- How I understood, at is used when I talk about something specific. -->
@@ -322,7 +324,7 @@ the action in the main clause happened second.
 <!-- }}} -->
 <!-- }}} -->
 ## Past <!-- {{{ -->
-### Using be
+### Using be<!-- {{{ -->
 | Present time                 | Past time                         |
 | ---                          | ---                               |
 | I **am** in class **today**. | I **was** in class **yesterday**. |
@@ -346,11 +348,13 @@ class yesterday.)
 Information que: _where + (be) + (subject)_  
 **Where** **were** **you** yesterday? $rarr; **_In class._** (I was in
 class yesterday.)  
-### Simple past tense: using -ed
+<!-- }}} -->
+### Simple past tense: using -ed<!-- {{{ -->
 _verb_ + **_ed_** = the simple past tense  
 simple present: I **walk** to school **every day**.  
 simple past: I **walked** to school **yesterday**.  
-#### Spelling of -ed verbs
+<!-- }}} -->
+#### Spelling of -ed verbs<!-- {{{ -->
 + end of verb: a consonant + **_-e_** $rarr; add **_-d_**.
 smile $rarr; smiled  
 + one vowel + one consonant $rarr; double the consonant, add **_-ed_**.
@@ -361,8 +365,120 @@ smile $rarr; smiled
 add **_ed_**. study $rarr; studied  
 + vowel + **_-y_** $rarr; add **_-ed_**; 
 do not change **_-y_** to **_-i_**. play $rarr; played  
+<!-- }}} -->
+### Past time words: yesterday, last, and ago<!-- {{{ -->
++ _yesterday_ is used with _morning, afternoon,_ and _evening_.  
++ _last_ is used with _night_, with long periods of time _(week, month,
+  year)_, with seasons _(spring, summer, etc.)_, and with days of the
+  week.  
++ _ago_ means "in the past." It follows specific lengths of time (e.g.
+  _two minutes_ + ago, _five years_ + ago).  
+<!-- }}} -->
+### Irregular verbs <!-- {{{ -->
+_Some verbs do not have **ed** forms. The past form is irregular._  
 
-### Simple past tense: using where, when, what time, and why
+<!-- appendix 5 -->
+
+| Simple form | Simple past | Past Participle |
+| ---         | ---         | ---             |
+| be          | was,were    | been            |
+| come        | came        |                 |
+| do          | did         |                 |
+| eat         | ate         | eaten           |
+| get         | got         |                 |
+| go          | went        | gone            |
+| have        | had         | had             |
+| put         | put         |                 |
+| see         | saw         | seen            |
+| sit         | sat         |                 |
+| sleep       | slept       |                 |
+| stand       | stood       |                 |
+| write       | wrote       | written         |
+| bring       | brought     |                 |
+| buy         | bought      |                 |
+| catch       | caught      |                 |
+| drink       | drank       |                 |
+| drive       | drove       |                 |
+| read        | read        | read\*          |
+| ride        | rode        |                 |
+| run         | ran         |                 |
+| teach       | taught      | taught          |
+| think       | thought     |                 |
+| break       | broke       |                 |
+| fly         | flew        |                 |
+| hear        | heard       |                 |
+| leave       | left        |                 |
+| meet        | met         | met             |
+| pay         | paid        |                 |
+| ring        | rang        |                 |
+| send        | sent        |                 |
+| sing        | sang        |                 |
+| speak       | spoke       | spoken          |
+| take        | took        | taken           |
+| wake up     | woke up     |                 |
+| begin       | began       |                 |
+| find        | found       |                 |
+| lose        | lost        | lost            |
+| hang        | hung        |                 |
+| say         | said        |                 |
+| sell        | sold        |                 |
+| steal       | stole       |                 |
+| tell        | told        |                 |
+| tear        | tore        |                 |
+| wear        | wore        | worn            |
+| cost        | cost        |                 |
+| cut         | cut         |                 |
+| forget      | forgot      |                 |
+| give        | gave        |                 |
+| hit         | hit         |                 |
+| hurt        | hurt        |                 |
+| lend        | lent        |                 |
+| make        | made        |                 |
+| spend       | spent       |                 |
+| understand  | understood  |                 |
+| blow        | blew        |                 |
+| draw        | drew        |                 |
+| fall        | fell        |                 |
+| feel        | felt        |                 |
+| grow        | grew        |                 |
+| keep        | kept        |                 |
+| know        | knew        | known           |
+| swim        | swam        |                 |
+| throw       | threw       |                 |
+| win         | won         |                 |
+| work        | worked      | worked          |
+| touch       | touched     | touched         |
+| become      | became      |                 |
+| bend        | bent        |                 |
+| bite        | bit         |                 |
+| build       | built       |                 |
+| shake       | shook       |                 |
+| feed        | fed         |                 |
+| fight       | fought      |                 |
+| hide        | hid         |                 |
+| hold        | held        |                 |
+| live        | lived       | lived           |
+| own         | owned       | owned           |
+
+\* the simple past and the past participle of the verb **_read_** are
+both pronounced "red".  
+
+<!-- }}}  -->
+### Negative<!-- {{{ -->
+(pronoun / noun) + **_did_** **_not_** + main verb\*(simple form).  
+I **_did_** **_not_** **_walk_** to school yesterday.  
+Notice that the simple form of the main virb is used with **_did not_**.  
+**_did_** is not used when the main verb is **_be_**.:  
+
++ incorrect: Joe _didn't_ be here yesterday.  
++ correct: Joe _wasn't_ here yesterday.  
+<!-- }}} -->
+### Questions <!-- {{{ -->
+#### yes/no<!-- {{{ -->
+structure: _did_ + _subject_ + _main verb_  
+**_Did_** **_Mary_** **_walk_** to school? $rarr; **_Yes, she did_**.  
+<!-- }}} -->
+#### Simple past tense: using where, when, what time, and why<!-- {{{ -->
 _Did_ you _go_ downtown? $rarr; yes, I did. / No, I didn't.  
 **_Where_** _did_ you _go_? $rarr; **_Downtown_**  
 
@@ -373,110 +489,8 @@ _Did_ you _run_ because you were late? $rarr; Yes, I did
 ---  
 _Did_ Ann _come_ as six? $rarr; Yes, she did.  
 **_When/What time_** did Ann come? $rarr; **_At six._**  
-
-### Past time words: yesterday, last, and ago
-+ _yesterday_ is used with _morning, afternoon,_ and _evening_.  
-+ _last_ is used with _night_, with long periods of time _(week, month,
-  year)_, with seasons _(spring, summer, etc.)_, and with days of the
-  week.  
-+ _ago_ means "in the past." It follows specific lengths of time (e.g.
-  _two minutes_ + ago, _five years_ + ago).  
-
-### Irregular verbs <!-- {{{ -->
-_Some verbs do not have **ed** forms. The past form is irregular._  
-
-| Present    | Past       |
-| ---        | ---        |
-| come       | came       |
-| do         | did        |
-| eat        | ate        |
-| get        | got        |
-| go         | went       |
-| have       | had        |
-| put        | put        |
-| see        | saw        |
-| sit        | sat        |
-| sleep      | slept      |
-| stand      | stood      |
-| write      | wrote      |
-| bring      | brought    |
-| buy        | bought     |
-| catch      | caught     |
-| drink      | drank      |
-| drive      | drove      |
-| read       | read       |
-| ride       | rode       |
-| run        | ran        |
-| teach      | taught     |
-| think      | thought    |
-| break      | broke      |
-| fly        | flew       |
-| hear       | heard      |
-| leave      | left       |
-| meet       | met        |
-| pay        | paid       |
-| ring       | rang       |
-| send       | sent       |
-| sing       | sang       |
-| speak      | spoke      |
-| take       | took       |
-| wake up    | woke up    |
-| begin      | began      |
-| find       | found      |
-| lose       | lost       |
-| hang       | hung       |
-| say        | said       |
-| sell       | sold       |
-| steal      | stole      |
-| tell       | told       |
-| tear       | tore       |
-| wear       | wore       |
-| cost       | cost       |
-| cut        | cut        |
-| forget     | forgot     |
-| give       | gave       |
-| hit        | hit        |
-| hurt       | hurt       |
-| lend       | lent       |
-| make       | made       |
-| spend      | spent      |
-| understand | understood |
-| blow       | blew       |
-| draw       | drew       |
-| fall       | fell       |
-| feel       | felt       |
-| grow       | grew       |
-| keep       | kept       |
-| know       | knew       |
-| swim       | swam       |
-| throw      | threw      |
-| win        | won        |
-| become     | became     |
-| bend       | bent       |
-| bite       | bit        |
-| build      | built      |
-| shake      | shook      |
-| feed       | fed        |
-| fight      | fought     |
-| hide       | hid        |
-| hold       | held       |
-
-<!-- }}}  -->
-### Negative
-(pronoun / noun) + **_did_** **_not_** + main verb\*(simple form).  
-I **_did_** **_not_** **_walk_** to school yesterday.  
-Notice that the simple form of the main virb is used with **_did not_**.  
-**_did_** is not used when the main verb is **_be_**.:  
-
-+ incorrect: Joe _didn't_ be here yesterday.  
-+ correct: Joe _wasn't_ here yesterday.  
-
-### Questions
-#### yes/no
-structure: _did_ + _subject_ + _main verb_  
-**_Did_** **_Mary_** **_walk_** to school? $rarr; **_Yes, she did_**.  
-
-
+<!-- }}} -->
+<!-- }}} -->
 <!-- }}} -->
 ## Future <!-- {{{ -->
 ### Using be going to
@@ -508,8 +522,11 @@ A future time clause uses the SIMPLE PRESENT TENSE, not **_will_** or **_be goin
 <!-- }}} -->
 ## Using have been (the present perfect) <!-- {{{ -->
 **_Have been_** expresses the idea that a situation began in the past
-and still exists at present. **_Have biin_** is used with **_since_** or
+and still exists at present. **_Have been_** is used with **_since_** or
 **_for_** to tell how long the situation has existed.  
+
+Form: **_have/has_** + _past participle_  
+He has &rarr; He's
 
 Situation: I came to this city on February 1st. It is now April 1st. I
 am still in this city.  
@@ -533,6 +550,45 @@ am still in this city.
 ### Using since-clauses <!-- {{{ -->
 
 <!-- }}} -->
+### Using never with the present perfect <!-- {{{ -->
+**_Never_** is frequently used with the _present perfect_.  
+
+> _I've **never** touched_ an elephant.  
+  
+That means "From the beginning of my life to the present moment, I have
+never touched and elephant."  
+<!-- }}} -->
+### Present perfect: questions and negatives <!-- {{{ -->
+Question has a form: **_have/has_** + _subject_ + _past participle_  
+> **_Have_**_you **lived**_ here for along time?  
+
+Negative form of the present perfect: **_have/has_** + **_not_** + _past
+participle_  
+> I **_have not (haven't) lived_** here for a long time.  
+<!-- }}} -->
+### Using ever with the present perfect <!-- {{{ -->
+**_ever_** means "in your lifetime, from the time you were born to the
+present moment." Questions with **_ever_** frequently use the present
+perfect.  
+
+_Have_ you **_ever_** _been_ in Hawaii?  
+Yes, I **_have._** ( I have been in Hawaii )  
+
+Note:  
+I **_haven't ever been_** in Korea. _is the same as_  
+I**_'ve never been_** in Korea.  
+<!-- }}} -->
+### The present perfect: questions with how long <!-- {{{ -->
+Form: same.  
+
+_How long **have** you **been**_ in this city?  
+For five months.  
+<!-- }}} -->
+<!-- }}} -->
+## Using since-clauses <!-- {{{ -->
+**_Since_** can be followed by a subject and verb. The verb in the
+_since_-clause is **simple past**.  
+    I've been afraid of dogs, _**since** I was a child._  
 <!-- }}} -->
 <!-- }}} -->
 ## Parts of words <!-- {{{ -->
@@ -730,11 +786,13 @@ Form: **_every_** + **singular** noun + **singular** verb.
 <!-- }}} -->
 <!-- }}} -->
 ## Time <!-- {{{ -->
-### Using _it_ to talk about time.
+<!-- appendix 3,4 -->
+### Using _it_ to talk about time.<!-- {{{ -->
 What day is it? -- It's Monday.  
 What's the date today? -- It's Semptember 15th.  
 What time is it? -- It's nine.  
-### Prepositions of time.  
+<!-- }}} -->
+### Prepositions of time.  <!-- {{{ -->
 __at__ + a specific time on the clock; __at__ + night  
 We have class __at__ one o'clock.  
 We sleep __at__ night.  
@@ -752,7 +810,8 @@ I have class __on__ Monday.
 I was born __on__ October 31,1975.  
 __from...to__ __from__(a specific time) __to__ (a specific time)  
 We have class __from__ 1:00 __to__ 2:00.  
-<!--   }}} -->
+<!-- }}} -->
+<!-- }}} -->
 ## Weather <!-- {{{ -->
 __It's__ sunny today.  
 __It's__ hot and humid today.  
