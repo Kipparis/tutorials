@@ -1,6 +1,6 @@
-
 # Where to read<!-- {{{ -->
 + [git-scm](https://git-scm.com/docs/gittutorial)  
++ book: pro-git  
 <!-- }}} -->
 # About Version Control<!-- {{{ -->
 Version control is a system that records changes to a file or set of
@@ -128,5 +128,122 @@ above use HTTPS protocol, buy you may also see `git://` or
 Typically, you'll want to start making changes and committing snapshots
 of those changes into your repository each time the project reaches a
 state you want to record.  
+
++ **_Tracked_** files are files that were in the last snapshot;  
++ **_Untracked_** files are everything else - anyu files in your working
+  directory that were not in your last snapshot and are not in your
+  staging area;  
+
+### Checking the Status of Your files <!-- {{{ -->
+The main tool you use to determine which files are in which stat is the
+`git status` command.  
+It shows:  
+
++ untracked files;  
++ which tracked files are modified;  
++ which branch you are on;  
++ informs you if it has diverged from the same branch on server;  
+
+**_Untracked_** basically means that Git sees a file you didn't have in
+the previous snapshot (commit);  
+<!-- }}} -->
+### Tracking New Files <!-- {{{ -->
+In order to begin tracking a new file, you use the command `git add`.  
+To begin tracking the _README_ file, you can run this:  
+```shell
+$ git add README
+```
+You can pass as argument either a file or a directory; if it's a
+directory, the command adds all the files in that directory recursively.  
+<!-- }}} -->
+### Stagin Modified Files <!-- {{{ -->
+Use `git add`  
+Git commit contains only staged file snapshots.  
+<!-- }}} -->
+### Short Status <!-- {{{ -->
+`git status -s` or `git status --short` will show far more simplified
+output  
+```shell
+$ git status -s
+ M README
+MM Rakefile
+A  lib/git.rb
+M  lib/simplegit.rb
+?? LICENSE.txt
+```
+
++ Files aren't tracked have a `??` next to them;  
++ New files that have been added to the staging area have an `A`;  
++ Modified files have an `M`;  
+
+There are trwo columns to the output:  
+
++ left-hand column indicates the status of the staging area;  
++ right-hand column indicates the status of the working tree;  
+
+So in example above: _README_ file is modified in the working directory
+but not yet staged, while the _lib/simplegit.rb_ file is modified and
+staged. The _Rakefile_ was modified, staged and then modified again, so
+there are changes to it that are both staged and unstaged.  
+
+**Help.** `man git-status` after that you may search for `Short Format`  
+<!-- }}} -->
+### Ignoring Files <!-- {{{ -->
+Often, you'll have a class of files that you don't want Git to
+automatically add or even show you as being untracked. In such cases,
+you can create a file listing patterns to match them named `.gitignore`.
+Here is example:  
+```shell
+$ cat .gitignore
+*.[oa]
+*~
+```
+
+1. Ignore files ending in ".o" or ".a";  
+2. Ignore files ending with a tilde;  
+
+Rules for the patterns you can put in the _.gitignore_file are as
+follows:  
+
++ blank likes or lines tarting with **_#_** are ignored;  
++ standard glob patterns work, and will be applied recursively
+  throughout the entire working tree;  
+    * you can use two asterisks to match nested directories
+    `a/**/z` would match `a/z`, `a/b/z`, `a/b/c/z` and so on.  
++ you can start patterns with a forward slash(**/**) to avooid recursivity;  
++ you can end patterns with a forward slash (**/**) to specify a
+  directory;  
++ you can negate a pattern by starting it with an exclamation point (**!**);  
+
+Here is another example _.gitignore_ file:  
+```txt
+# ignore all .a files
+*a
+
+# but do track lib.a, even though you're ignoring .a files above
+!lib.a
+
+# only ignore the TODO file in the current directory, not subdir/TODO
+/TODO
+
+# ignore all files in any directory named build
+build/
+
+# ignore doc/notes.txt, but not doc/server/arch.txt
+doc/*.txt
+
+# ignore all .pdf files in the doc/ directory and any of its
+# subdirectories
+doc/**/*.pdf
+```
+
+Note: in the simple case, a repository might have a single _.gitignore_
+file. However it's possible to have additional _.gitignore_ files in
+subdirectories. The rules in these nested files apply only to the files
+under the directory where they are located.  
+<!-- }}} -->
+### Viewing Your Staged and Unstaged Changes <!-- {{{ -->
+
+<!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
