@@ -1,5 +1,5 @@
 # This file describes commands to start use ranger
-<!-- 336 line -->
+<!-- 533 line -->
 ## General configuration <!-- {{{ -->
 + `%ranger/rc.conf` - where all the options are stored  
     * also there are keybindings
@@ -149,6 +149,88 @@ Many key bindings take an additional numeric argument.
 + `10<space>` - to mark 10 files  
 
 ### Main bindings <!-- {{{ -->
+<!-- line 441 man page -->
 
+**Basic movement**  
+
++ `h`, `j`, `k`, `l` - move left, down, up or right  
++ `^D` or `J`, `^U` or `K` - move a half page down, up  
++ `H`, `L` - move back and forward in the history  
++ `gg`, `G` - move to the top, bottom  
++ `[`, `]` - move up and down in the parent directory  
++ `^R` - **reload** everything
++ `mX` - create a **bookmark** with the name _X_  
++ ```X`` - move to the **bookmark** with the name _X_  
++ `n` - find next file. By default, this gets you to the **newest file** in
+  the directory.  
++ `N` - find the previous file  
++ `f` - quickly navigate by entering a part of the filename  
+
+**Performance**  
+
++ `F` - toggle **freeze\_files** setting. When active, directories and
+  files will not be loaded, improving performance. (preview can be
+  toggled with `zI`, preview of directories toggled with `zP`)  
++ `i` - inspect the current file in a bigger window  
++ `E` - edit the current file in $VISUAL otherwise $EDITOR otherwise
+  "vim"  
++ `S` - open a shell in the current directory  
++ `W` - opens the log window
++ `w` - opens the task window where you can view and modify background
+  processes that currently run in ranger  
+    * in there you can type `dd` to abour process  
+    * `J` or `K` to change the priorit y of a process.  
++ `^C` - stop the currently running background process that ranger has
+  started  
++ `oX` - change the **sort method**  
++ `u?` - universal **undo-key**  
+    * `uq` restores closed tabs  
+    * `ud` clears the copy/cut buffer  
+    * `uV` starts the reversed visual move  
+    * `uv` **clears the selection**  
+
+**Basic file manipulation**  
+
++ `yy` - **copy** the selection (same as Ctrl+C in GUI)  
+    * `ya` to add files to the copy buffer  
+    * `yr` to remove files again  
+    * `yt` for toggling  
++ `dd` - **cut** the selection (same as Ctrl+X in GUI)  
+    * `da`, `dr`, and `dt` equivalent to _yy_ section  
++ `pp` - **past** the files which were previously copied or cut (same as
+  Ctrl+V in GUI). (conflicts are solved by appending an _ and index if
+  necessary)  
+    * `po` - past files, overwriting existing files.  
+    * `pP`, `pO` - like _pp_ and _po_, but queues the operation so that
+  it will be executed after any other operations.  
+    * `pl`, `pL` - create syblinks (absolute or relative) to the copied
+  files  
+    * `phl` - create hardlinks to the copied files  
+
++ `Space` - mark a file.  
++ `v` - toggle the mark-status of all files  
++ `V` - starts the visual mode.
++ `/` - search for files in the current directory  
+
+**Console**  
+
++ `:` - open the console  
++ `!` - open the console with the content "shell "  
++ `@` open the console with the content "shell %s", placing the
+cursor before the %s so you can quickly run commands with the
+current selection as the argument  
++ `r` - open the console with the content "open with " so you can
+decide which program to use to open current file selection  
++ `cd` - open the console with the content "cd "  
++ `^P` - open the console with the most recent command.  
+
+**Tabs**  
+
+
+**Help**  
+
++ `zX` - change settings. See the settings section for a list of
+  settings and their hotkey  
++ `?` - opens this man page
 <!-- }}} -->
 <!-- }}} -->
