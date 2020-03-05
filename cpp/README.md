@@ -491,6 +491,92 @@ headers:
 To support languages that use wide characters, the library defines a set
 of types and objects that manipulate `wchar_t` data. The names of the
 wide-character versions begin with a `w` (`wcin`, `wcout`, etc)  
+
+The library lets us ignore the difference between different kinds of
+stream by using **_inheritance_**. _For example._ Types _ifstream_ and
+_istringstream_ inherit from _istream_. Thus, we can call `getline` on
+an _ifstream_ or _istringstream_ object and we can use the `>>` operator
+on both of them.  
+
+**No copy or Assign for IO Objects.** Thus we cannot have a parameter or
+return type that is one of stream types. Stream is passed only by
+reference.  
+<!-- }}} -->
+## Condition States <!-- {{{ -->
+IO classes define functions and flags, listed below, that let us access
+and manipulate the **_condition state_** of a stream.  
+
+_strm_ is one of the IO types.  
+
+|                   |                                                                                |
+| ---               | ---                                                                            |
+| strm::iostate     | machine-dependent integral type that represents the condition state of stream. |
+| strm::badbit      | it's value is used to indicate that a stream is corrupted (`s.bad()`)          |
+| strm::failbit     | it's value is used to indicate that an IO operation failed (`s.fail()`)        |
+| strm::eofbit      | used to indicate that a stream hit end-of-file (or `s.eof()` bit)              |
+| strm::goodbit     | used to indicate that a stream is not in an error state (`s.good()`)           |
+| s.clear()         | reset all condition values in the stream s to valid state                      |
+| s.clear(flags)    | reset the condition of s to flags. Type of slags is stdm::iostate              |
+| s.setstate(flags) | adds specified conditions to s.  _flags_'s type is strm::iostate               |
+| s.rdstate()       | strm::iostate value from _s_                                                   |
+
+Consider this:  
+```cpp
+int ival;
+cin >> ival;    // we enter Boo on the sti
+```
+
+Executed this, cin will be in an error state.  
+The easiest way to determine **_the state of a stream_** object is to use that
+object as a condition:  
+```cpp
+while (cin >> word)
+    // ok: read operation successful
+```
+<!-- }}} -->
+## Integrrogating the State of a Stream <!-- {{{ -->
+Using a stream as a condition tells us only whether the stream is valid, not
+telling what happened.  
+
+IO library defines a machine-dependent integral type named _iostate_ -
+collection of bits. Also IO classes define four _constexpr_ values of type
+iostate that represent particular bit patterns.  
+
+Right way to determine the state of a stream is to use either `good()`
+or `fail()`.  
+<!-- }}} -->
+## Managing the Condition State <!-- {{{ -->
+The following turns off `failbit` and `badbit` but leaves eofbit untouched:  
+```cpp
+cin.clear(cin.rdstate() & ~cin.failbit & ~cin.badbit);
+```
+
+<!-- }}} -->
+## Managing the Output Buffer <!-- {{{ -->
+When the following code is executed:
+```cpp
+os << "plrese enter a value: ";
+```
+the string might be printed immediately, or the operating system might store
+the data in a buffer to be printed later.  
+
+There are several conditions that cause the buffer to be flushed: 
+
++ The program completes normally. All output buffers are flushed as part of the
+  `return` from `main`;  
++ At some indeterminate time, the buffer can become full, in which case it will
+  be flushed before writing the next value;  
++ We can flush the buffer explicitly using a manipulator such as `endl`;  
++ We can use the `unitbuf` manipulator to set the stream's intewrnal staate to
+  mepty the buffer after each output operation;  
++ Stream might be tied to another stream. In this case, the buffer of the tied
+  stream is flushed whenever the tied stream is read or written;  
+    `cin` and `cerr` are both tied to `cout`. Hence, reading `cin` or writing to
+    `cerr`flushed the buffer in `cout`.  
+
+<!-- }}} -->
+## Flushing the Output Buffer <!-- {{{ -->
+<!-- TODO: stopped here -->
 <!-- }}} -->
 ## File Input and Output <!-- {{{ -->
 
@@ -498,5 +584,4 @@ wide-character versions begin with a `w` (`wcin`, `wcout`, etc)
 ## `string` Streams <!-- {{{ -->
 
 <!-- }}} -->
-
 <!-- }}} -->
