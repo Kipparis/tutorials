@@ -168,6 +168,57 @@ UNIX command that lets you lower (or higher) the priority of any job - `nice`
 | !         | Pipeline logical NOT         |
 <!-- }}} -->
 ## Quoting <!-- {{{ -->
+Sometimes you will want to use special characters literally, i.e.
+without their special meanings. This is called _quoting_.  
+``'string'``  
+<!-- }}} -->
+## Backslash-Escaping <!-- {{{ -->
+Another way to change the meaning of a character is to precede it with a
+backslash (`\`). This is called _backslash-escaping_ the character.  
+<!-- }}} -->
+## Control Keys <!-- {{{ -->
+Control keys - those that you type by holding down the CTRL key and
+hitting another key.  
+If you want to see your settings type `stty --all`  
+
+Common control keys:  
+
+| Ctrl key      | stty name | Function description                        |
+| ---           | ---       | ---                                         |
+| Ctrl-C        | intr      | Stop current command                        |
+| Ctrl-D        | eof       | End of input                                |
+| Ctrl-\        | quit      | Stop current command if Ctrl-C doesn't work |
+| Ctrl-S        | stop      | Halt output to screen                       |
+| Ctrl-Q        |           | Restart output to screen                    |
+| DEL or Ctrl-? | erase     | Erase last character                        |
+| Ctrl-U        | kill      | Erase entire command line                   |
+| Ctrl-Z        | susp      | Suspend current command                     |
+<!-- }}} -->
+<!-- }}} -->
+# Help <!-- {{{ -->
+In bash you can type `help` by itself to get a list of the built-in
+shell commands.  
+If you provide `help` with a shell command name it will give you a
+detailed description.  
+You can also provide _help_ with a **_partial name_**. For example `help
+re` will provide details on _read_, _readonly_, _return_.  
+<!-- }}} -->
+# Command-Line Editing <!-- {{{ -->
+`fc` command allows you edit your last command with your favorite
+editor.  
+## Enabling Command-Line Editing <!-- {{{ -->
+Two ways to enter either editing mode:  
+
++ `$ set -o vi`  
++ set a _readline_ variable in the file _.inputrc_  
+    Note about .inputrc. It is only sourced by bash :)  
+    If you want to set up eny mode on your shell, search for this  
+<!-- }}} -->
+## The History List <!-- {{{ -->
+Default to *.bash\_history*, buy you can change to whatever you like by
+setting the environment varialbe **HISTFILE**.  
+<!-- }}} -->
+## vi Editing Mode <!-- {{{ -->
 
 <!-- }}} -->
 <!-- }}} -->
