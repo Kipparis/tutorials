@@ -17,7 +17,7 @@ parser.add_argument("-u", "--update", help="update words in database",
         action="store_true", default=True)
 args = parser.parse_args()
 
-if args.create: 
+if args.create:
     args.create = StringBool(input("Are you sure you want to recreate database "
             "(operation will remove any file/folder/symnlink on "
             "specified path - '{}')\ny,[n]: ".format(args.db_file_name)))
@@ -36,20 +36,24 @@ if args.create:
             category_name text
             )''')
     db_cursor.execute('''CREATE TABLE results
-            (ID int NOT NULL PRIMARY KEY, 
-            word text, 
-            score int, 
+            (ID int NOT NULL PRIMARY KEY,
+            word text,
+            score int,
             date_added date,
-            category int DEFAULT -1 
-            REFERENCES categories(ID) 
-            ON UPDATE CASCADE 
-            ON DELETE SET DEFAULT
+            category int DEFAULT -1
+                REFERENCES categories(ID)
+                ON UPDATE CASCADE
+                ON DELETE SET DEFAULT
             )''')
     # iterate over words in .dict file and uppend them
-    for category in parse_dict(args.words_file): # must return iterable
-        print(f"Entered {category}")
-        for entry in category:
-            print(f"\t{entry}")
+    for entry in parse_dict(args.words_file): # must return iterable
+        print(f"GOT THIIS {entry}")
+        # becouse I reassign every variable for every entry
+        # it gonna to be very nice to memory (but opposite to CPU)
+        # for every entry -> store in db
+
+
+# if args.update:
 
 
 
@@ -61,6 +65,8 @@ if args.create:
 #       output statistic
 #       on welcom page output this statistic
 #       and percantage of overall words knowledge
+# Formalities:
+#   1. Create simple usage for newcommers
 
 
 db_conn.close() # close connection
