@@ -243,7 +243,95 @@ subdirectories. The rules in these nested files apply only to the files
 under the directory where they are located.  
 <!-- }}} -->
 ### Viewing Your Staged and Unstaged Changes <!-- {{{ -->
++ What have you changed but not yet staged?  
++ What have you staged that you are about to commt?  
 
+`git status` answers this questions very generally  
+`git diff` shows you the exact lines added and removed - _the patch_ as
+it were  
+
+Let's say you edit and stage the `README` file, and then edit the
+`CONTRIBUTING.md` file without staging it.  
+
+Then `git diff` will compare you working directory with what is in your
+staging area.  
+If you want to see what you've **_staged_** what will go into your next
+commit, you can use `git diff --staged` or `git diff -cached`
+(compares your staged changes to your last commit)  
+
+Run `git difftool --tool-help` to see what **_tools_** are available on your
+system.  
+<!-- }}} -->
+### Commiting Your Changes <!-- {{{ -->
+`git commit` launches your editor of choice. (It uses EDITOR environment
+variable or can be configured using `git config --global core.editor`
+command)  
+
+By default in commit message will contain the most recent output of `git
+status`, you can include more detailed information by using `-v` option.
+It will also include `diff` of your change.  
+
+When you **_exit_** the editor, Git creates your commit with that commit
+message (with the comments and diff stipped out).  
+
+You can pass commit message inline using `-m` flag, like this:  
+`$ git commit -m "Story 182: fix menchmarks for speed"`  
+
+<!-- }}} -->
+### Skipping the Staging Area <!-- {{{ -->
+Adding the `-a` option to the `git commit` stages every file that is
+already tracked before doing the commit.  
+_but be careful; sometimes this flag will cause you to include unwanted
+changes._  
+<!-- }}} -->
+### Removing Files <!-- {{{ -->
+To remove a file from Git, you have to remove it from your tracked files
+(e.g. remove from your stagin area &rarr; commit). The `git rm` command
+does that (and also removes the file from your working directory).  
+
+If you **_modified_** or **_staged_** the file, you must force the
+removal with the `-f` option.  
+
+If you want to remove only from **_staging_** area, and keep in your
+working tree, use `git rm --cached`  
+
+You can pass _files_, _directories_, and _file-glob_ patterns to the
+`git rm` command. (you have to precede _file-glob symbols_ with the
+backslash (\\) because git has its own filename expansion)  
+<!-- }}} -->
+### Moving Files <!-- {{{ -->
+If you want to rename a file in Git, you can run something like:  
+`$ git mv file_from file_to`  
+above equivalent to:  
+```shell
+$ mv README.md README
+$ git rm README.md
+$ git add REAMDE
+```
+
+<!-- }}} -->
+### Viewing the Commit History <!-- {{{ -->
+To see what have commited you may use `git log` command.  
+
+A huge number and variety of options to the `git log` command are
+available. Here are the most popular:  
+
++ `-p` or `--patch` - shows the difference (the _patch_ output)
+  introduced in each commit. You can limit the number of log entries
+  displayed using `-<number>`.  
++ `--stat` - see some abbreviated stats for each commit (such as what
+  file changed, how many insertions/deletions)  
++ `--pretty` - changes the log output to formats other than default  
+    * `oneline` option prints each commit on single line  
+    * `short`, `full`, `fuller` - show output in roughly the same format
+  but with less or more information.  
+    `$ git log --pretty=oneline`  
+    * `format` allows you to specify your own log output format  
+    `$ git log --pretty=format:"%h - %an, %ar : %s"`
+
+Useful options for `git log --pretty=format`:  
+
+<!-- stopped here -->
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
