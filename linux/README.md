@@ -219,6 +219,97 @@ Default to *.bash\_history*, buy you can change to whatever you like by
 setting the environment varialbe **HISTFILE**.  
 <!-- }}} -->
 ## vi Editing Mode <!-- {{{ -->
+vim-mode has two modes of its own: _input_ and _control_ mode.  
+
+| Command     | Description                                     |
+| ---         | ---                                             |
+| DEL, Ctrl-H | Delete previous character                       |
+| Ctrl-W      | Erase previous word (i.e., erase until a blank) |
+| Ctrl-V      | Quote the next character                        |
+| ESC         | Enter control mode (see below)                  |
+
+Type `<count>G` to move `count` lines up in search history  
+
+**Character-Finding Commands:**  
+
++ `fx` move right to next occurence of `x`  
++ `Fx` move left  to previous occurence of `x`  
++ `t` and `T` same as `f` and `F` but your coursor placed closely to
+  starting position  
++ `;` - redo last character-finding command  
++ `,` - redo last character-finding command in opposite direction  
+
+**Textual Completion:**  
+In modern shells it's called via `TAB` key.  
+
+**Miscellaneous Commands:**  
+
+| Command  | Description                                        |
+| ---      | ---                                                |
+| `~`      | Invert case of current character(s)                |
+| `-`      | Append last word of previous command, enter IM     |
+| `Ctrl-L` | Clear the screen and redraw the current line on it |
+| `#`      | Prepend # to the line and send it to the history   |
 
 <!-- }}} -->
+<!-- }}} -->
+
+## The fc Command <!-- {{{ -->
+`fc -l` - lists last commands (you may specify 2 arguments - since,
+before), time window is specified by number arguments or by prefix
+string  
+
+* `-n` suppresses the line numbers  
+
+`f` is usually used to fix a recent command  
+
++ With no arguments - edit the most recent command  
++ With a numberic argument - edit command with that number  
++ With a string argument - edit command starting with that string  
++ With two arguments you specify the ranger of commands  
+
+**Warning!** After exit fc editor will execute all commands.
+
+<!-- }}} -->
+## History Expansion <!-- {{{ -->
+The way to recall commands is by the use of _event designators_.  
+
+| Command            | Description                                                                 |
+| ---                | ---                                                                         |
+| `!`                | Start a history substitution                                                |
+| `!!`               | Refers to the last command                                                  |
+| `!n`               | Refers to command line _n_                                                  |
+| `!-n`              | Refers to the current command line minus _n_                                |
+| `!string`          | Refers to the most recent command starting with _string_                    |
+| `!?string?`        | Refers to the most recent command containing _string_; ending ? is optional |
+| `^string1^string2` | Repeat the last command, replacing _string1_ with _string2_                 |
+
+_Note_:
+
++ `!!` good for _sudo_  
++ `^string1^string2` - _typos_  
+
+It's also possible to refer to certain words in a previous command by
+the use of a _word designator_.  
+
+| Designator | Description                                           |
+| ---        | ---                                                   |
+| `0`        | First word in a line                                  |
+| `n`        | The _n_th word in a line                              |
+| `^`        | The frst argument (the second word)                   |
+| `$`        | The last argument in a line                           |
+| `%`        | The words matched by the most recent _?string_ search |
+| `x-y`      | A range of words from _x_ to _y_                      |
+| `*`        | All words but the first (_0-y_)                       |
+| `x*`       | `x-$`                                                 |
+| `x-`       | The words from _x_ to the second to last word         |
+
+The _word designator_ follows the _event designator_ separated by a
+colon.  
+
+There are also **_modifiers_**, but it's better to master vi or emacs
+mode skills. If you wish to read about **_modifiers_** go to page 168.  
+<!-- }}} -->
+## Keyboard Habits <!-- {{{ -->
+
 <!-- }}} -->
