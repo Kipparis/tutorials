@@ -327,11 +327,95 @@ available. Here are the most popular:
   but with less or more information.  
     `$ git log --pretty=oneline`  
     * `format` allows you to specify your own log output format  
-    `$ git log --pretty=format:"%h - %an, %ar : %s"`
+    `$ git log --pretty=format:"%h - %an, %ar : %s"`  
 
 Useful options for `git log --pretty=format`:  
 
+| Option | Description of Output                           |
+| ---    | ---                                             |
+| `%H`   | Commit hash                                     |
+| `%h`   | Abbreviated commit hash                         |
+| `%T`   | Tree hash                                       |
+| `%t`   | Abbreviated tree hash                           |
+| `%P`   | Parent hashes                                   |
+| `%p`   | Abbreviated parent hashes                       |
+| `%an`  | Author name                                     |
+| `%ae`  | Author email                                    |
+| `%ad`  | Author date (format respects the --date=option) |
+| `%ar`  | Author date, relative                           |
+| `%cn`  | Commiter name                                   |
+| `%ce`  | Commiter email                                  |
+| `%cd`  | Commiter date                                   |
+| `%cr`  | Commiter date, relative                         |
+| `%s`   | Subject                                         |
+
+What the difference is between _author_ and _committer_? Author is the
+person who originally wrote the work. Commiter is the person who last
+applied the work ( one of the core members for example ).  
+
+The `oneline`and `format` options are particularly useful with option
+`--graph`. This option adds a nice litle ASCII graph showing your branch
+and merge history.  
+
+_Common options to_ `git log`:  
+
+| Option            | Description                                             |
+| ---               | ---                                                     |
+| `-p`              | Show the patch introduced with each commit              |
+| `--stat`          | Show statistics for files modified in each commit       |
+| `--shorstat`      | Display only the changed/insertions/deletions line      |
+| `--name-only`     | Show the list of files modified after the commit        |
+| `--name-status`   | Show the list of file afffected with added/mod/del      |
+| `--abbrev-commit` | Show only the first few char of the SHA-1               |
+| `--relative-date` | Display the date in a relative format ("2 weeks ago")   |
+| `--graph`         | Display an ASCII graph of the branch and meerge history |
+| `--pretty`        | Show commits in an alternate format                     |
+| `--oneline`       | Shorthand for `--pretty=oneline --abbrev-commit`        |
+
 <!-- stopped here -->
+<!-- }}} -->
+### Limiting Log Output <!-- {{{ -->
++ `-<n>` - where `n` is any integer to show the last `n` commits  
+
+You may use options such as `--since` and `--until`.  
+`$ git log --since=2.weeks`  
+This command workds with lots of formats - you can specify a specific
+date like "2008-01-15" or a relative date "2 years 1 day 3 minutes ago".  
+
++ `--author` option allows you to filter on a specific author  
++ `--committer` option allows you to filter on a specific commiter  
++ `--grap` olption lets you search for keywords in the commit messages  
+    You can specify more than one instance of both the `--author` and
+    `--grep` search criteria, which will display commits that match _any_ of the patterns
+    however, adding the `--all-match` option output those commits
+    matching _all_ search criterias.  
++ `-S` takes a string and shows only those commits that changed the
+  number of occurrences of that string.  
++ `--no-merges` prevent appearing merge commits  
++ `path` limit the log output to commits that introduced a change to
+  those files (in dir or where path indexing). Preceded by double dashes
+  (--)  
+<!-- }}} -->
+### Undoing Things <!-- {{{ -->
+When you commit too early and possibly forget to add some files, or you
+mess up your commit message - make the additional changes, stage them,
+and commit again using the `--amend` option:  
+`$ git commit --amend`  
+
+<!-- }}} -->
+### Unstaging a Staged File <!-- {{{ -->
+`git status` shows by itself how to do that.  
+The command to unstage:  
+`git reset HEAD <file>...`  
+<!-- }}} -->
+### Unmodifying a Modified File <!-- {{{ -->
+How can you easily unmodify file - revert it back to what it looked like
+when you last committed (or initially cloned), git status helps us:  
+`git checkout -- <file>...`
+    Any local changes you made to that file are gone.  
+<!-- }}} -->
+### Working with Remotes <!-- {{{ -->
+<!-- TODO: stopped here -->
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
