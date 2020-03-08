@@ -211,6 +211,7 @@ Many key bindings take an additional numeric argument.
 + `v` - toggle the mark-status of all files  
 + `V` - starts the visual mode.
 + `/` - search for files in the current directory  
+    * `^B` - fzf search  
 
 **Console**  
 
@@ -226,11 +227,32 @@ decide which program to use to open current file selection
 
 **Tabs**  
 
++ `Alt-N` - N in [0,9] **_open_** a _tab_. If doesn't exist yet, it will be
+  created  
++ `Alt-l`, `Alt-r` - **_shift_** a _tab_ left/right  
++ `gn` - **_create_** new tab  
++ `gt`, `gT` - go to **_next/previous_** _tab_ (you may use TAB and Shift+TAB)  
++ `gc` - **_close_** the current _tab_
 
 **Help**  
 
 + `zX` - change settings. See the settings section for a list of
   settings and their hotkey  
 + `?` - opens this man page
+
+**Filters**  
+<!-- more on filters on line 600 man page -->
+
++ `.d` - apply typefilter **"directory"**  
++ `.f` - apply typefilter **"file"**  
++ `.l` - apply the typefilter **"limlink"**  
++ `.p` - pop the topmost filter from stack  
++ `.c` - clear the filter stack  
+
++ `M` change line mode (info displaying on same line with filename)  
 <!-- }}} -->
+<!-- }}} -->
+## Settings <!-- {{{ -->
+Settings can be changed in the file `~/.config/ranger/rc.conf`  
+or using command `:set option value`.  
 <!-- }}} -->
