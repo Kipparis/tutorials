@@ -156,7 +156,7 @@ $ git add README
 You can pass as argument either a file or a directory; if it's a
 directory, the command adds all the files in that directory recursively.  
 <!-- }}} -->
-### Stagin Modified Files <!-- {{{ -->
+### Staging Modified Files <!-- {{{ -->
 Use `git add`  
 Git commit contains only staged file snapshots.  
 <!-- }}} -->

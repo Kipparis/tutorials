@@ -576,10 +576,106 @@ There are several conditions that cause the buffer to be flushed:
 
 <!-- }}} -->
 ## Flushing the Output Buffer <!-- {{{ -->
-<!-- TODO: stopped here -->
+```cpp
+cout << "hi!" << endl;  // writes hi and a newline, then flushes the buffer
+cout << "hi!" << flush; // writes hi, then flushes the buffer; adds no data
+cout << "hi!" << ends;  // writes hi and a null, then flushes the buffer
+```
+
+**The unitbuf Manipulator**  
+
+If we want to flush after every output:  
+
+```cpp
+cout << unitbuf;    // all writes will be flushed immediately
+cout << nounitbuf;  // returns to normal buffering
+```
+
+**Caution: Buffers Are Not Flushed If the Program Crashes**  
+
+#### Tying Input and Output Streams Together <!-- {{{ -->
+When _cout_ tied to _cin_, the statement:  
+`cin >> ival;`  
+causes the buffer associated with _cout_ to be flushed. (so the welcom
+message will appear before user input)  
+**_Examples:_**
+
+```cpp
+cin.tie(&cout);     // illustration only: the library ties cin and cout
+// old_tie points to the stream (if any) currently tied to cin
+ostream *old_tie = cin.tie(nullptr);    // cin is no longer tied
+// ties cin and cerr
+cin.tie(&cerr);     // reading cin flushes cerr, not cout
+cin.tie(old_tie);   // reestablish normal tie between cin and cout
+```
+
+<!-- }}} -->
+
 <!-- }}} -->
 ## File Input and Output <!-- {{{ -->
+The _fstream_ header defines three types to support file IO:  
 
++ `ifstream` to read from given file  
++ `ofstream` to write to a given file  
++ `fstream` which reads and writes a given file  
+
+_fstream_-Specific Operations:  
+
++ _fstream_ fstrm; - Creates an unbound file stream.  
++ _fstream_ fstrm(s); - Creates an _fstream_ and opens the file named _s_.
+  _s_ can have type `string` or pointer to a C-style character string.
+  The default file mode depends on the type of _stream_.
++ _fstream_ fstrm(s, mode); - Like previous but opens in given mode
++ fstrm.open(s) - open and bind file to object
++ fstrm.open(s, mode) - -//- with given mode. Returns `void`.  
++ fstrm.close() - Closes the file to which _fstrm_ is bound. Returns `void`  
++ fstrm.is_open() - REturns a _bool_ indicating whether the file
+  associated with  fstrm was successfully opened and has not been closed.  
+
+_fstream_ is one of the types defined in the `fstream` header  
+
+### Using File Stream Objects <!-- {{{ -->
+When we supply a file name, `open` is called automatically:  
+```cpp
+ifstream in(ifile);     // construct an ifstream and open the given file
+ofstream out;           // output file stream that is not associated with any file
+```
+
+<!-- }}} -->
+### The open and close Members <!-- {{{ -->
+If a call to _open_ fails, _failbit_ is set. Because a call to open
+might fail, it is good to check this:  
+```cpp
+if (out)    // check that the open succeeded
+    // the open succeeded, so we can use the file
+```
+
+To **_associate new file_**, we must close existing file, and then open
+another.  
+
+<!-- }}} -->
+### Automatic Construction and Destruction <!-- {{{ -->
+Consider a folowing program:  
+```cpp
+// for each file passed to the program
+for (auto p = argv + 1; p != argv + argc; ++p) {
+    ifstream input(*p);     // create input and open the file
+    if (input) {            // if the file is ok, "process" this file
+        process(input);
+    } else
+        cerr << "couldn't open: " + string(*p);
+} // input goes out of scope and is destroyed on each iteration
+```
+
+Each iteration constructs a new `ifstream` object. Because `input` is
+local to the _while_, it is created and destroyed on each iteration.
+When an `fstream` object **_goes out of scope_**, the file it is bound to is
+**_automatically closed_**.
+
+<!-- }}} -->
+### File Modes <!-- {{{ -->
+<!-- TODO: stopped here -->
+<!-- }}} -->
 <!-- }}} -->
 ## `string` Streams <!-- {{{ -->
 
