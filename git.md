@@ -384,7 +384,7 @@ date like "2008-01-15" or a relative date "2 years 1 day 3 minutes ago".
 
 + `--author` option allows you to filter on a specific author  
 + `--committer` option allows you to filter on a specific commiter  
-+ `--grap` olption lets you search for keywords in the commit messages  
++ `--grep` option lets you search for keywords in the commit messages  
     You can specify more than one instance of both the `--author` and
     `--grep` search criteria, which will display commits that match _any_ of the patterns
     however, adding the `--all-match` option output those commits
