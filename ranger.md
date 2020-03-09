@@ -188,6 +188,7 @@ Many key bindings take an additional numeric argument.
     * `ud` clears the copy/cut buffer  
     * `uV` starts the reversed visual move  
     * `uv` **clears the selection**  
++ `^B` - fzf search  
 
 **Basic file manipulation**  
 
@@ -211,7 +212,6 @@ Many key bindings take an additional numeric argument.
 + `v` - toggle the mark-status of all files  
 + `V` - starts the visual mode.
 + `/` - search for files in the current directory  
-    * `^B` - fzf search  
 
 **Console**  
 
