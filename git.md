@@ -414,8 +414,110 @@ when you last committed (or initially cloned), git status helps us:
 `git checkout -- <file>...`
     Any local changes you made to that file are gone.  
 <!-- }}} -->
-### Working with Remotes <!-- {{{ -->
-<!-- TODO: stopped here -->
 <!-- }}} -->
+## Working with Remotes <!-- {{{ -->
+### Showing Your Remotes <!-- {{{ -->
+`git remote` command lists shortnames of each remote handle you've
+specified.  
+`-v` options shows you the URLs that Git has stored for the shortname.  
+
+<!-- }}} -->
+### Adding Remote Repositories <!-- {{{ -->
+`git remote add <shortname> <url>`  
+<!-- }}} -->
+### Fetching and Pulling from Your Remotes <!-- {{{ -->
+`$ git fetch <remote>`  
+After you do this, you should have references to all the branches from
+that remote, which you can merge in or inspect at any time.  
+You can use the `git pull` command to automatically fetch and them merge
+that remote branch into your current branch.  
+<!-- }}} -->
+### Pushing to Your Remotes <!-- {{{ -->
+If you want to push your changes upstream, use command `git push
+<remote> <branch>`.  
+`$ git push origin master`  
+If someone else fetch and push upstream and then you push upstream, your
+push will rightly be rejected.  
+<!-- }}} -->
+### Inspecting a Remote <!-- {{{ -->
+If you want to see more information about a particular remote, you can
+use the `git remote show <remote>` command.  
+<!-- }}} -->
+### Renaming and Removing Remotes <!-- {{{ -->
+If you want rename, use `git remore rename <src> <target>` command  
+If you want remove, use `git remote remove <branch>` command  
+<!-- }}} -->
+<!-- }}} -->
+## Tagging <!-- {{{ -->
+Tagging is frequently used to mark release points.  
+### Listing Your Tags <!-- {{{ -->
+To list existing tags type `git tag`.  
+You may apply filter with `$ git tag -l "v1.8.5*"`
+To inspect tag use `$ git show <tag_name>`  
+<!-- }}} -->
+### Creating Tags <!-- {{{ -->
+Git suppports two types of tags: _lightweight_ and _annotated_.  
+
++ _lightweight_ - just a pointer to a specific commit  
++ _annotated_ - are stored as full objects in the Git database. They're
+  checksummed; contain the tagger name, email, and date; have a tagging
+  message; and can be signed and verified with GNU Privacy Guard.  
+<!-- }}} -->
+### Annotated Tags <!-- {{{ -->
+The easiest way to create _annotated tag_ is to specify `-a` when you
+run the `tag` command:  
+```shell
+$ git tag -a v1.4 -m "my version 1.4"
+$ git tag
+v0.1
+v1.3
+v1.4
+```
+The `-m` specifies a tagging message.  
+
+<!-- }}} -->
+### Lightweight Tags <!-- {{{ -->
+Don't supply any of the `-a`, `-s`, or `-m` options, just provide a tag
+name:  
+```shell
+$ git tag v1.4-lw
+$ git tag
+v0.1
+v1.4
+v1.4-lw
+```
+
+<!-- }}} -->
+### Tagging Later <!-- {{{ -->
+To tag specific commit in the past, use `git tag -a <tag> <hashsum>`
+command (`git log --pretty=oneline` will help you)  
+<!-- }}} -->
+### Deleting Tags <!-- {{{ -->
+To delete tag on local machine, use `git tag -d <tagname>`.  
+To remove tag on remove server there are two variations:  
+
++ `git push <remote> :refs/tags/<tagname>` - null value before the colon 
+is being pushed to the remote tag name, effectively deleting it.  
++ `git push origin --delete <tagname>`
+<!-- }}} -->
+### Sharing Tags <!-- {{{ -->
+By default, the `git push` command doesn't transfer tags to remote
+servers. This process is jsut like sharing remote branches - you can run
+`git push origin <tagname>`.  
+`--tags` option will transfer all of your tags.  
+<!-- }}} -->
+### Checking out Tags <!-- {{{ -->
+If you want to view the vrsions of files a tag is pointing to, you can
+do a `git checkout` of that tag, although this puts your repository in
+"detached HEAD" state, which has some ill side effects:  
+`$ git checkout 2.0.0`  
+If you want to fix a bug, it's better to create new branch and work
+there:  
+`$ git checkout -b version2 v2.0.0`  
+<!-- }}} -->
+<!-- }}} -->
+## Git Aliases <!-- {{{ -->
+<!-- TODO: stopped here -->
+
 <!-- }}} -->
 <!-- }}} -->
