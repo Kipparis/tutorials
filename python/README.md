@@ -133,6 +133,12 @@ Best practices:
 + when object accessed a large number of times using attribute access, 
 \   it may be better to create and use local variable that refers to the
 \   object to provide faster access  
++ fast creating constants:  
+    ```python
+    Const = collections.namedtuple("_", "min max")(191, 591)
+    Const.min, Const.max
+    ```
+<!-- }}} -->
 
 two modules for investigating the performance of out code:  
 + timeit - timing small pieces of out code  
@@ -207,6 +213,7 @@ class Ords:
 ```
 when accessing attributes first call is __getattribute__(), then __getattr__()  
 + getattribute -- invoked before looking at the actual attributes  
+    Warning! Using this function may lead to recursion in field lookup  
 + getattr -- invoked if the attribute wasn't found the usual ways  
 
 <!-- }}} -->
@@ -362,13 +369,6 @@ context = globals().copy() to not override current dict
 + `eval` -- can handle only single expression  
 use of function.cache = {} to memoize data, _like here `https://jeremykun.com/2012/03/22/caching-and-memoization/`_  
 <!-- }}} -->
-# Optimization <!-- {{{ -->
-fast creating constants
-```python
-Const = collections.namedtuple("_", "min max")(191, 591)
-Const.min, Const.max
-```
-<!-- }}} -->
 # Functions <!-- {{{ -->
 ## Decorators <!-- {{{ --> 
 __decorators__ - one who take function and incorporates it with additional functionality and returns it
@@ -485,37 +485,41 @@ at the end call:	   `matcher.close()`
 <!-- }}} -->
 <!-- }}} -->
 # Processes and Threading <!-- {{{ -->
-## Subprocess  
+## Subprocess
 __Subprocess__ module provides facilities for tunning other programs and
 communicating using pipes.  
 example in grep-p, and grep-p-child:  
-	+ how to create child  
-	+ how to pass arguments and nicely call same interpreter  
-	+ how to write and read  
-	+ how to wait for them and exit  
-## Threading  
-Threads __are created__ by threading.Thread(callable) or we can pass subclass
-of threading.Thread.  
-Threads __are only started__ by .start() and they will wait until it's
-possible.  
+
++ how to create child  
++ how to pass arguments and nicely call same interpreter  
++ how to write and read  
++ how to wait for them and exit  
+
+## Threading
+Threads __are created__ by `threading.Thread(callable)` or we can pass subclass
+of `threading.Thread`.  
+Threads __are only started__ by `.start()` and they will wait until it's
+possible.
 
 **_example in grep-t.py_**  
-methods to use: 
-	+ Worker class inherits multiprocessing.Process  
-	+ multiprocessing.JoinableQueue instead of queue.Queue  
+methods to use:  
+
++ Worker class inherits `multiprocessing.Process`  
++ `multiprocessing.JoinableQueue` instead of `queue.Queue`  
 
 ### Serialized queue 
 __queue.Queue__ provides:
-	+ FIFO  
-	+ LIFO  
-	+ PriorityQueue - garantee that only one thread has access
-\	  (_serialize access_)  
++ FIFO  
++ LIFO  
++ PriorityQueue - garantee that only one thread has access
+ (_serialize access_)  
 
 use of working __queue__:  
-	+ `queue.put()` to add task  
-	+ `queue.get()` to get task  
-	+ `queue.task_done()` complete task  
-	+ `queue.join()` wait until all tasks are done  
+
++ `queue.put()` to add task  
++ `queue.get()` to get task  
++ `queue.task_done()` complete task  
++ `queue.join()` wait until all tasks are done  
 
 ### Locking 
 to use own __lock__ write next:  
@@ -523,15 +527,16 @@ in class: `_lock = threading.Lock()`
 in function:   
 ```python
 with self._lock:
-	***
+    ***
 ```
 this will ensure that all class objects share the same lock and not
 access object at the same time.  
 
 other available locks:  
-	+ threading.RLock - can be used again by thread who blocked  
-	+ threading.Semaphore - protect specific number of resources  
-	+ threading.Condition - provides a wait condition  
+
++ `threading.RLock` - can be used again by thread who blocked  
++ `threading.Semaphore` - protect specific number of resources  
++ `threading.Condition` - provides a wait condition  
 
 ---  
 
