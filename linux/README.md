@@ -310,6 +310,74 @@ colon.
 There are also **_modifiers_**, but it's better to master vi or emacs
 mode skills. If you wish to read about **_modifiers_** go to page 168.  
 <!-- }}} -->
-## Keyboard Habits <!-- {{{ -->
+
+# Customizing Your Environment <!-- {{{ -->
++ **_Special files_** - like *.bash_profile*(better to use _.profile_),
+*.bash_logout*,_.bashrc_ are read by _bash_ when you log in
+and out or start a new shell  
++ **_Aliases_** - synonyms for commands or command strings  
++ **_Options_** - controls various apects of your environment that you
+  can turn on and off.  
++ **_Variables_** - shell and other programs can modify their behavior
+  according to the values stored in the variables  
+
+## The .bash\_profile, .bash\_logout, and .bashrc Files <!-- {{{ -->
+Default for *.bash_profile* is _/etc/profile_. This file is read and the
+commands in it are executed by _bash_ every time you log in to the
+system  
+You you done changes, they won't affect until logging in or executing
+command `source .bash_profile`  
+_.bashrc_ executed every time subshell runs  
+*.bash_logout* - every logout  
+<!-- }}} -->
+## Aliases <!-- {{{ -->
+Sytax `alias name=command`  
+Two ways of using an alias:  
+
++ create more mnemonic name for an existing command:  
+    `alias search=grep`  
++ correcting typos:  
+    `alias emcas=emacs`  
++ shorhand for a longer command string:  
+    `alias cdvoy="cd sipp/demo/animation/voyager"`
+
+Notes:  
+
++ _bash_ makes a textual substitution of the alias for that which it is
+  aliasing  
++ aliases are recursive (but it can be prevented by bash by looking at
+  first word in the command)  
++ aliases can't be expanded as arguments
+    one solution for _cd_ is `alias cd="cd "` this will enable directory
+    aliasing  
+
+`alias name` - output alias' value  
+`alias` - output all available aliases  
+<!-- }}} -->
+## Options <!-- {{{ -->
+_Options_ allow you to change shell's behavior  
+Syntax is: `set +\-o optionname [+\- optionname [...]]`  
+
++ **+** turn options _off_  
++ **-** turns option _on_  
+
+Basic shell options:  
+
+| Option      | Description                                                          |
+| ---         | ---                                                                  |
+| emacs       | Enters _emacs_ editing mode                                          |
+| ignoreeof   | Doesn't allow use of single ^d to log off (use `exit`)               |
+| noclobber   | doesn't allow output redirection to overwrite an existing file       |
+| noglob      | Doesn't expand filename wildcards                                    |
+| nounset     | Indicates and error when trying to use a variable that is undefined  |
+| vi          | Enters _vi_ editing mode                                             |
+| cdable_vars | argument to cd that is not a directory assumed as name of a variable |
+
+
+`set -o` will output all options and their status.  
+<!-- }}} -->
+## Shell Variables <!-- {{{ -->
+
+<!-- }}} -->
 
 <!-- }}} -->
