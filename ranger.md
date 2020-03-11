@@ -1,10 +1,24 @@
 # This file describes commands to start use ranger
 <!-- 533 line -->
+<!-- TODO: maybe create structure like Q:A -->
+<!--     what specific file do? -->
+<!--     where to read about mappings -->
+<!--     where are information about commands -->
 ## General configuration <!-- {{{ -->
+_line 1500 man page_  
+
 + `%ranger/rc.conf` - where all the options are stored  
-    * also there are keybindings
-+ `%ranger/rifle.conf` - open methods  
-+ `%ranger/scope.sh` - preview methods  
+    * also there are keybindings and settings
++ `%ranger/rifle.conf` - open methods (configuration file for _rifle_)  
++ `%ranger/scope.sh` - preview methods. When the options
+  *use_preview_script* and *preview_files* are set, the program
+  specified in the option *preview_script* is run and its output and/or
+  exit code determines rangers reaction.  
++ `%ranger/colorschemes` - cholorschemes can be places here.  
++ `%ranger/plugins` - plugins can be placed here.  
++ `%ranger/commands.py` - commands which can be used in ranger's console
+  by typing `:` or in the _rc.conf_ file.  
++ `%ranger/commands_full.py` - reference for custom commands  
 <!-- }}} -->
 ### tags<!-- {{{ -->
 `t` - toggle tags  
@@ -255,4 +269,58 @@ decide which program to use to open current file selection
 ## Settings <!-- {{{ -->
 Settings can be changed in the file `~/.config/ranger/rc.conf`  
 or using command `:set option value`.  
+```
+set column_ratios 1,2,3
+set show_hidden true
+```
+Toggling like this: `set show_hidden!`  
+
+You can **_view a list of all settings and their current values_** by
+pressing `3?`.  
+
+_read about common settings on line 641 of man page_  
+<!-- }}} -->
+## Commands <!-- {{{ -->
+You can enter the commands in the console which is opened by pressing `:`  
+To get list of currently existing commands type `?c`.  
+
+_to read about commands see line 969 of man page_  
+_to read description - line 1040 of man page_  
+
+Most interesting commands:  
+
++ `bulkrename` - opens a list of selected files in an external editor.
+  After you edit and save the file, it will generate a shell script
+  which does bulk renaming according to the changes you did in the file.  
+<!-- }}} -->
+## Storage <!-- {{{ -->
+_line 1517 man page_  
+what specific file do:  
+
++ _bookmarks_ - contains a list of bookmarks  
++ *copy_buffer* - contains the paths of all currently copyed files (you
+  can later run `:load_copy_buffer`)  
++ _history_ - contains a list of commands that have bee previously typed
+  in.  
++ _tagged_ - contains a list of tagged files.  
+<!-- }}} -->
+## Environment <!-- {{{ -->
+_line 1536 man page_  
+
++ `RANGER_LOAD_DEFAULT_RC` - if FALSE, ranger won't load the default
+  rc.conf.  
++ `BAT_STYLE` - specifies the theme to be used for syntax highlighting
+  when `bat` is installed, unless `highlight` is also installed. Find
+  out possible values by running `bat --list-themes`  
++ `PYGMENTIZE_STYLE` - specifies the theme to be used for syntax
+  highlighting when `pygmentize` is installed, unless `highlight` is
+  also installed. Find out possible values by running:  
+    `python -c 'import pygments.styles; [print(stl) for stl in
+    pygments.styles.get_all_styles()]'`  
++ `HIGHLIGHT_STYLE` - specifies the theme to be used for syntax
+  highlighting when `highlight` is installed. Find out possible values
+  by running `highlight --list-themes`.  
++ `HIGHLIGHT_OPTIONS` - _highlight_ will pick up command line options
+  specified in this variable (will override existing highlight options)  
+
 <!-- }}} -->
