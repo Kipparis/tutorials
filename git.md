@@ -516,8 +516,109 @@ there:
 `$ git checkout -b version2 v2.0.0`  
 <!-- }}} -->
 <!-- }}} -->
-## Git Aliases <!-- {{{ -->
-<!-- TODO: stopped here -->
+## Git Aliases <!-- {{{-->
+Its easy to set up an alias for each command using `git config`:  
+```shell
+$ git config --global alias.co checkout
+$ git config --global alias.br branch
+$ git config --global alias.ci commit
+$ git config --global alias.st status
+```
+This means that, for example, instead of `git commit` you may type `gitci`.  
+You may correct the usability problems:  
+
++ `$ git config --global alias.unstage 'reset HEAD --'`  
++ `$ git config --global alias.last 'log -1 HEAD'`  
+
+If you want to run external commands - start the command with a `!`
+character:  
+`$ git config --global alias.visual '!gitk'`  
+<!-- }}} -->
+<!-- }}} -->
+# Git branching <!-- {{{ -->
+<!-- p. 62 -->
+## Creating a New Branch <!-- {{{ -->
+You can create branch with `git branch <name>` command.  
+**HEAD** in Git is a pointer to the local branch you're currently on.  
+All branches is just pointer to the commit.  
+<!-- }}} -->
+## Switching Branches <!-- {{{ -->
+To switch to an existing branch, you run the `git checkout <name>
+command` (this moves _HEAD_ to point to the new branch)  
+To show log for another branch use: `git log <branchname>` or  
+to show all of the branches, add `--all` to your `git log` command.  
+
+You can  easily see branches with the `git log` command:  
+`git log --oneline --decorate --graph --all`  
+
+_Creating_ a branch and _switching_ to it can be done in one command:  
+`git checkout -b <newbranchname>`  
+<!-- }}} -->
+## Basic Branching and Merging <!-- {{{ -->
+### Workflow <!-- {{{ -->
+
+In real world, commonly, you'll follow this steps:  
+
+1. Do some work on a website.  
+2. Create a branch for a new user story you're working on.  
+3. Do some work in that branch.  
+
+At this stage, you'll receive a call that another issue is critical and
+you need a hotfix. You'll do the following:  
+
+1. Switch to your production branch.  
+2. Create a branch to add the hotfix.  
+3. After it's tested, merge the hotfix branch, and push to production.  
+4. Switch back you your original user story and continue working.  
+<!-- }}} -->
+### Basic Branching <!-- {{{ -->
+Git won't allow you to checkout to another branch until you have
+unstaged files (`stash` or `amend` could help)  
+
+To merge branches you should be on branch you want to remain:  
+```shell
+$ git checkout master
+$ git merge hotfix
+Updating .....
+Fast-forward
+```
+
+**Fast-forward** means that git simply moves pointer of branch forward.  
+
+You can **delete** branch with the `-d` option to `git branch`  
+<!-- }}} -->
+### Basic Merging <!-- {{{ -->
+
+>            v master
+> -C0-C1-C2-C4
+>         \C3-C5
+>              ^ iss53
+
+Suppose you've decided that you iss53 branch work is completed and ready
+to be merged into your _master_ branch.  
+In order to do tha, you have to check out the branch you wish to merge
+into &rarr; run the `git merge` command:  
+```shell
+$ git checkout master
+Switched to branch 'master'
+$ git merge iss53
+Merge made by the 'recursive' strategy
+...
+```
+Because the commit on the branch you're on _isn't a direct ancestor_ of
+the branch you're mergin in, Git has to do some work. In this case, Git
+does a _simple three-way merge_, using the two snapshots pointed to by the
+branch tips and the common ancestor of the two.  
+
+After that, Git _creates a new snapshot_ that results from this three-way
+merge and automatically _creates a new commit_ that points to it (merge
+commit). It's special in that it has more than one parent.  
 
 <!-- }}} -->
+### Basic Merge Conflicts <!-- {{{ -->
+<!-- TODO: stopped here -->
+<!-- }}} -->
+
+<!-- }}} -->
+
 <!-- }}} -->
