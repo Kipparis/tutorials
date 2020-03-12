@@ -377,7 +377,108 @@ Basic shell options:
 `set -o` will output all options and their status.  
 <!-- }}} -->
 ## Shell Variables <!-- {{{ -->
+To set variable use command `varname=value`  
+To unset - `unset varname`  
+<!-- }}} -->
+## Built-In Variables <!-- {{{ -->
+**Editing mode variables:**  
+
+| Variable | Meaning                                               |
+| ---      | ---                                                   |
+| HISTCMD  | The history number of the current command             |
+| HISTFILE | File containing history lines                         |
+| HISTSIZE | Maximum number of commands to remember (default 500)  |
+| FCEDIT   | Pathname of the editor to use with the **fc** command |
+<!-- }}} -->
+## Prompting variables <!-- {{{ -->
+They are:  
+
++ **PS1** - primary prompt string  
++ **PS2** - secondary prompt string (default `>`)  
++ **PS3** - relate to shell programming and debugging  
++ **PS4** - relate to shell programming and debugging  
+
+**Prompt string customizations:**  
+
+| Command      | Meaning                                                 |
+| `\a`         | The ASCII bell character                                |
+| `\A`         | The current time in 24-hour HH:MM format                |
+| `\d`         | The date in "Weekday Month Day" format                  |
+| `\D{foramt}` | The format is passed to strftime                        |
+| `\e`         | The ASCII escape character (033)                        |
+| `\H`         | The hostname                                            |
+| `\h`         | The hostname up to the first "."                        |
+| `\j`         | The number of jobs currently managed by the shell       |
+| `\l`         | The basename of the shell's terminal device name        |
+| `\n`         | A carrieage return and line feed                        |
+| `\r`         | A carriage return                                       |
+| `\s`         | The name of the shell                                   |
+| `\T`         | The current time in 12-hour HH:MM:SS format             |
+| `\t`         | The current time in HH:MM:SS format                     |
+| `\@`         | The current time in 12-hour a.m./p.m. format            |
+| `\u`         | The username of the current user                        |
+| `\w`         | The current working directory                           |
+| `\W`         | The basename of the current working directory           |
+| `\#`         | The command number of the current command               |
+| `\!`         | The history number of the current command               |
+| `\$`         | if the effective UID is 0, print a `#`, otherwise - `$` |
+| `\nnn`       | Character code in octal                                 |
+| `\\`         | backslash                                               |
+| `\[`, `\]`   | Begin, and a sequence of non-printing characters        |
+<!-- }}} -->
+## Command search path <!-- {{{ -->
+Safe way to extend PATH is `PATH=$PATH":/home/you/bin`  
+    You command won't be executed if you already have command with this
+    name  
+<!-- }}} -->
+## Command hashing <!-- {{{ -->
+First time you enter command, bash will store its path to hashtable.
+When you enter this command again, bash will search for its location in
+hastable, and if fails, looks in search path.  
+
+To see your hashtable type: `hash`  
+
++ `hash -r` - remove everything in the table  
++ `hash -d name` - remove specific name  
++ `hash -p` - enter command in hash table  
+
+Command hashing can be turned on and off with the **hashall** option.  
+<!-- }}} -->
 
 <!-- }}} -->
+# Customization and Subprocesses <!-- {{{ -->
+## Subprocesses and environment variables <!-- {{{ -->
+Environment Variables are very basic thing that known to all
+subprocesses. You can define **your own environment variables** with
+command: `export varname=value`  
+
+It is also possible to define variables to be in the environment of a
+**particular subprocess only** by preceding the command with the variable
+assignment: `varname=value command`
+
+You can find out which variables are invironment variables and their
+values by typing `export` or by using `-p` option to the command  
+
+**Standard variables:**  
+
+| Variable | Meaning                                 |
+| ---      | ---                                     |
+| COLUMNS  | The number of columns your display has  |
+| EDITOR   | Pathname of your text editor            |
+| LINES    | The number of lines your display has    |
+| SHELL    | Pathname of the shell you are running   |
+| TERM     | The type of terminal that you are using |
+<!-- }}} -->
+## Terminal types <!-- {{{ -->
+The value of **TERM** must be ashort character string with lowercase
+letters that appears as a filename in the _terminfo_ database. This
+database is a two-tiered directory of files `/usr/lib/terminfo`. This
+directory contains subdirectories with single-character names; these in
+turn contain files of terminal information for all terminals whose names
+begin with taht character.  
+<!-- }}} -->
+<!-- }}} -->
+
+# Basic Shell Programming <!-- {{{ -->
 
 <!-- }}} -->
