@@ -674,10 +674,127 @@ When an `fstream` object **_goes out of scope_**, the file it is bound to is
 
 <!-- }}} -->
 ### File Modes <!-- {{{ -->
-<!-- TODO: stopped here -->
+Each stream has an associated _file mode_that represents how the file
+may be used:  
+
+|        |                                    |
+| ---    | ---                                |
+| in     | Open for input (_ifstream_, _fstream_)                      |
+| out    | Open for output (_ofstrem_, _fstream_)                   |
+| app    | Seek to the end before every write (trunc is not specified) |
+| trunc  | Truncate the file (out is specified)                  |
+| binary | Do IO operations in binary mode    |
+
+By default a file opened in _out_ mode is truncated, to preserve
+content, we must specify _app_.  
+
+**Opening a File in out Mode Discards Existing Data**  
+```cpp
+// file 1 is truncated in each of these cases
+ofstream out("file1");  // out and trunc are implicit
+ofstream out2("file1", ofstream::out);  // trunc is implicit
+ofstream out3("file1", ofstream::out | ofstream::trunc);
+
+// to preserve the file's contents, we must explicitly specify app mode
+ofstream app("file2", ofstream::app);   // out is implicit
+ofstream app2("file2", ofstream::out | ofstream::app);
+```
+**File Mode is Determined Each Time open Is Called**  
 <!-- }}} -->
 <!-- }}} -->
 ## `string` Streams <!-- {{{ -->
+The `sstream` header defines three types to support in-memory IO; these
+types read from or write to a string as if the string were an IO stream.  
+_sstream_ is one of the type defined in the `sstream` header  
+| | |
+| --- | --- |
+| _sstream_ strm; | strm is an unbound stringstream. |
+| _sstream_ strm(s); | strm holds a copy of the string s (explicit constructor) |
+| strm.str() | Returns a copy of the string that strm holds |
+| strm.str(s) | Copies the string s into strm. Returns void |
+
+### Using an `istringstream` <!-- {{{ -->
+An `istringstream` is often used when we have some work to do on an
+entire line, and other work to do with individual words within a line.  
+
+Assume we have file with structure:  
+```txt
+<person_name> <phone_number1> [<phone_number2> [...]]
+<person1_name> <phone1_number1> [<phone1_number2> [...]]
+...
+```
+
+Then creating this program will help us to parse this file:  
+```cpp
+string line, word;          // will hold aline and word from input, respectively
+vector<PersonInfo> people;  // will hold all the records from the input
+// read the input a line at a time until cin hits end-of-file
+while (getline(cin, line)) {
+    PersonInfo info;        // create an object to hold this record's data
+    istringstream record(line); // bind record to the line we just read
+    record >> info.name;    // read the name
+    while (record >> word)  // read the phone numbers
+        info.phones.push_back(word);    // and store them
+    people.push_back(info); // append this record to people
+}
+```
+
+
+
+<!-- }}} -->
+### Using `ostringstream`s <!-- {{{ -->
+An `ostringstream` is useful when we need to build up our output a
+little at a time but do not want to print the output until later.  
+<!-- }}} -->
+<!-- }}} -->
+<!-- Summary p. 415 -->
+<!-- }}} -->
+# Sequential Containers <!-- {{{ -->
+## Preface <!-- {{{ -->
++ _sequential_ container - order corresponds to the positions in whic the
+  elements are added  
++ _associative_ container - position depends on a key associated with each
+  element  
+
+Container classes share common interface, which each of the containers
+extends in its own way.  
+
+Container holds a collection of objects of a specified type. The
+**_sequential containers_** let the programmer control the order in
+which the elements are stored and accessed.  
+
+The library also provide three _container adaptors_ - adapts a container
+type by defining a different interface to the container's operations.  
+<!-- }}} -->
+## Overview of the Sequential Containers <!-- {{{ -->
+Sequential Container Types:  
+
++ `vector` - Flexible-size array. Supports fast random access. Inserting
+  or deleting elements other than at the back may be slow.  
++ `deque` - Double-ended queue. Supports fast random access. Fast
+  insert/delete at front or back.  
++ `list` - Doubly linked list. Supports only bidirectional sequential
+  access. Fast insert/delete at any point in the list.  
++ `forward_list` - Singly linked list. Su pports only sequential acces
+  in one direction. Fast insert/delete at any point in the list.  
++ `array` - Fixed-size array. Supports fast random access. Cannot add or
+  remove elements  
++ `string` - A specialized container, similar to `vector`, that contains
+  characters. Fast random access. Fast insert/delete at the back.  
+<!-- }}} -->
+## Container Library Overview <!-- {{{ -->
+<!-- TODO: stopped here -->
+<!-- }}} -->
+## Sequential Container Operations <!-- {{{ -->
+
+<!-- }}} -->
+## How a `vector` Grows <!-- {{{ -->
+
+<!-- }}} -->
+## Additional `string` Operations <!-- {{{ -->
+
+<!-- }}} -->
+## Container Adaptors <!-- {{{ -->
 
 <!-- }}} -->
 <!-- }}} -->
