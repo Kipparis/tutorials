@@ -616,9 +616,89 @@ commit). It's special in that it has more than one parent.
 
 <!-- }}} -->
 ### Basic Merge Conflicts <!-- {{{ -->
+If you change the same part of the same file differently in the two
+branches you're merging, Git won't be able to merge them cleanly.  
+To see which files are unmerged run `git status`  
+
+Git adds standard conflict-resolutin markers to the files that have
+conflicts, so you can open them manually and resolve those conflicts.
+Example:  
+```
+<(7 times) HEAD:index.html
+example text
+=(7 times)
+example text example
+>(7 times) iss53:index.html
+```
+This means the version in _HEAD_ (your _master_ branch, because that was
+what you had checked out when you ran your merge command) is the **_top_**
+part of that block, while the version in your _iss53_ branch looks like
+everything in the mottom. To resolve the conflict, you must choose either
+side on merge them manually.  
+
+Afterfwards, staging the file marks it as _resolved_.  
+
+Also, you may run `git mergetool`, which fires up an appropriate visual
+merge tool.  
+<!-- }}} -->
+### Branch Management <!-- {{{ -->
+Get all your current branches: `$ git branch`. Notice `*` character
+marks the branch that you currently have checked out.  
+To see the **_last commit** on each branch, you can run `git branch -v`.  
+
++ `--merged` lists branches that you already merged  
+    Its fine to delete those without * in front of them with `git branch -d`  
++ `--no-merged` lists branches that are not merged yet  
+    If you really want to delete those branches, pass `-D` argument  
+<!-- }}} -->
+### Branching Workflows <!-- {{{ -->
+This section cover some common workflows that this lightweight
+branching makes possible.  
+#### Long-Running Branches <!-- {{{ -->
++ Having code the at is entirely stable in `master` branch  
++ Branch you work on - `develop` or `next`. Whenever it gets to a stable
+  state, it can be merged into `master`  
+
+The commit history should look like this:  
+master &larr; ... &larr; develop &larr; ... &larr; topic  
+It's generally easier to think about them as work silos, where sets of
+commits graduate to a more stable silo when they're fully tested.  
+<!-- }}} -->
+#### Topic Branches <!-- {{{ -->
+A **_topic branch_** is a short-lived branch that you create and use for
+a single particular feature or related work.  
+<!-- }}} -->
+<!-- }}} -->
+### Remote Branches <!-- {{{ -->
+You can get a full list of remote references explicitly with:  
+
++ `git ls-remote <remote>`  
++ `git remote show <remote>`  
+
+Remote-tracking branch names take the form `<remote>/<branch>`. It's
+updated by every network communication with git server.  
+
+To synchronize your work with a given remote, you run a `git fetch
+<remote>` command.  
+
+#### Pushing <!-- {{{ -->
+Pushing can be done with `git push <remote> <branch>` command.  
+If you want to push local branch to another remote branch (or just give
+another name on remote server) use command - `git push origin
+<localbranch>:<remotebranch>`  
+
+If you use an HTTPS URL to push over, the Git will ask you for your
+username and password every push. To prevent it you may set up cache
+that will hold your credentials for a few minutes:  
+`git config --global credential.helper cache`  
+
+After `git fetch` you don't have local branch. But if you want, run `git
+checkout -b <localbranchname> <remotebranchname>`. You can merge remote
+branch into yours as well  
+<!-- }}} -->
+#### Tracking Branches <!-- {{{ -->
 <!-- TODO: stopped here -->
 <!-- }}} -->
-
 <!-- }}} -->
-
+<!-- }}} -->
 <!-- }}} -->
