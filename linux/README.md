@@ -1,13 +1,19 @@
 _book: Learning the bash Shell 3rd Edition. O'Reilly_  
     This file just a notes. If you have no clue what commands and pipes
     are, read the book by yourself.  
-# What Is a Shell?<!-- {{{ -->
-The shell's job is to traslate the user's command lines into operating
-system instructions.  
-Remember that the shell itself is not UNIX - just the **_user interface_** to it.
-UNIX is one of the first operating systems to make the user interface
-independent of the operating system.  
-<!-- }}} -->
+<!-- TODO: once read, go throw -->
+<!--     options -->
+<!--     env variables -->
+<!--     aliases -->
+<!--     functions -->
+<!-- and find out cool, or those need for modification -->
+<!-- # What Is a Shell?<!-- {{{ --> -->
+<!-- The shell's job is to traslate the user's command lines into operating -->
+<!-- system instructions.   -->
+<!-- Remember that the shell itself is not UNIX - just the **_user interface_** to it. -->
+<!-- UNIX is one of the first operating systems to make the user interface -->
+<!-- independent of the operating system.   -->
+<!-- <!-- }}} --> -->
 # Features of bash<!-- {{{ -->
     + command-line editing modes  
     + job control  
@@ -480,5 +486,100 @@ begin with taht character.
 <!-- }}} -->
 
 # Basic Shell Programming <!-- {{{ -->
+## Shell Scripts and Functions <!-- {{{ -->
+Running scripts as `source scriptname` causes the commands in the script
+to be read and run as if you typed them in.  
+Second way - just type its name and hit RETURN  
+If commands aren't in your path, you must type `./scriptname`  
+Before you can invoke the shell script by name, you must also give it
+"execute" permission. (usually `chmod +x scriptname`)  
 
+More important difference between the two ways of running shell scripts:  
+
++ **source** causes the commands in the script to be run as if they
+  were part of your login session  
++ **just the name** method causes the shell to:  
+    + run another copy of the shell (_subshell_)  
+    + the subshell then takes commands from the script, runs them, and
+  terminates, handing control back to the parent shell  
+<!-- }}} -->
+## Functions <!-- {{{ -->
+You use them to define some shell code by name and store it in the
+shell's **_memory_**, to be invoked and run later:  
+
++ runs faster  
++ organizing long shell scripts into modular "chunks" of code  
++ run in current shell  
++ take precedence over scripts (with same name)  
+
+To define a function, you can use either one of two forms:  
+```bash
+function functname {
+    shell commands
+}
+# or
+functname() {
+    shell commands
+}
+```
+You can delete a function definition with the command `unset -f
+functname`  
+
+If you want to run function, just type its name followed by any
+arguments.  
+
+Find out _**what functions are defined**_ in your
+login session - `declare -f`  
+
+**Order of precedence:**  
+
+1. Aliases  
+2. Keywords (e.g. _function_, _if_, _for_, etc)  
+3. Functions
+4. Built-ins like _cd_ and _type_  
+5. Scripts and executable programs (from **PATH**)  
+
+If you want to find out a source of command, `type -all/-a` will help you.  
+
++ `-p` - restrict to executable files or shell scripts  
++ `-P` - forces type to look for executable files or shell scripts  
++ `-f` - suppresses shell function lookup  
++ `-t` - restrict to single word description  
+
+<!-- }}} -->
+## Shell Variables <!-- {{{ -->
+### Positional Parameters <!-- {{{ -->
+_Positional parameters_ hold the command-line arguments to scripts when
+they are invoked. Positional parameters have the names
+**1**,**2**,**3**, etc (values denoted by **$1**, **$2**, **$3**, etc).
+**$0** holds name of the scripts  
+
+Two special variables contain all of the positional parameters (expect
+**0**): `*` and `@`.  
+
++ `"$*"` expands to `"${1}${IFS}${2}${IFS}..."`  
++ `"$@"` expands to `"$1" "$2" "$3"...`  
+
+The variable **#** holds the number of positional parameters  
+All of these variables are "read-only".  
+<!-- }}} -->
+### Positional parameters in functions <!-- {{{ -->
+Acting basically the same way as in scripts  
+#### Local Variables in Functions <!-- {{{ -->
+A **local** statement inside a function definition makes the variables
+involved all become _local_ to that function.  
+<!-- }}} -->
+<!-- }}} -->
+### Quoting with $@ and $\* <!-- {{{ -->
+For example calling `countargs "$*"` will print **1 args**  
+`countargs "$@"` will print **3 args**  
+<!-- }}} -->
+### More on Variable Syntax <!-- {{{ -->
+`$varname` is the same as `${varname}`. Second is used to bring
+clarification for bash.  
+<!-- }}} -->
+<!-- }}} -->
+## String Operators <!-- {{{ -->
+<!-- TODO: stopped here -->
+<!-- }}} -->
 <!-- }}} -->
