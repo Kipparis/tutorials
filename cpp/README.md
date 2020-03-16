@@ -783,7 +783,131 @@ Sequential Container Types:
   characters. Fast random access. Fast insert/delete at the back.  
 <!-- }}} -->
 ## Container Library Overview <!-- {{{ -->
+### Container Operations <!-- {{{ -->
+Some operations are provided by all container types:  
+
+**Type Aliases:**  
++ `iterator` - type of the iterator for this container type  
++ `const_iterator` - iterator type that can read but not change its
+  elements  
++ `size_type` - unsigned integral type big enough to hold the size of
+  the largest possible container of this container type  
++ `difference_type` - signed integral to hold distance between two
+  iterators  
++ `value_type` - element type  
++ `reference` - element's lvalue type; synonym for `value_type&`  
++ `const_reference` - `const value_type&`  
+
+**Construction:**  
++ `C c;` - default constructor, empty container  
++ `C c1(c2);` - Construct `c1` as a copy of `c2`  
++ `C c(b, e);` - copy elements from the range denoted by iterators `b`
+  and `e` (**not valid for array**)  
++ `C c{a,b,c...};` - list initialize `c`  
+
+**Assignment and swap:**  
++ `c1 = c2` - replace elements in c1 with those in c2  
++ `c1 = {a,b,c,...}` - replace elements in c1 with those in the list (**not valid for array**)  
++ `a.swap(b)` - swap elements in `a` with those in `b` (eqv to `swap(a,b)`)  
+
+**Size:**  
++ `c.size()` - number of elements in `c` (**not valid for
+  `forward_list`**)  
++ `c.max_size()` - Maximum number of elements `c` can hold  
++ `c.empty()` - _false_ if `c` has any elements, _true_ otherwise  
+
+**Add/Remove Elements _(not valid for array)_**  
+**_Note: the interface to these operations varies by container type_**  
++ `c.insert(args)` - copy element(s) as specified by _args_ into `c`  
++ `c.emplace(inits)` - use _inits_ to construct an element in `c`  
++ `c.erase(args)` - remove element(s) specified by _args_  
++ `c.clear()` - remove all elements from `c`; returns `void`  
+
+**Equality and Relational Operators:**  
++ `==`, `!=` - equality valid for all container types  
++ `<`, `<=`, `>`, `>=` - not valid for unordered associative containers  
+
+**Obtain Iterators:**  
++ `c.begin()`, `c.end()` - return iterator to the first, one past the
+  last element in `c`  
++ `c.cbegin()`, `c.cend()` - --//-- `const_iterator`  
+
+**Additional Members of Reversible Containers (not valid for
+`forward_list`)**  
++ `reverse_iterator` - iterator that addresses elements in reverse order  
++ `const_reverse_iterator` - reverse iterator that cannot write the
+  elements  
++ `c.rbegin()`, `c.rend()` - return iterator to the last, one past the
+  first element  
++ `c.crbegin()`, `c.crend()` - return `const_reverse_iterator`  
+
+Each container is defined in a header file with the same name as the
+type.  
+The containers are **_class templates_**  
+Commonly we supply element type to container:  
+```cpp
+list<Sales_data>    // list that holds Sales_data object
+deque<double>       // deque that holds doubles
+```
+<!-- }}} -->
+### Constraints on Types That a Container Can Hold <!-- {{{ -->
+Some container operations impose requirements of their own on the
+element type. As an example:  
+```cpp
+// assume noDefault is a type without a default constructor
+vector<noDefault> v1(10, init); // ok: element initializer supplied
+vector<noDefault> v2(10);       // error: must supply an element initializer
+```
+<!-- }}} -->
+### Iterators <!-- {{{ -->
+They are provide access to element from container.  
+#### Iterator Ranges <!-- {{{ -->
+**Iterator range** is denoted by a pair of iterators each of which
+refers to element, or to _one past the last element_, in the same
+container (usually `begin` and `end`).  
+This element range is called a **left-inclusive interval** or `[begin,
+end)`  
+
+Requirements on Iterators Forming an Iterator Range:  
++ They refer to elements of, or one past the end of, the same container.  
++ It is possible to reach end by repeatedly incrementing begin.  
+##### Programming Implications of Using Left-Inclusive Ranges <!-- {{{ -->
+Assuming begin and end denote a valid iterator range, then:  
+
++ if `begin == end` - the range is empty  
++ if `begin != end` - there is at least one element in the range, and
+  begin refers to the first element in that range  
++ we can increment `begin` until `begin == end`  
+
+Example:  
+```cpp
+while (begin != end) {
+    *begin = val;       // ok: range isn't empty so begin denotes an element
+    ++begin;            // advance the iterator to get the next element
+}
+```
+
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+### Container Type Members <!-- {{{ -->
+To use one of these type, we must name the class of which they are a
+member:  
+```cpp
+// iter is the iterator type defined by list<string>
+list<string>::iterator iter;
+// count is the difference_type type defined by vector<int>
+vector<int>::difference_type count;
+```
+
+<!-- }}} -->
+### `begin` and `end` Members <!-- {{{ -->
+These iterators are most often used to form an iterator range that
+encompasses all the elements in the container.  
+<!-- }}} -->
+### Defining and Initializing a Container <!-- {{{ -->
 <!-- TODO: stopped here -->
+<!-- }}} -->
 <!-- }}} -->
 ## Sequential Container Operations <!-- {{{ -->
 
