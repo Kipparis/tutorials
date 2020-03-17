@@ -697,6 +697,107 @@ checkout -b <localbranchname> <remotebranchname>`. You can merge remote
 branch into yours as well  
 <!-- }}} -->
 #### Tracking Branches <!-- {{{ -->
+Checking out a local branch from a remote-tracking branch automatically
+creates what is called a _"tracking branch"_ (and the branch it tracks
+is called an _"upstream branch"_). If you're on a _tracking branch_ and
+type `git pull`, Git automatically knows which from where to fetch to
+merge in. (same happends on `git clone` with _master_ branch)  
+
+To _**create**_ _tracking branch_ run `git checkout -b <branch>
+<remote>/<branch>` or `git checkout --track <remote>/<branch>`  
+
+To **_change upstream branch_** type `git branch -u <remote>/<branch>`  
+    When you have a tracking branch, you can reference its upstream
+    branch with the `@{upstream}` or `@{u}` shorhand.  
+
+If you want to find your tracking branches and see additional info
+(ahead, begind, both), you can use `-vv` option to `git branch`  
+
+Good practive for viewing branches is: `git fetch --all; git branch -vv`  
+<!-- }}} -->
+#### Pulling <!-- {{{ -->
+It's the same as `git fetch` than `git merge`. Generally it's better to
+simply use those commands explicitly as the magic of `git pull` can
+often be confusing  
+<!-- }}} -->
+#### Deleting Remote Branches <!-- {{{ -->
+You can delete remote branch with:  
+`git push <remote> --delete <branch>`  
+_basically it just removes the pointer from the server_  
+<!-- }}} -->
+<!-- }}} -->
+### Rebasing <!-- {{{ -->
+In Git, there are two main ways to integrate changes from one branch
+into another:  
+
++ `merge`  
++ `rebase`  
+
+#### The Basic Rebase <!-- {{{ -->
+With the `rebase` command, you can take all the changes that were
+committed on one branch and replay them on a different branch.  
+Rebasing makes a cleaner history. If you examine the log of a rebased
+branch, it looks like a linear history.  
+
+For this example, you would check out the `experiment` branch, and the
+rebase it onto the `master` branch as follows:  
+```shell
+$ git checkout experiment
+$ git rebase master
+...
+```
+At this point, you can go back to the `master` branch and do a
+fast-forward merge.  
+```shell
+$ git checkout master
+$ git merge experiment
+```
+
+Often, you'll do this to make sure your commits apply cleanly on a
+remote branch - perhaps in a project to which you're trying to
+contribute but that you don't maintain.  
+<!-- }}} -->
+#### More Interesting Rebases <!-- {{{ -->
+Take a history like _A history with a topic branch off another topic
+branch_, for example.  
+
+You:  
+
+1. Branched a topic branch (_server_), and made a commit  
+2. Then, you branched off that to make the client-side changes (_client_) and commited a few times.  
+3. Went back to your server branch and did a few more commits.  
+
+Suppose you decide that you want to merge your **_client-side_** changes
+into your mainline. You can take the changes on `client` that aren't on
+`server` and replay them on your `master` branch by using the `--onto`
+option of `git rebase`:  
+```shell
+$ git rebase --onto master server client
+```
+This basically says, "Take the `client` branch, figure out the patches
+since it diverged from the `server` branch, and replay these patches in
+the `client` branch as if it was base directly off the `master` branch
+instead".  
+Now you can _fast-forward_ your `master` branch.  
+```shell
+$ git checkout master
+$ git merge client
+```
+Then you decide to pull in your server branch. You can use `git rebase
+<basebranch> <topicbranch>` command - `$ git rebase master server`  
+
+The rest you can do by yourself.
+_Remember delete branches with_ `git branch -d <branch>` _command_  
+<!-- }}} -->
+#### The Perils of Rebasing <!-- {{{ -->
+**Do not rebase commits that exist outside your repository and that
+people may have based work on.**  
+It's really messy and hard to understand without pictures. If you want,
+see page 99 (105 pdf) in book _pro git_.  
+<!-- }}} -->
+#### Rebase When You Rebase <!-- {{{ -->
+If you **do** find yourself in a situation like this, Git has some
+further magic that might help you out.  
 <!-- TODO: stopped here -->
 <!-- }}} -->
 <!-- }}} -->
