@@ -7,13 +7,13 @@ _book: Learning the bash Shell 3rd Edition. O'Reilly_
 <!--     aliases -->
 <!--     functions -->
 <!-- and find out cool, or those need for modification -->
-<!-- # What Is a Shell?<!-- {{{ --> -->
-<!-- The shell's job is to traslate the user's command lines into operating -->
-<!-- system instructions.   -->
-<!-- Remember that the shell itself is not UNIX - just the **_user interface_** to it. -->
-<!-- UNIX is one of the first operating systems to make the user interface -->
-<!-- independent of the operating system.   -->
-<!-- <!-- }}} --> -->
+# What Is a Shell?<!-- {{{ -->
+The shell's job is to traslate the user's command lines into operating
+system instructions.  
+Remember that the shell itself is not UNIX - just the **_user interface_** to it.
+UNIX is one of the first operating systems to make the user interface
+independent of the operating system.  
+<!-- }}} -->
 # Features of bash<!-- {{{ -->
     + command-line editing modes  
     + job control  
@@ -580,6 +580,95 @@ clarification for bash.
 <!-- }}} -->
 <!-- }}} -->
 ## String Operators <!-- {{{ -->
-<!-- TODO: stopped here -->
+The _curly-bracket_ syntax allows for the shell's _string operators_. In
+particular, string operators let you do the following:  
+
++ Ensure that variables exist (i.e., are defined and have non-null
+  values)  
++ Set default values for variables  
++ Catch errors that result from variables not being set  
++ Remove portions of varialbes' value that match patterns  
+
+Syntax of String Operators<!-- {{{ -->
+==========================
+
+Any special characters are inserted between the variable's name and the
+right curly bracket. Any argument - to the operator's right.  
+<!-- }}} -->
+### Existense of variables and substitutions <!-- {{{ -->
++ `${varname:-word}` - if _varname_ exists and isn't null, return its
+  value; otherwise return _word_  
++ `${varname:=word}` - if _varname_ exists and isn't null, return its
+  value; otherwise set it to _word_ and then return its value.  
++ `${varname:?message}` - if _varname_ exists and isn't null, return its
+  value; otherwise print _varname:_ followed by _message_ and abort the
+  current command or script  
++ `${varname:+word}` - if _varname_ exists and isn't null, return
+  _word_; otherwise return null.  
+    Purpose: Testing for the existence of a variable - `${count:+1}`
+    returns 1 if **count** is defined.  
++ `${varname:offset:length}` - it returns the substring of $_varname_
+  starting at _offset_ and up to _length_ characters. The first
+  character in $_varname_ is position 0. If _length_ is ommitted, the
+  substring continues to the end of $_varname_. If _offset_ is less than
+  0 then the position is taken from the end of $_varname_. If _varname_
+  is @, the _length_ is the number of positional parameters starting at
+  parameter offset.  
+<!-- }}} -->
+### Patterns and Pattern Matching <!-- {{{ -->
+Patterns are strings that can contain wildcard characters (\*, ?, and []
+for character sets and ranges)  
+
++ `${variable#pattern}` - if pattern matches the **beginning** of the
+  variable's value, delete the **shortest** part that matches and return the
+  rest.  
++ `${variable##pattern}` - if the pattern matches the **beginning** of the
+  varialbe's value, delete the **lognest** part that matches and return
+  the rest  
++ `${variable%pattern}` - if the pattern matches the **end** of the
+  variable's value, delete the **shortest** part that matches and return the
+  rest  
++ `${variable%%pattern}` - if the pattern matches the **end** of the
+  variable's value, delete the **longest** part that matches and return the
+  rest.  
++ `${varialbe/pattern/string}${variable//pattern/string}` - The
+  **longest** match to _pattern_ in _variable_ is replaced by _string_.
+    * In the first form, only the first match is replaced. In the second
+  form, all matches are replaced.  
+    * if the pattern begins with a `#`, it must match at the start of
+  the variable. If it begins with a `%`, it must match with the end
+  of the variable.  
+    * If _variable_ is @ or \*, the operation is applied to each
+  positional parameter in turn and the expansion is the resultant
+  list.  
+<!-- }}} -->
+### Length Operator <!-- {{{ -->
+`${#varname}` - returns the length of the value of the variable as a
+character string  
+<!-- }}} -->
+### Extended Pattern Matching <!-- {{{ -->
+Bash provides a further set of pattern matching operators if the **shopt**
+option **extglob** is switched on. Each operator takes one or more
+patterns, normally strings, separated by the vertical bar ( | ).  
+
++ `*(patternlist)` - matches zero or more occurrences of the given
+  patterns  
++ `+(patternlist)` - matches one or more occurences of the given
+  patterns  
++ `?(patternlist)` - matches zero or one occurences of the give patterns  
++ `@(patternlist)` - matches exactly one of the given patterns  
++ `!(patternlist)` - matches anything except one of the given patterns.  
+
+Patterns can contain shell wildcards and can be nested.  
+
+Example: output all .txt or .md files: `ls -al *(*.txt|*.md)`  
+<!-- }}} -->
+<!-- }}} -->
+## Command Substitution <!-- {{{ -->
+Command substitution allows you to use the standard output of a command
+as if it were the value of a variable. The syntax is: `$(UNIX command)` (can be nested)  
+<!-- }}} -->
+## Some examples from `pushd` and `popd` <!-- {{{ -->
+If you want to read full paragraph go to page 306  
 <!-- }}} -->
 <!-- }}} -->
