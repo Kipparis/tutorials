@@ -798,8 +798,129 @@ see page 99 (105 pdf) in book _pro git_.
 #### Rebase When You Rebase <!-- {{{ -->
 If you **do** find yourself in a situation like this, Git has some
 further magic that might help you out.  
+
+If you pull down work that was rewritten and rebase it on top of the new
+commmits  from your partner, Git can often successfully figure out what
+is uniquely yours nad apply them back on top of the new branch. (git
+also computes checksum that is based jsut on the patch introduced with
+the commit - _match-id_)  
+
+You can simplify this by running `git pull --rebase` or `git fetch ; git
+rebase <remote>/<branch>`  
+You can turn this option by default with `git config --global
+pull.rebase true`  
+<!-- }}} -->
+#### Rebase vs. Merge <!-- {{{ -->
+The commit history has two points of view:  
+
++ record of what actually happened.  
++ story of how your project was made. This is the camp that uses tools
+  like `rebase` and `filter-branch` to tell the story in the way that's
+  best for future readers.  
+
+In general the way to get the best of both worlds is to **_rebase local
+changes_** you've made but haven't shared yet before you push them in order
+to clean up your story, but **never** rebase _anything_ you've **_pushed
+somewhere_**  
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+# Git on the Server <!-- {{{ -->
+A remote repository is generally a _bare repository_ - a Git repository
+that has no working directory. In the simplest terms, a bare repository
+is the ocntents of your project's `.git` directory and nothing else.  
+## Protocols <!-- {{{ -->
+Git can use four distinct protocols to transfer data:  
+
++ Local  
++ HTTP  
++ Secure Shell (SSH)  
++ Git  
+
+### Local Protocol <!-- {{{ -->
+The remote repository is in another directory on the same host. This is
+often used if everyone on your team has access to a shared filesystem
+such as an _NFS_.  
+
+To clone repository like this, use the path to the repository as the
+URL:  
+```shell
+$ git clone /srv/git/project.git    # Git tries to use  hardlinks or direclty copy the files it needs
+# or this
+$ git clone file:///srv/git/project.git # extraneous reference or objects left out
+```
+
+**Pros:**  
+
++ They're simple and they use existing file permissions and network
+  access.  
++ Has a nice option for quicly grabbing work from someone else's working
+  repository: `git pull /home/john/project`  
+
+**Cons:**  
+
++ It can be difficult to set up and reach from multiple locations.  
++ A repository on NFS is often slower than the repository over SSH on
+  the same server, allowing Git to run off local disks on each system.  
++ Not protected against accidental damage.  
+
+<!-- }}} -->
+### HTTP Protocols <!-- {{{ -->
+**Pros:**  
+
++ Having a single URL for all types of access  
++ Having the server prompt only  when authentication is needed  
++ Ability to authenticate with a username and password  
++ Fast and efficient protocol, similar to the SSH one.  
++ You can also serve your repositories read-only over HTTPS.  
++ HTTP and HTTPS are such commonly used protocols that corporate
+  firewalls are often set up to allow traffic though their ports  
+
+**Cons:**  
+
++ Tricky to set up  
++ Providing your credentials is sometimes more complicated than using
+  keys over SSH  
+<!-- }}} -->
+### The SSH Protocol <!-- {{{ -->
+To clone a Git repository over SSH, you can specify an `ssh://` URL like
+this:  
+```shell
+$ git clone ssh://[user@]server/project.git
+```
+Or you can use the shorter scp-like syntax for the SSH protocol:  
+```shell
+$ git clone [user@]server:project.git
+```
+
+**Pros:**  
+
++ Easy to set up  
++ Access over SSH is secure  
++ SSH is efficient, making the data as compact as possible before
+  transferring it.  
+
+**Cons:**  
+
++ Doesn't support anonymous access  
+
+<!-- }}} -->
+### The Git Protocol <!-- {{{ -->
+You must create a `git-daemon-export-ok` file - the Git daemon won't
+serve a repository without that file in it.  
+
+**Pros:**  
+
++ Fastest network transfer protocol  
+
+**Const:**  
+
++ Lack of authentication.  
++ The most difficult protocol to set up.  
+<!-- }}} -->
+<!-- }}} -->
+## Getting Git on a Server<!-- {{{ -->
 <!-- TODO: stopped here -->
-<!-- }}} -->
-<!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
