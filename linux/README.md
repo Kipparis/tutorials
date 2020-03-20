@@ -1,6 +1,18 @@
 _book: Learning the bash Shell 3rd Edition. O'Reilly_  
     This file just a notes. If you have no clue what commands and pipes
     are, read the book by yourself.  
+
+useful keywords  
+
+scripting:  
+
+<!-- TODO: -->
+<!-- + options -->
+<!-- + aliases -->
+<!-- + functions -->
+<!-- + variables (like `unset`) -->
++ builtin - tells the shell to use the built-in command and ignore any
+  function of than name
 <!-- TODO: once read, go throw -->
 <!--     options -->
 <!--     env variables -->
@@ -670,5 +682,157 @@ as if it were the value of a variable. The syntax is: `$(UNIX command)` (can be 
 <!-- }}} -->
 ## Some examples from `pushd` and `popd` <!-- {{{ -->
 If you want to read full paragraph go to page 306  
+<!-- }}} -->
+<!-- }}} -->
+# Flow Control <!-- {{{ -->
+Bash supports:  
+
++ **if/else**  
++ **for**  
++ **while**  
++ **until**  
++ **case**  
++ **select** - allow the user to select one of a list of possibilities
+  from a menu  
+
+## if/else <!-- {{{ -->
+The **if** construct has the following syntax:  
+
+```bash
+if condition
+then
+    statements
+[elif condition
+then
+    statements...]
+[else
+    statements]
+fi
+```
+
+<!-- }}} -->
+Exit Status<!-- {{{ -->
+===========
+
+Conditions are based on general UNIX concept - _ext status_ of commands  
+Every UNIX command returns such. Where 0 is _usually_ the OK exit
+status, while anything else (1 to 255) _usually_ denotes an error.  
+---  
+
+**if** checks the exit status of the last statement in the list
+following the **if**keyword. If status is 0 &rarr; condition evaluates
+to true; otherwise - false.  
+<!-- }}} -->
+Return<!-- {{{ -->
+======
+
+`return N` causes the surrounding function to exit with exit status _N_ (defaults to the exit status of the last command).  
+<!-- }}} -->
+Combinations of Exit Statuses<!-- {{{ -->
+=============================
+
++ `statement1 && statement2` - execute _statement1_, and if its exit
+  status is 0, e execute _statement2_.  
++ `statement1 || statement2` - execute _statement1_, and if its exit
+  status is _not_ 0, execute _statement2_  
++ `! statement` - return 0 if _statement_ fails, otherwise - 1  
+<!-- }}} -->
+Condition Tests<!-- {{{ -->
+===============
+
+`[[...]]` is just newer version of `[...]`. In first word splitting and
+pathname expansion are not performed on the words within the brackets.  
+
+They can also be combined using this syntax:  
+```bash
+if [ condition ] && [ condition ]; then
+# or
+if command && [ condition ]; then
+```
+Also you can negate the truth using preceding exlamation point (**!**).  
+Furthermore, you can make complex logical expressions of conditional
+operators by grouping them with parentheses (which must be "escaped"
+with backslashes), and by using two logical operators: **-a** (AND) and
+**-o** (OR). (`-a` and `-o` are working only inside a **test**
+conditional expression)  
+
+Example of combining:  
+```bash
+if [ -n "$dirname" ] && [ \( -d "$dirname" \) -a \( -x "$dirname" \) ]; then
+```
+
+
+<!-- }}} -->
+## String Comparisons <!-- {{{ -->
+**Operator** - **True if...**  
+
++ `str1 = str2` - _str1_ matches _str2_  
++ `str1 != str2` - _str1_ does not match _str2_  
++ `str1 < str2` - _str1_ is less than _str2_  
++ `str1 > str2` - _str1_ is greater than _str2_  
++ `-n str1` - _str1_ is not null (length > 0)  
++ `-z str1` - _str1_ is null (length == 0)  
+<!-- }}} -->
+## File attribute checking <!-- {{{ -->
+There are 24 such operators. We will cover those of most general
+interest here.  
+
+**Operator** - **True if...**  
+
++ `-a file` - _file_ exists  
++ `-d file` - _file_ exists and is a directory  
++ `-e file` - same as `-a`  
++ `-f file` - _file_ exists and is a **_regular_** file (i.e., not a
+  directory or other special type of file)  
++ `-r file` - you have read permission on _file_  
++ `-s file` - _file_ exists and is not empty  
++ `-w file` - you have write permission on _file_  
++ `-x file` - you have execute permission on _file_, or directory search
+  permission if it is a directory.  
++ `-N file` - _file_ was modified since it was last read  
++ `-O file` - you own _file_  
++ `-G file` - _file_'s group ID matches yours (or one of yours)  
++ `file1 -nt file2` - _file1_ is newer(modification time) than _file2_  
++ `file1 -ot file2` - _file1_ is older(modification time) than _file2_  
+<!-- }}} -->
+Integer Conditionals<!-- {{{ -->
+====================
+
+**Test** - **Comparison**  
+
++ `-lt` - less than  
++ `-le` - less than or equal  
++ `-eq` - equal  
++ `-ge` - greater than or equal  
++ `-gt` - greater than  
++ `-ne` - not equal  
+<!-- }}} -->
+## for <!-- {{{ -->
+The shell's standard **for** loop doesn't
+let you specify a number of times to iterate or a range of values over
+which to iterate.  
+
+Syntax:
+```bash
+for name [in list] # defaults to "$@"
+do
+    statements that can use $name...
+done
+```
+
+For custom iteration you can do this:
+```bash
+IFS=:
+
+for dir in $PATH
+do
+    ls -ld $dir
+done
+```
+
+
+<!-- }}} -->
+## case <!-- {{{ -->
+<!-- TODO: stopped here -->
 <!-- }}} -->
 <!-- }}} -->
