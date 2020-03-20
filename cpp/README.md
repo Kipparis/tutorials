@@ -906,11 +906,110 @@ These iterators are most often used to form an iterator range that
 encompasses all the elements in the container.  
 <!-- }}} -->
 ### Defining and Initializing a Container <!-- {{{ -->
-<!-- TODO: stopped here -->
+#### Initializing a Container as a Copy of Another Container <!-- {{{ -->
+Two ways to create a new container as a copy of another one:  
+
+1. directly ocpy the container  
+    1. the container and element types must match  
+2. (excepting array) copy a range of elements denoted by a pair of
+   iterators  
+    1. Element types in the new and original containers can differ as
+   long as it is possible to convert 
+    2. Container types can differ  
+<!-- }}} -->
+#### List Initialization <!-- {{{ -->
+Since _c++11_ standart we can list initialize a container:  
+```cpp
+list<string> authors = {"Milton", "Shakespeare", "Austen"};
+```
+<!-- }}} -->
+#### Sequential Container Size-Related Constructors <!-- {{{ -->
+We can also initialize the sequential containers (other than array) from
+a size and an (optional) element initializer. If we do not supply
+element initializer, the library creates a value-initialized one for us:  
+```cpp
+vector<int> ivec(10, -1);   // ten int elements, each initialized to -1
+list<string> svec(10, "hi!")    // ten strings, each element is "hi!"
+forward_list<int> ivec(10); // ten elements, each initialized to 0
+deque<string> svec(10); // ten elements, each an empty string
+```
+
+<!-- }}} -->
+#### Library `arrays` Have Fixed Size <!-- {{{ -->
+The size of a library `array` is part of its type.  
+```cpp
+array<int, 42>  // type is: array that holds 42 ints  
+```
+To use an array type we must specify both the element type and the size:  
+```cpp
+array<int, 10>::size_type i;    // array type includes element type and size
+array<int>::size_type j;        // error: array<int> is not a type
+```
+If we list initialize the `array`, the number of the initializers myst
+be equal to or less than the size of the array.  
+
+Although we cannot copy or assign objects of built-in array types, there
+is no such restriction on array:  
+```cpp
+int digs[10] = {0,1,2,3,4,5,6,7,8,9};
+int cpy[10] = digs; // error: no copy or assignment for built-in arrays
+array<int, 10> digits = {0,1,2,3,4,5,6,7,8,9};
+array<int, 10> copy = digits;   // ok: so long as array types match
+```
+
+
+<!-- }}} -->
+<!-- }}} -->
+### Assignment and `swap`<!-- {{{ -->
++ `c1 = c2` - replace the elements in `c1` with copies of the elements
+  in `c2`. `c1` and `c2` must be the same type.  
++ `c = {a,b,c...}` - replace the elements in `c1` with copies of the
+  elements in the initializer list **(Not valid for array.)**  
++ `swap(c1, c2)`, `c1.swap(c2)` - exchanges elements in `c1` with those in `c2`. `c1`
+  and `c2` must be the same type. `swap` is usually _much_ faster than
+  copying elements from `c2` to `c1`.
+
+**assign operations not valid for associative containers or array**
+
++ `seq.assign(b,e)` - replaces (copies) elements in `seq` with those in the range
+  denoted by iterators `b` and `e`. The iterators `b` and `e` must not
+  refer to elements in `seq`.  
++ `seq.assign(il)` - replaces the elements in `seq` with those in the
+  initializer list `il`  
++ `seq.assign(n,t)` - replaces the elements in `seq` with _n_ elements
+  with value _t_.
+
+Unlike built-in arrays, the library `ar ray` type does allow assignment
+(types must be the same)  
+
+#### Using `swap`<!-- {{{ -->
+Excepting `array`, `swap` does not copy, delete, or insert any elements
+and is guaranteed to run in constant time. Swapping two `arrays` does
+exchange the elements. As a result, swapping two `arrays` requires time
+proportional to the number of elements in the array.  
+<!-- }}} -->
+<!-- }}} -->
+### Relational Operators <!-- {{{ -->
+Every container type support the equality operators (== and !=), and
+(except unordered associative) support relational operators (>, >=, <,
+<=). The right- and left-hand operands must be the same kind of
+acontainer and must hold elements of the same type.  
+
+Comparing two containers performs lexicographic comparison:  
+
++ if both containers are the same size and all the elements are equal,
+  the the two containers are equal  
++ if the containers have different sizes bu t every element of the
+  smaller one is equal to the corresponding element of the larger one,
+  then the smaller one it less than the other  
++ if neither container is an initial subsequence of the other, then the
+  comparison depends on a comparing the first unequal elements  
+
+**Relational Operators Use Their Element's Relational Operator**  
 <!-- }}} -->
 <!-- }}} -->
 ## Sequential Container Operations <!-- {{{ -->
-
+<!-- TODO: stopped here -->
 <!-- }}} -->
 ## How a `vector` Grows <!-- {{{ -->
 
