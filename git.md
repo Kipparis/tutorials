@@ -921,6 +921,143 @@ serve a repository without that file in it.
 <!-- }}} -->
 <!-- }}} -->
 ## Getting Git on a Server<!-- {{{ -->
-<!-- TODO: stopped here -->
+To initially set up you have to export an existing repository into a new
+bare repository - clone your repository with `--bare` option. By
+convention, bare repository directory names end with the suffix `.git`
+like so:  
+```shell
+$ git clone --bare my_project my_project.git
+```
+
 <!-- }}} -->
+## Putting the Bare repository on a Server <!-- {{{ -->
+Users who have SSH-based read access to the directory on that server can
+clone repository by running  
+```shell
+$ git clone user@git.example.com:<dir>/<bare_repo>.git
+```
+Git will automatically add group write permissions to a repository
+properly if you run the `git init` command with the `--shared` option.  
+```shell
+$ shh user@git.example.com
+$ cd /srv/git/my_project
+$ git init --bare--shared
+```
+
+
+<!-- }}} -->
+## Small Setups <!-- {{{ -->
+If you want some repositories to be read-only for certain users and
+read/write for others, access and permissions can be a bit more
+difficult to arrange.  
+### SSH Access <!-- {{{ -->
+If you have a server to which all your developers already have SSH
+access, it's generally easiest to set up your first repository there
+(you don't have to do any work). If you want more complex access control
+type permissions, you can handle them with the normal filesystem
+permissions of your server's operating system.  
+
+Other way:  
+
+1. Set up accounts for everybody. You may not want to run `adduser` and
+   have to set termorary pawwords for every new user.  
+2. Create a single _git_ user account on the machine, ask every user who
+   is to have write access to send you an SSH publick key, and add that
+   key to the `$HOME/.ssh/authorized_keys` file of that new _git_
+   accout. At that point, everyone will be able to access that machin
+   via the _git_ accout. This doesn't affect the commit data in any way
+   - the SSH user you connect as doesn't affect the commmits you've
+   recorded
+3. Have your SSH server authenticate from an LDAP server or some other
+   centralized authentication source that you may already have set up,.
+   As long as each user can get shell access on the machine, any SSH
+   auth mechanism you can think of should work.  
+<!-- }}} -->
+<!-- }}} -->
+## Generating Your SSH Public Key <!-- {{{ -->
+First, you should check to make sure you don't already have a key (by
+default they are stored in `$HOME/.ssh` directory)  
+You are looking for pair of files named something like `id_dsa` or
+`id_rsa` (private keys) and a matching file with a `.pub` extension (public key).  
+
+In order to generate them user program called `ssh-keygen`:  
+```shell
+$ ssh-keygen -o
+```
+When it asks for passphrase, you can leave it empty, if you don't want
+to type a password when you use the key.  
+
+<!-- }}} -->
+## Setting Up the Server <!-- {{{ -->
+Let's walk through setting up SSH access on the server side. We'll use `authorized_keys`
+method for authenticating your users.  
+
+> A good deal of what is described here can be automated by using the
+> `shh-copy-id` command, rather than manually copying and installing
+> public keys  
+
+Create a `git` user account and a `.ssh` directory for that user.
+```shell
+$ sudo adduser git
+$ su git
+$ cd
+$ mkdir .ssh && chmod 700 .ssh
+$ touch .ssh/authorized_keys && chmod 600 .ssh/authorized_keys
+```
+Add developers SSH public keys to the `authorized_keys` file under the `git` user.  
+```shell
+$ cat /tmp/id_rsa.john.pub >> ~git/.ssh/authorized_keys
+$ cat /tmp/id_rsa.josie.pub >> ~git/.ssh/authorized_keys
+$ cat /tmp/id_rsa.jessica.pub >> ~git/.ssh/authorized_keys
+```
+
+You should note that currently all these users can also log into the
+server and get a shell as the `git` user. If you want to restrict that,
+you will have to change the shell to something else in the `/etc/passwd`
+file.  
+
+You can easily restrict the `git` user account to only Git-related
+activities with a limited shell tool called `git-shell` that comes with
+Git. If you set this as the `git` user account's login shell, then that
+account can't have normal  shell access to your server. To use this,
+specify `git-shell` as login shell. To do so:  
+
++ specify full pathname of the `git-shell` command to `/etc/shells`  
++ edit the shell for a user using `chsh <username> -s <shell>`:  
+    `$ sudo chsh git -s $(which git-shell)`  
+
+Now they can't login in to interactive mode into shell. But they still
+able to use SSH port forwarding to access any host the git server is
+able to reach. To prevent that, edit the `authorized_keys` file and
+prepend the following options to each key you'd like to restrict:  
+```
+no-port-forwarding,no-X11-fowarding,no-agent-forwarding,no-pty 
+```
+
+Run `git help shell` for more information on customizing the shell.  
+
+<!-- }}} -->
+## Git Daemon <!-- {{{ -->
+_p 113_  
+Set up a daemon serving repositories using the "Git" protocol. This is a
+common choice for fast, anauthenticated access to your Git data.  
+<!-- }}} -->
+## Smart HTTP <!-- {{{ -->
+_p 115_  
+It's a protocol that can do both authenticated and unauthenticated
+access at the same time.  
+<!-- }}} -->
+## GitWeb <!-- {{{ -->
+_p. 116_  
+To set up a simple web-base visualizer use CGI script (that comes with
+Git) called GitWeb.  
+<!-- }}} -->
+## GitLab <!-- {{{ -->
+_p. 118_  
+More complex than the GitWeb option and likely requires more
+maintenance, but it is much more fully featured option.  
+<!-- }}} -->
+<!-- }}} -->
+# Distributed Git <!-- {{{ -->
+<!-- TODO: stopped here -->
 <!-- }}} -->
