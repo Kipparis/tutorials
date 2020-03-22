@@ -1059,5 +1059,91 @@ maintenance, but it is much more fully featured option.
 <!-- }}} -->
 <!-- }}} -->
 # Distributed Git <!-- {{{ -->
+You'll learn how to contribute code successfuly to a project and make it
+as easy on you and the project maintainer as possible, and also how to
+maintain a project successfully with a number of developers
+contributing.  
+
+## Distributed Workflows <!-- {{{ -->
+### Centralized Workflow <!-- {{{ -->
+One central hub, or _repository_, can accept code, and everyone
+synchronizes their work with it.  
+This means that if two developers clone
+from the hub and both make changes, the first developer to push their
+changes back up can do so with no problems. The second developer must
+merge in the first one's work before pushing changes up.  
+<!-- }}} -->
+### Integration-Manager Workflow <!-- {{{ -->
+
+1. The project maintainer pushes to their public repository.  
+2. A contributor clones that repository and makes changes.  
+3. The contributor pushes to their own public copy.  
+4. The contributor sends the maintainer an email asking them to pull
+   changes.  
+5. The maintainer adds the contributor's repository as a remote and
+   merges locally.  
+6. The miantainer pushes merged changes to the main repository.  
+
+<!-- }}} -->
+### Dictator and Lieutenants Workflow <!-- {{{ -->
+Variant of _Integration-Manager workflow_.  
+Common developer pushes his changes to lietenant. Group of lieutenants
+pushes its changes to dictator, which in order pushes to main branch.  
+
+1. Regular developers work on their topic branch and rebase their work
+   on top of master. The mast er branch is that of the reference
+   repository to which dict ator pushes.  
+2. Lieutenants merge the developers' topic branches into their `master`
+   branch.  
+3. The dictator merges the lieutenants' `master` branches into the
+   dictator's `master` branch.  
+4. Finally, the dictator pushes that `master` branch to the reference
+   repository so the other developers can rebase on it.  
+<!-- }}} -->
+<!-- }}} -->
+## Contributing to a Project <!-- {{{ -->
+You should consider following _variables_:  
+
++ active contributor count.  
++ workflow in use for the project.  
++ commit access.  
+
+All these questions can affect how you contribute effectively to a
+project and what workflows are preferred or available to you.  
+
+### Commit Guidelines <!-- {{{ -->
+The Git project provides a document that lays out a **number of good tips**
+for creating commits from which to submit patches - you can read it in
+the Git source code in the `Documentation/SubmittingPatches` file.  
+
+1. Your submission should not contain any whitespace errors. You can
+   check this via `git diff --check` command.  
+2. Try to make each commit logically separate changeset. If some of the
+   changes modify the same file, try to use `git add --patch` to
+   partially stage files.  
+3. Commit message:  
+    1. first line no longer than 50 characters (72 if necessary),
+   followed by a blank line, followed by a more detailed
+   explanation.  
+    2. Write in imperative: "Fix bug" and not "Fixed bug" or "Fixes
+   bug".  
+
+Git project requires more detailed explanation to contain your
+motivation for the change and contrast its implementation with previous
+version.  
+<!-- }}} -->
+### Private Small Team <!-- {{{ -->
+Private - not accessible to the outside world. You and the other
+developers all have push access to the repository.  
+
++ work on `topic` branch
++ merge `topic` into `master`
++ merge `<remote>/master` into `master`
++ push changes to server
+
+<!-- }}} -->
+### Private Managed Team <!-- {{{ -->
 <!-- TODO: stopped here -->
+<!-- }}} -->
+<!-- }}} -->
 <!-- }}} -->
