@@ -415,6 +415,7 @@ They are:
 + **PS1** - primary prompt string  
 + **PS2** - secondary prompt string (default `>`)  
 + **PS3** - relate to shell programming and debugging  
+    - `select` uses **PS3** variable as prompt  
 + **PS4** - relate to shell programming and debugging  
 
 **Prompt string customizations:**  
@@ -834,6 +835,148 @@ done
 
 <!-- }}} -->
 ## case <!-- {{{ -->
+_bash_'s **case** construct lets you test strings against patterns that
+can contain wildcard characters.  
+The syntax of **case** is as follows:  
+```bash
+case expression
+    in
+    pattern1 )
+        statements
+        ;;
+    pattern2 )
+        statements
+        ;;
+    ...
+esac
+```
+Any of the _patterns_ can actually be several patterns separated by pipe
+characters (|).
+
+<!-- }}} -->
+## select <!-- {{{ -->
+**select** allows you to generate simple menus easily. It has concise
+syntax, but it does quite a lot of work. The syntax is:  
+```bash
+select name [in list]   # default to "$@"
+do
+    statements that can use $name...
+done
+```
+
+What **select** does is:  
+
+1. generates a menu of each item in list, formatted with numbers for
+   each choice  
+2. Prompts the user for a number  
+3. Stores the selected choice in the variable name and the selected
+   number in the built-in variable **REPLY**  
+4. Executes the statements in the body  
+5. Repeats the process forver  
+    If you want to exit, use `break` statement  
+
+<!-- }}} -->
+## while and until <!-- {{{ -->
+They both allow a section of code to be run repeatitively while (or
+until) a certain condition becomes true.  
+Syntax for **while** is:  
+```bash
+while condition
+do
+    statements...
+done
+```
+for **until** jsut substitute **until** for **while** in the aboce
+example.  
+
+<!-- }}} -->
+<!-- }}} -->
+# Command-Line Options and Typed Variables <!-- {{{ -->
+## Command-Line Options <!-- {{{ -->
+
+shift<!-- {{{ -->
+=====
+
+The command `shift` performs the function of:
+```
+1=$2
+2=$3
+...
+```
+you can supply argument to shift that many times over. For example
+`shift 3` will do `1=$4 ; 2=$5`  
+
+common example:
+
+```bash
+while [ -n "$(echo $1 | grep '-')" ]; do
+    case $1 in
+        -a ) process option -a
+            ;;
+        -b ) process option -b
+            ;;
+        -c ) process option -c
+            ;;
+        * ) echo 'usage: alice [-a] [-b] [-c] args'
+            exit 1
+    esac
+    shift
+done
+normal processing of arguments...
+```
+<!-- }}} -->
+Options with Arguments<!-- {{{ -->
+======================
+
+```bash
+while [ -n "$(echo $1 | grep '-')" ]; do
+    case $1 in
+        -a ) process option -a
+            ;;
+        -b ) process option -b
+            option=$2       # <--- modified here
+            shift
+            ;;
+        -c ) process option -c
+            ;;
+        * ) echo 'usage: alice [-a] [-b] [-c] args'
+            exit 1
+    esac
+    shift
+done
+normal processing of arguments...
+```
+
+<!-- }}} -->
+getopts<!-- {{{ -->
+========
+
+The shell provides a built-in way to deal with multiple comples options
+without thse constraints. The built-in command **getopts** can be used
+as the condition of the **while** in an option-processing loop.  
+
+`getopts` takes two arguments:
+
+1. string containing letters and colons. Each letter is a valid option.
+   If a letter is followed by a colon, the option requires an argument.
+2. variable to which **getopts** will assign options.  
+
+As long as there are options left to process, **getopts** will return
+exit status 0; when the options are exhausted, it returns exit status 1.  
+
+If the user types an invalid option, **getopts** normally prints an
+unfortunate error message and sets **opt** to **?**. But if you begin
+the option string with a colon, **getopts** won't print the message.  
+
+If an option has an argument, **getopts** stores it in the variable
+**OPTARG**, which can be used in the code that processes the option.  
+
+**OPTIND** - the number of the next argument to be processed. Expression
+`shift $(($OPTIND - 1))` shifts all options leaving the "real arguments
+as $1, $2, etc"  
+<!-- }}} -->
+<!-- }}} -->
+## Typed Variables <!-- {{{ -->
 <!-- TODO: stopped here -->
 <!-- }}} -->
 <!-- }}} -->
