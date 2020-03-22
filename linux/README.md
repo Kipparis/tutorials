@@ -11,6 +11,7 @@ scripting:
 <!-- + aliases -->
 <!-- + functions -->
 <!-- + variables (like `unset`) -->
+<!-- + bind (опции) -->
 + builtin - tells the shell to use the built-in command and ignore any
   function of than name
 <!-- TODO: once read, go throw -->
