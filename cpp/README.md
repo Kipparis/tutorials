@@ -1009,10 +1009,167 @@ Comparing two containers performs lexicographic comparison:
 <!-- }}} -->
 <!-- }}} -->
 ## Sequential Container Operations <!-- {{{ -->
-<!-- TODO: stopped here -->
+**Container Operations May Invalidate Iterators**  
+### Adding elements to a Sequential Container <!-- {{{ -->
+Excepting `array`, all of the library containers provide flexible memory
+management. We can add or remove elements dynamically changing the size
+of the container at run time.  
+
++ `c.push_back(t)`, `c.emplace_back(args)` - creates an element with value `t`
+  or constructed from _args_ at the end of `c`. Returns void.  
+    not valid for `forward_list`  
++ `c.push_front(t)`, `c.emplace_front(args)` - creates an element with value `t`
+  or constructed from _args_ on the front of `c`. Returns void.  
+    not valid for `forward_list`  
++ `c.insert(it, t)`, `c.emplace(it, args)` - creates an element with value _t_
+  or constructed from _args_ before the element denoted by iterator _it_.
+  Returns an iterator referring to the element that was added.  
++ `c.insert(it,n,t)` - inserts _n_ elements with value _t_ before the
+  element denoted by iterator _it_. Returns an iterator to the first
+  element inserted; if _n_is zero, returns _it_.  
++ `c.insert(p, b, e)` - inserts the elements from the range denoted by
+  iterators _b_ and _e_ before the element denoted by iterator _p_. _b_
+  and _e_ may not refer to elements in `c`. Returns an iterator to the
+  first element inserted; if the range is empty, returns _p_.  
++ `c.insert(it,il)` - _il_ is a braced list of element values. Inserts
+  the given values before the element denoted by the iterator _it_.
+  Returns an iterator to the first inserted element; if the list is
+  empty returns _it_  
+
+When use these operations, we must remember that the containers use
+different strategies for allocating elements and that these strategies
+affect performance.  
+
+#### Using `push_back` <!-- {{{ -->
+The call to `push_back` creates a new element at the end of `container`,
+increasing the `size` of container by 1. The value of that element is a
+copy of _word_. The type of container can be any of list, vector, or
+deque.  
+**Key concept: Container Elements Are Copies**  
+<!-- }}} -->
+#### Using `push_front` <!-- {{{ -->
+This operatrion inserts a new element at the front of the container.  
+As with `vector`, inserting elements other than at the front or back of
+a `deque` is ponentially expensive operation.  
+<!-- }}} -->
+#### Adding Elements at a Specified Point in the Container <!-- {{{ -->
+The `insert` members let us insert zero or more elements at any point in
+the container. Elements are inserted _before_ the position denoted by
+the iterator.  
+<!-- }}} -->
+#### Using the Return from `insert` <!-- {{{ -->
+We can use the this value to repeatedly insert elements at a specified
+position in the container:
+```cpp
+list<string> 1st;
+auto iter = 1st.begin();
+while (cin >> word)
+    iter = 1st.insert(iter, word);  // same as calling push_front
+```
+
+<!-- }}} -->
+<!-- }}} -->
+### Accessing Elements <!-- {{{ -->
+The access operations are undefined if the container has no elements.  
+
++ `c.back()` - returns a reference to the last element in _c_.  
++ `c.front()` - returns a reference to the first  element in _c_.  
++ `c[n]` - returns a reference to the element indexed by the unsigned
+  integral value _n_. Undefined if `n >= c.size()`  
++ `c.at(n)` - returns a reference to the element indexed by _n_. If the
+  index is out of ranger, throws an `out_of_range` exception. (safe
+  random access)  
+
+All seq. containers, including `array`, has a `front` member.  
+All (except `forward_list`) have a `back` member.  
+
+#### The Access Members Return References <!-- {{{ -->
+If the ocntainer is `const` object, the return is a reference to
+`const`. If the container is not `const`, the return is a ordinary
+reference that we can use to change the value of the fetched element:
+```cpp
+if (!c.empty()) {
+    c.front() = 42;     // assigns 42 to the first element in c
+    auto &v = c.back()  // get a reference to the last element
+    v = 1024;           // changes the element in c
+    auto v2 = c.back(); // v2 is not a reference; it's a copy of c.back()
+    v2 = 0;             // no change to the element in c
+}
+```
+
+<!-- }}} -->
+<!-- }}} -->
+### Erasing Elements <!-- {{{ -->
+Undefined if container is empty.  
+
++ `c.pop_back()` - removes last element in _c_. Returns _void_.  
++ `c.pop_front()` - removes first element in _c_. Returns _void_.  
++ `c.erase(p)` - removes the element denoted by the iterator _p_ and
+  returns an iterator to the element after the one deleted or the
+  off-the-end iterator if _p_ denotes the last element.  
++ `c.erase(b,e)` - removes the range of elements. Returns last element
+  deleted, or an off-the-end iterator if _e_ is itself an off-the-end
+  iterator.  
++ `c.clear()` - removes all the elements in _c_. Returns _void_.  
+
+**Removing elements invalidates pointers, references.**  
+**The programmer must ensure that elements exist before removing them.**  
+
+#### The `pop_front` and `pop_back` Members <!-- {{{ -->
+There's no `pop_front` for `vector` and `string`.  
+There's no `pop_back` for `forward_list`.  
+
+These operatrions return _void_. If you need the value you are about to
+pop, you must store that value before doing the pop.  
+<!-- }}} -->
+#### Removing an Element from within the Container <!-- {{{ -->
+Both forms of `erase` return an iterator referring to the location after
+the (last) element that wasa removed.  
+
+```cpp
+list<int> lst = {0,1,2,3,4,5,6,7,8,9};
+auto it = lst.begin();
+while (it != lst.end())
+    if (*it % 2)            // if the element is odd
+        it = lst.erase(it); // erase this element
+    else
+        ++it;
+```
+
+<!-- }}} -->
+<!-- }}} -->
+### Specialized `forward_list` Operations <!-- {{{ -->
+Operatrions to add or remove element in a `forward_list` operate by
+changing the element _after_ the given element. Instead of common
+`insert`, `emplace`, or `erase` it defines `insert_after`,
+`emplace_after`, and `erase_after`.  
+
+**erase** operators return pointer to the element after the one deleted.  
+<!-- }}} -->
+### Resizing a Container <!-- {{{ -->
++ current size > requested size &rarr; elements are deleted from
+  the back of the container;  
++ current size < new size &rarr; elements are added to the back of the
+  container:  
+
+```cpp
+list<int> ilist(10,42); // ten ints: each has value 42
+ilist.resize(15);   // adds five elements of value 0 to the back of ilist
+ilist.resize(25,-1) // adds ten elements of value -1 to the back of ilist
+ilist.resize(5);    // erases 20 elements from the back of ilist
+```
+
+<!-- }}} -->
 <!-- }}} -->
 ## How a `vector` Grows <!-- {{{ -->
+Because reallocation every time new element is inserted is too
+expensive, library implementors use allocation strategies that reduce
+the number of times the container is reallocated. Thus `vector` usually
+grows more efficiently than a `list` or a `deque`.  
 
+### Members to Manage Capacity <!-- {{{ -->
+<!-- TODO: stopped here -->
+<!-- }}} -->
 <!-- }}} -->
 ## Additional `string` Operations <!-- {{{ -->
 
