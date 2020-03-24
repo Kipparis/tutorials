@@ -1143,7 +1143,236 @@ developers all have push access to the repository.
 
 <!-- }}} -->
 ### Private Managed Team <!-- {{{ -->
-<!-- TODO: stopped here -->
+You must already know how to work on those teams. To read about workflow
+open p. 136.  
+<!-- }}} -->
+### Forked Public Project <!-- {{{ -->
+Contributing to public project is a bit different. Because you don't
+have the permissions to directly update branches on the project, you
+have to get the work to the maintainers some other way. This first
+example describes contribuing via forking.  
+
+First, you'll probably want to clone the main repository, create a topic
+branch.  
+
+> You may want to use `rebase -i` to squash your work down to a single
+> commit, or rearrange the work in the commits to make the patch easier
+> for the maintainer to review.  
+
+When you ready to contribute go to original project page and clike the
+"Fork" button, creating your own writable fork of the project. You then
+need to add this repository URL as a new remote of your local
+repository; for example:  
+```shell
+$ git remote add myfork <url>
+```
+
+Then push your local branch into remote fork. You won't want to merge
+into your `master` branch because:  
+
++ your work might not be accepted  
++ your work might be cherry-picked  
+
+To push to remote - `git push -u myfork featureA`. Not `-u` option which
+adds default remote for this branch.  
+
+Then you may want to generate **pull request**. You can do it on GitHub,
+or via `git request-pull` command (generates summary of all changes you
+are asking to be pulled). This output can be sent to the maintainer.  
+```shell
+$ git checkout -b featureB origin/master
+    ... work ...
+$ git commit
+$ git push myfork featureB
+$ git request-pull origin/master myfork
+    ... email generated request pull to maintainer ...
+$ git fetch origin
+```
+---  
+
+
+Let's say the project maintainer has pulled in a bunch of other patches
+and now your branch doesn't clenly merges. In this case, you can try to
+rebase that branch on top of `origin/master`, resolve the ocnflicts for
+the maintainer, and then resumbit your changes:  
+```shell
+$ git checkout featureA
+$ git rebase origin/master
+$ git push -f myfork featureA
+```
+Because you rebased the branch, you have to specify the `-f` to your
+push command in order to be able to replace the `featureA` branch on the
+server with a commit that isn't a descendant of it.  
+
+---  
+
+Assume that: the maintainer has looked at work in your second branch and
+likes the concept but would like you to change an implementation detail.
+You also can base your work on current `origin/master` branch:  
+```shell
+$ git checkout -b featureBv2 origin/master
+$ git merge --squash featureB
+    ... change implementation ...
+$ git commit
+$ git push myfork featureBv2
+```
+
+The `--squash` option takes all the work on the merged branch and
+squashes it into one changeset producing the repository state as if a
+real merge happened, without actually making a merge commit. (also
+`--no-commit` option can be helpful)  
+
+
+<!-- }}} -->
+### Public Project over Email <!-- {{{ -->
+Many projects have established procedures for accepting patches - you'll
+need to check the specific rules for each project.  
+
+Since there are several older, larger projects thich accept patches via
+a developer mailing list, we'll go over it:  
+
+the workflow is similar to the previous use case:  
+
+1. you create a topic branches for each patch  
+2. instead of forking the project and pushing to your own writable
+   version, you generate email versions of each commit series nad email
+   them to the developer mailing list  
+
+```shell
+$ git checkout -b topicA
+    ... work ...
+$ git commit
+    ... work ...
+$ git commit
+```
+
+To sent to the mailing list use `git format-patch` to generate the
+**mbox-fomatted** files (turn each commit into an email message with the
+first line of the commit message as the subject and the rest + patch = body)
+that yuo can email to the list.  
+`format-patch` outputs generated filenames. `-M` option tells Git to
+look for renames.  
+
+> You can also edit this patch files to add more infotmation - you may
+> add text between the `---` line and the beginning of the patch (the `diff --git` line)  
+
+To email this you can either paste the file into your email program
+(often causes formatting issues) or
+send it via a command-line program.  
+
+To send via IMAP program:  
+
++ set imap section in your `~/.gitconfig` file.  
+```txt
+[imap]
+    folder = "[Gmail]/Drafts"
+    host = imaps://imap.gmail.com
+    user = user@gmail.com
+    pass = YX]8g76G_2^sFbd
+    port = 993
+    sslverify = false
+```
++ `git imap-send` to place the patch series in the drafts folder of the
+  specified IMAP server  
+    `$ cat *.patch | git imap-send`  
+
+To send via SMTP server:
+
++ configure following section in
+  `~/.gitconfig` file:  
+```txt
+[sendemail]
+    smtpencryption = tls
+    smtpserver = smtp.gmail.com
+    smtpuser = user@gmail.com
+    smtpserverport = 587
+```
++ use `git send-email` to send your patches:  
+    `$ git send-email *.patch`  
+
+
+<!-- }}} -->
+<!-- }}} -->
+## Maintaining a Project <!-- {{{ -->
+Whether you maintain a canonical repository or want to help by verifying
+or approving patches, you need to know how to accept work in a way that
+is clearest for other contributors and sustainable by you over the long
+run.  
+
+### Working in Topic Branches <!-- {{{ -->
+It's generally a good idea to try new work in a _topic branch_. The name
+is better to be based on the theme of the work you're going to try or
+something similarly descriptive, youcan easily remember. You can
+namespace them as well - such as `sc/ruby_client`, where `sc` is short
+for the person who contributed the work.  
+<!-- }}} -->
+### Applying Patches from Email <!-- {{{ -->
+There are two ways to apply an emailed patch:  
+
++ `git apply`  
++ `git am`  
+
+#### Applying a Patch with `apply` <!-- {{{ -->
+If you received the patch from someone who generated it with `git diff`
+or some variation of the Unix `diff` comand (which is not recommended),
+you can apply it with the `git apply` command. Assuming you saved the
+patch at `/tmp/patch-ruby-client.patch`, you can apply it like this:  
+```shell
+$ git apply /tmp/patch-ruby-client.patch
+```
+This modified the files in your working directory. It's almost identical
+to running a `patch -p1`, but better than it.  
+
+To see whether patch applies cleanly run `git apply --check` with the
+patch (if htere is no output, patch should apply cleanly).  
+<!-- }}} -->
+#### Applying a Patch with `am` <!-- {{{ -->
+You can encaurage your contributors to use `format-patch` instead of
+`diff` (because it produces more info)  
+
+To apply a patch generated by `format-patch`, you use `git am` (am -
+apply a series of patches from a mailbox)  
+
+If someone has emailed you the patch properly using `git send-email`,
+and you download that into an mbox format, then you can point `git am`
+to that mbox file, and it will start applying all the patches it sees.
+If you run a mail client that can save several email out in mbox format,
+you can save entire patch series into a file and then use `git am`.  
+
+_commit_ information indicates the person who applied the patch  
+_authore_ information is the individual who originally created the patch  
+
+if `git am` fails, it will ask you what you want to do. It will put
+conflict markers in any files it has issues with, much like a conflicted
+merge or rebase operation. You resolve the conflict and run `git am
+-resolved` to continue to the next patch.  
+
+To make git resolve more intelligently, you can pass  a `-3` option to
+it, which makes Git attempt a three-way merge.  
+<!-- }}} -->
+#### Checking Out Remote Branches <!-- {{{ -->
+For instance, if Jessica sends you an email saying that she has a greate
+new feature in the `ruby-client` branch of her repository, you can test
+in by adding the remote and checking out that branch locally:  
+```shell
+$ git remote add jessica git://github.com/jessica/myproject.git
+$ git fetch jessica
+$ git checkout -b rubyclient jessica/ruby-client
+```
+
+If you aren't working with a person consistently but still want to pull
+from them with respect of commit history, you can provide the URL of
+the remote repository to the `git pull` command. This does a one-time
+pull and doesn't save the URL as a remote reference:  
+```shell
+$ git pull https://github.com/onetimeguy/project
+```
+
+
+<!-- }}} -->
+#### Determining What Is Introduced <!-- {{{ -->
+
+<!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
