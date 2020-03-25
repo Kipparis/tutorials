@@ -12,8 +12,12 @@ scripting:
 <!-- + functions -->
 <!-- + variables (like `unset`) -->
 <!-- + bind (опции) -->
-+ builtin - tells the shell to use the built-in command and ignore any
-  function of than name
++ `builtin` - tells the shell to use the built-in command and ignore any
+  function of than name  
++ `test` - use manpage for using **strings in conditions**  
++ `declare` - displays the values of all variables in the environment
+or set variable attributes  
++ `readonly name` - makes variable name be a type of readonly  
 <!-- TODO: once read, go throw -->
 <!--     options -->
 <!--     env variables -->
@@ -977,6 +981,152 @@ as $1, $2, etc"
 <!-- }}} -->
 <!-- }}} -->
 ## Typed Variables <!-- {{{ -->
-<!-- TODO: stopped here -->
+You can set variable attributes with the `declare` built-in. A `-` turns
+the option on, while `+` turns it off.  
+
+| Option | Meaning                                            |
+| ---    | ---                                                |
+| -a     | The variables are treated as arrays                |
+| -f     | Use function names only                            |
+| -F     | Display function names without definitions         |
+| -i     | the variables are treated as integers              |
+| -r     | makes the variables read-only                      |
+| -x     | marks the variables for export via the environment |
+
+Equivalent to `declare -r` is `readonly name` - makes variable
+name be a type of readonly  
+
+- `-p` prints a list of all read-only names  
+- `-a` interprets the name as array  
+- `-f` interprets the name as function  
+
 <!-- }}} -->
+## Integere Variables and Arithmentic <!-- {{{ -->
+### Basic <!-- {{{ -->
+The shell interprets words surrounded by `$((` and `))` as arithmetic
+expressions.  
+
+Some of the operators contain special characters, there is no need to
+backslash-escape them, because they are within the `$((...))` syntax.  
+
++ `++`, `--` - increment, decrement by one (prefix and postfix)  
++ `+`, `-`, `*`, `/` - sum, sub, multiplication, division (with
+  truncation)  
++ `%` - remainder  
++ `**` - exponentiation  
++ `<<`, `>>` - bit-shift left, right  
++ `&`, `|`, `~` - bitwise _and_, _or_, _not_  
++ `^` - bitwise _exclusive or_  
++ `!` - logical _not_  
++ `,` - sequential evaluation  
+
+Parentheses can be used to group subexpressions.  
+
+Relational operators:  
+
++ `<`, `>` - less/greater than  
++ `<=`, `>=` - less/greater than or equal to  
++ `==` - equal to  
++ `!=` - not equal to  
++ `&&` - logical and  
++ `||` - logical or  
+
+Shell also supports base _N_ numbers, where _N_ can be from 2 to 36. The
+notation _B # N_ means "_N_ base _B_".  
+
+<!-- }}} -->
+## Arithmetic Conditionals <!-- {{{ -->
+Arithmetic conditions can also be tested as strings (in `[[...]]`):  
+
++ `-lt` - less than  
++ `-gt` - greater than  
++ `-le` - less than or equal to  
++ `-ge` - greater than or equal to  
++ `-eq` - equal to  
++ `-ne` - not equal to  
+
+MOre efficient way of performing an arithmetic test:
+by using the `((...))` construct. This returns an exit status of 0 if
+the expression is true, and 1 otherwise.  
+<!-- }}} -->
+## Arithmetic Variables and Assignment <!-- {{{ -->
+You can evaluate arithmetic expressions and assign them to variables
+with the use of `let`. The syntax is:  
+```shell
+let intvar=expression
+```
+It's not necessary to surround expression with `$(())` (it's actually
+redundant). There must not be any space on either side of the equal
+sign. It is good practive to surround expressions with quotes, since
+many characters are treated as special by the shell.  
+<!-- }}} -->
+## Arithmetic for Loops <!-- {{{ -->
+The form of an arithmetic for loop is very similar to those found in
+Java and C:
+```bash
+for (( initialisation ; ending condition ; update ))
+do
+    statements...
+done
+```
+
+endless loop:
+```bash
+for ((;;))
+do
+    read var
+    if [ "$var" = "." ]; then
+        break
+    fi
+done
+```
+
+
+<!-- }}} -->
+<!-- }}} -->
+## Arrays <!-- {{{ -->
+There are several ways to assign values to arrays:  
+an array is created automatically by any of the following assignment or
+by using `declare -a`  
+
++ the one straightforward
+```bash
+names[2]=alice
+names[0]=hatter
+naems[1]=duchess
+```
++ compound assignment:
+```bash
+names=([2]=alice [0]=hatter [1]=duchess)  
+```
++ without indexes (have to reorder elements slightly):
+```bash
+names=(hatter duchess alice)
+```
++ if we provide an index at some point in the _compound_ assignment, the
+  values get assigned consecutively from that point on:
+```bash
+names(hatter [5]=duchess alice) # hatter - 0, duchess - 5, alice - 6
+```
+An element in an array may be referenced with `${array[i]}`. All
+elements are returned with `${array[@]}` or `${array[*]}`. When quoted
+first expands to several words, second - to one. Unquoted, expanding to
+several words.  
+
+If you want to know what indices currently have values in an array, you
+can use `${!array[@]}` (will return array of existing non-empty indices).  
+
+Find length of element in array - `${#array[i]}`, find length of array -
+`${#array[@]}` (counts only non-empty elements)  
+
+Reassigning to an existing array with a compound array statement
+replaces the old array with the new one.  
+
+Remove element from array - `unset array[i]`, destroy entire array -
+`unset array[@]` or `unset array[*]`  
+
+<!-- }}} -->
+<!-- }}} -->
+# Input/Output and Command-Line Processing <!-- {{{ -->
+<!-- TODO: stopped here -->
 <!-- }}} -->
