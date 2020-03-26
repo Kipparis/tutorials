@@ -1168,13 +1168,155 @@ the number of times the container is reallocated. Thus `vector` usually
 grows more efficiently than a `list` or a `deque`.  
 
 ### Members to Manage Capacity <!-- {{{ -->
-<!-- TODO: stopped here -->
++ `c.shring_to_fit()` - request to reduce `capacity()` to equal `size()`  
++ `c.capacity()` - number of elements _c_ can have before reallocation
+  is necessary  
++ `c.reserve(n)` - allocate space for a least _n_ elements  
+
+Under the **c++11**, we can call `shrink_to_fit` to ask a `deque`,
+`vector`, or `string` to return unneeded memory.  
+<!-- }}} -->
+### `capacity` and `size` <!-- {{{ -->
+**size** - number of elements it already holds;  
+**capacity** - how many element it can hold before more space must be
+allocated.  
 <!-- }}} -->
 <!-- }}} -->
 ## Additional `string` Operations <!-- {{{ -->
+More constructors:  
+
++ `string s(cp, n)` - _s_ is a copy of the first _n_ characters in the
+  array to which _cp_ points. That array must have at least _n_
+  characters.  
++ `string s(s2, pos2)` - _s_ is a copy of the characters in the `string
+  s2` starting at the index _pos2_.  
++ `string s(s2, pos2, len2)` - _s_ is a copy of _len2_ characters from
+  _s2_ starting at the index _pos2_. Regardless of the value of _len2_,
+  copies at most `s2.size() - pos2` characters.  
++ `s.substr(pos, n)` - return a `string` containing _n_ characters from
+  _s_ starting at _pos_.  
+
+### Other Ways to Change a `string` <!-- {{{ -->
+In addition to the versions of `insert` and `erase` that take iterators,
+`string` provides versions that take an index.  
+
++ `s.insert(pos, args)` - insert characters specified by _args_ before
+  _pos_. _pos_ can be an index or an iterator. Versions taking an index
+  return a reference to _s_; those taking an iterator return an iterator
+  denoting the first inserted character.  
++ `s.erase(pos, len)` - remove _len_ characters starting at position
+  _pos_. If _len_ is omitted, removes characters from _pos_ to the end
+  of the _s_. Returns a reference to _s_.  
++ `s.assign(args)` - replace characters in _s_ according to _args_.
+  Returns a reference to _s_.  
++ `s.append(args)` - append _args_ to _s_. Returns a reference to _s_.  
++ `s.replace(range, args)` - remove _range_ of characters from _s_ and
+  replace them with the characters formed by _args_. _range_ is either
+  an index and a length or a pair of iterators into _s_. Returns a
+  reference to _s_.  
+
+_args_ can be:  
+
++ `str` - the `string str`  
++ `str, pos, len` - up to _len_ characters from _str_ starting at _pos_  
++ `cp, len` - up to _len_ characters from the character array pointed to
+  by _cp_  
++ `cp` - null-terminated array pointed to by pointer _cp_  
++ `n, c` - _n_ copies of character _c_  
++ `b, e` - characters in the range formed by iterators _b_ and _e_  
++ _initializer list_ - comma-separated list of characters enclosed in
+  braces.  
+
+<!-- }}} -->
+### `string` Search Operations <!-- {{{ -->
+Eache of these search operations returns a `string::size_type` value
+that is the index of wehre the match occured. If these is no match, the
+function returns a `static` member names `string::npos` (it equals `-1`
+by default ==  largest possible size of string).  
+
++ `s.find(args)` - find the first occurrence of _args_ in _s_.  
++ `s.rfind(args)` - find the last occurrence of _args_ in _s_.  
++ `s.find_first_of(args)` - find the first occurrence of any character
+  from _args_ in _s_  
++ `s.find_last_of(args)` - find the last occurrence of any character
+  from _args_ in _s_  
++ `s.find_first_not_of(args)` - find the first character in _s_ that is
+  not in _args_  
++ `s.find_last_not_of(args)` - find the last character in _s_ that is
+  not in _args_  
+
+_args_ **must be one of**:  
+
++ `c, pos` - character _c_ starting at position _pos_  
++ `s2, pos` - string _s2_ starting at position _pos_  
++ `cp, pos` - C-style string _cp_ starting at position _pos_  
++ `cp, pos, n` - look for the first _n_ characters in the array pointed
+  to by the pointer _cp_. Start looking at position _pos_  
+
+Common programming pattern to iterate over all specified characters in
+string:
+```cpp
+string::size_type pos = 0;
+// each iteration finds the next number in name
+while ((pos = name.find_first_of(numbers, pos)) != string::npos) {
+    cout << "found number at index: " << pos
+        << " element is " << name[pos] << endl;
+    ++pos;  // move to the next character
+}
+```
+
+<!-- }}} -->
+### The `compare` Functions <!-- {{{ -->
+`s.compare` returns zero or a positive or negative value depending on
+whether _s_ is equal to, greter than, or less than the string formed
+from the given arguments.  
+
+**Possible Arguments to `s.compare`**
+
++ `s2` - compare _s_ to _s2_.  
++ `pos1, n1, s2` - compares _n1_ characters starting at _pos1_ from _s_
+  to _s2_.  
++ `pos1, n1, s2, pos2, n2` - --//-- additional args for _s2_.  
++ `cp` - compares _s_ to the null-terminated array pointed to by _cp_.  
++ `pos1, n1, cp` - similar to one for string.  
++ `pos1, n1, cp, n2` - cimilar to one for string.  
+<!-- }}} -->
+### Numeric conversions <!-- {{{ -->
+**c++11** introduced several functions that convert between numeric data
+and library `string`s:
+
++ `to_string(val)` - overloaded functions returning the `string`
+  representation of _val_. _val_ can be any arithmetic type.  
++ `stoi(s,p,b)` - return the initial substring of _s_ that has numeric
+  ontent as an `int`, `long`, `unsigned long`, `long long`, `unsigned
+  long long`, respectively. _b_ - numeric base (defaults to 10). _p_ is
+  a pointer to a `size_t` in which to put the index of the first
+  nonnumeric character in _s_ (defaults to 0, in which case the function
+  doesn't store the index)  
++ `stol(s,p,b)`  
++ `stoul(s,p,b)`  
++ `stoll(s,p,b)`  
++ `stoull(s,p,b)`  
++ `stof(s,p)` - return the initial numeric substring in _s_ as a
+  `float`, `double`, or `long double`, respectively. _p_ is the same as
+  above.  
++ `stod(s,p)`  
++ `stold(s,p)`  
+
+```cpp
+string s2 = "pi = 3.14";
+// convert the first substring in s that starts with a digit, d = 3.14
+d = stod(s2.substr(s2.find_first_of("+-.0123456789")));
+```
+
+The first non-whitespace character in the `string` must be a sign (+ or
+-) or adigit.  
+The `string` can begin with 0x, or 0X to indicate hexadecimal.  
+May contain an e or E to designate the exponent.  
+<!-- }}} -->
 
 <!-- }}} -->
 ## Container Adaptors <!-- {{{ -->
-
+<!-- TODO: stopped here -->
 <!-- }}} -->
 <!-- }}} -->
