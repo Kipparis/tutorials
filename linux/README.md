@@ -1128,5 +1128,262 @@ Remove element from array - `unset array[i]`, destroy entire array -
 <!-- }}} -->
 <!-- }}} -->
 # Input/Output and Command-Line Processing <!-- {{{ -->
+
+**I/O redirectors**:  <!-- {{{ -->
+
++ `cmd1 | cmd2` - pipe; take standard output of _cmd1_ as standard input
+  of _cmd2_.  
++ `[n]> file` - direct standard output to _file_  
++ `[n]< file` - take standard input from _file_  
++ `[n]>> file` - direct standard output to _file_; append to _file_ if it
+  already exists  
++ `[n]>| file` - force standard output to _file_ even if **noclobber** is
+  set.  
++ `<< label` - take standard input and read until line containing only
+  _label_  
++ `n>&`, `n<&` - duplicate standard output/input to file descriptor _n_  
++ `n>&m`, `n<&m` - file descriptor _n_ is made to be a copy of the
+  output/input file descriptor  
+    `comand > out 2>&1` - send standart output to _out_ file and
+    standart error to the same place as standart output  
++ `&> file` - directs standard output and standard error to _file_  
++ `[n]<&-`, `[n]>&-` - close the standard input/output  
+
+
+_[n]_ can be file descriptor  
+<!-- }}} -->
+File Descriptors<!-- {{{ -->
+================
+
+-//- refer to particular streams of data associated with a process. When
+a process starts, it usually has three file descriptors open: standart
+inpu (0), standard output (1), standard error (2).  
+<!-- }}} -->
+## String I/O <!-- {{{ -->
+
+echo<!-- {{{ -->
+====
+
+`echo` options:  
+
++ `-e` - turns on the interpretation of backslash-escaped characters  
++ `-E` - turns off the interpretation of backslash-escaped characters  
++ `-n` - omits the final newline  
+
+`echo` escape sequences:  
+
++ `\a` - ALERT of CTRL-G (bell)  
++ `\b` - BACKSPACE or CTRL-H  
++ `\c` - Omit final NEWLINE  
++ `\e`, `\E` - escape character  
++ `\f` - FORMFEED or CTRL-L  
++ `\n` - NEWLINE or CTRL-J  
++ `\r` - RETURN (ENTER) or CTRL-M  
++ `\t` - TAB or CTRL-I  
++ `\v` - VERTICAL TAB or CTRL-K  
++ `\n` - ASCII character with octal (base-8) value _n_, where _n_ is 1
+  to 3 digits  
++ `\0nnn` - the eight-bit character whose value is the octal (base-8)
+  value _nnn_ where _nnn_ is 1 to 3 digits  
++ `\xHH` - the eight-bit character whose value is the hexadecimal
+  (base-16) value _HH_ (one or two digits)  
++ `\\` - single backslash  
+<!-- }}} -->
+printf<!-- {{{ -->
+======
+
+Same as in C. syntax is `printf format-string [arguments]`  
+
+`printf` format specifiers:  
+
++ `%c` - ASCII character (prints first character of corresponding
+  argument)  
++ `%d`, `%i` - decimal integer  
++ `%e`, `%E` - floating-point format (_[-]d.precisione[+-]dd_, _[-]d.precisionE[+-]dd_)  
++ `%f` - floating point format (_[-]ddd.precision_)  
++ `%g` - `%e` or `%f` conversion, whichever is shorter, with trailing
+  zeros removed  
++ `%G` - `%E` or `%f` conversion, whichever is shortest, with trailing
+  zeros removed  
++ `%o` - unisgned octal value  
++ `%s` - string  
++ `%u` - unsigned decimal value  
++ `%x` - unsigned hexadecimal number (uses _a-f_)  
++ `%X` - unsigned hexadecimal number (uses _A-F_)  
++ `%%` - literal _%_  
+
+Format expression can take three optional modifiers following _%_ and
+preceding the _format specifier_:
+```shell
+%flags width.precision format-specifier # without spaces in between
+```
+
+Examples:
+```shell
+printf "|%10s|\n" hello     # right-justified
+printf "|-%10s|\n" hello    # left-justified
+myvar=42.123456
+printf "|%*.*G|\n" 5 6 $myvar   # dinamically specify width and precision
+> |42.1235|
+```
+
+Meaning of presision:  
+
++ simple num output (not floating) - minimum number of digits to print.
+  When the value has fewer digits, it is padded with leading zeros.  
++ `%e`, `%E` - minimum number of digits to print.  
++ `%f` - the number of digits to the right of the decimal point.  
++ `%g`, `%G` - the maximum number of signifiicant digits.  
++ `%s` - the maximum number of characters to print  
+
+**Flags for printf**:  
+
++ `-` left-justify the formatted value within the field.  
++ `space` - prefix positive values with a space and negative values with
+  a minus.  
++ `+` - always prefix numeric values with a sign, even if the value is
+  positive.  
++ `#` - use an alternate form  
+    - `%o` has a preceding _0_;  
+    - `%x`, `%X` are prefixed with _0x_ and _0X_;  
+    - `%e`, `%E`, `%f` always have a decimal point in the result;  
+    - `%g`, `%G` do not have trailing zeros removed.  
++ `0` - pad output with zeros, not spaces (only for numeric formats)  
+
+**Additional bash printf specifiers**:
+
++ `%b` - when used instead of `%s`, expands **echo**-style escape
+  sequences in the argument string.  
++ `%q` - when used instead of `%s`, prints the string argument in such a
+  way that it can be used for shell input.  
+
+
+<!-- }}} -->
+read<!-- {{{ -->
+====
+
+_read_ allows you to read values into shell variables. The basic syntax
+is:
+```bash
+read var1 var2...
+```
+takes line from standart input, depending of the **IFS** splits it on
+variables (exceeding words are assigned to last variable). If you omit
+the variables altogether, the entire line of input is assegned to the
+`REPLY` variable.  
+
+`read` exit status is 1 when there is nothing to read.  
+
+**Options**:  
+
++ `-a` - read into array  
++ `-d` - delimiter. read a line up until the _first_ character of the delimiter is
+  reached  
+```bash
+$ read -s stop aline
+alice duches
+$ echo $aline
+alice duche
+```
++ `-e` can be used only with scripts run from interactive shells. It
+  causes _readline_ to be used to gather the input line.  
++ `-n` specifies how many characters will be read by **read**  
++ `-p` followed by a string argument prints the string before reading
+  input.  
+    useful for prompting: `read -p 'directory? ' REPLY`  
++ `-r` preserves any escape sequences the input might contain  
++ `-s` forces **read** to not echo the characters that are typed to the
+  terminal.  
+    useful for keybindings: `read -s -n1 key`  
++ `-t` specifies a time in seconds. **read** will wait the specified
+  time for input and then finish.  
+
+
+to redirect file to function the uses `read` you can do one of the
+following techniques:  
+```bash
+findterm() {
+    TERM=vt100  # assume this as a default
+    like=$(tty)
+    while read dev termtype; do
+        if [ $dev = $line ]; then
+            TERM=$termtype
+            echo "TERM set to $TERM."
+            break;
+        fi
+    done
+}
+
+findterm < /etc/terms
+```
+or
+```bash
+findterm() {
+    TERM=vt100  # assume this as a default
+    like=$(tty)
+    while read dev termtype; do
+        if [ $dev = $line ]; then
+            TERM=$termtype
+            echo "TERM set to $TERM."
+            break;
+        fi
+    done
+} < /etc/terms
+```
+or
+```bash
+TERM=vt100  # assume this as a default
+like=$(tty)
+while read dev termtype; do
+    if [ $dev = $line ]; then
+        TERM=$termtype
+        echo "TERM set to $TERM."
+        break;
+    fi
+done < /etc/terms
+```
+you can use this technique with any flow-control construct.  
+
+
+<!-- }}} -->
+### Command blocks <!-- {{{ -->
+The coude surrounded by curly brackets (_{}_) will behave like a
+function that has no name. This code will also standard I/O descriptors.  
+
+```bash
+{
+    TERM=vt100  # assume this as a default
+    like=$(tty)
+    while read dev termtype; do
+        if [ $dev = $line ]; then
+            TERM=$termtype
+            echo "TERM set to $TERM."
+            break;
+        fi
+    done
+} < /etc/terms
+```
+
+or in case of creating a standard algebraic notation frontend to the _dc_ command:
+```bash
+{
+    while read like; do
+        echo "$(alg2rpn $line)"
+    done
+} | dc
+```
+
+<!-- }}} -->
+### Reading user input <!-- {{{ -->
+Shell convention dictates that prompts should go to standard _error_,
+not standard output.  
+
+You may use `-p "propmt"` option to **read** and redirect it to
+stderr (`>&2`).  
+<!-- }}} -->
+<!-- }}} -->
+## Command-Line Processing <!-- {{{ -->
 <!-- TODO: stopped here -->
+<!-- }}} -->
+
 <!-- }}} -->
