@@ -1350,7 +1350,8 @@ merge or rebase operation. You resolve the conflict and run `git am
 To make git resolve more intelligently, you can pass  a `-3` option to
 it, which makes Git attempt a three-way merge.  
 <!-- }}} -->
-#### Checking Out Remote Branches <!-- {{{ -->
+<!-- }}} -->
+### Checking Out Remote Branches <!-- {{{ -->
 For instance, if Jessica sends you an email saying that she has a greate
 new feature in the `ruby-client` branch of her repository, you can test
 in by adding the remote and checking out that branch locally:  
@@ -1368,10 +1369,245 @@ pull and doesn't save the URL as a remote reference:
 $ git pull https://github.com/onetimeguy/project
 ```
 
+<!-- }}} -->
+### Determining What Is Introduced <!-- {{{ -->
+It's often helpful to get a review of all the commits that are in this
+branch but that aren't in your `master` branch.  
+
+For example, you create branch `contrib` and applied patches, you can
+run this:
+```shell
+$ git log contrib --not master
+<two commits there>...
+```
+you may also use `-p` option  
+
+Direct diffing from master will show you misinformation (`$ git diff
+master`). One solution is explicitly figuring out the common ancestor
+and then running your diff on it:
+```shell
+$ git merge-base contrib master
+367db....
+$ git diff 36c7db
+```
+or, more concisely:
+```shell
+$ git diff $(git merge-base contrib master)
+```
+Git provides another shothand:
+```shell
+$ git diff master...contrib
+```
+
+
+
 
 <!-- }}} -->
-#### Determining What Is Introduced <!-- {{{ -->
+### Integrating Contributed Work <!-- {{{ -->
+#### Merging Workflows <!-- {{{ -->
+One basic workflow is to simply merge all that work directly into your `master` branch.  
+In this scenaria, you have a `master` branch that contains basically
+stable code.  
 
+ If you have a more important project, you might want to use a two-phase
+ merge cycle. In this scenaria, you have two long-running branches,
+ `master` and `develop`, in which you determine that `master` is updated
+ only when a very stable release is cut and all new code is integrated
+ into the `develop` branch. (you may also include `integrate` branch
+ before `develope`).  
+<!-- }}} -->
+#### Large-Merging Workflows <!-- {{{ -->
+The Git project has four long-running branches: `master`, `next`, and
+`pu` (proposed updates) for new work, and `maint` for maintenance
+backports.  
+
++ new work introduced by contributors is collected into topic branches
+  in the maintainer's repository.  
+    + if they're safe they're merged into `next` and that branch is pushed
+  up so everyone can try the topics integrated together.  
+    + if the topics still need work, they're merged into `pu` insted.
++ when it's determined that they're totally stable, the topics are
+  re-merged into `master`. The `next` and `pu` branches are then rebuilt
+  from the `master` (`master` almost always moves forward, `next` is
+  rebased occasionally, `pu` is rebased even more often)  
+
+The git project also has a `maint` branch that is forked off from the
+last release to provide backported patches in case a maintenance release
+is required.  
+
+<!-- }}} -->
+#### Rebasing and Cherry-Picking Workflows <!-- {{{ -->
+Other maintainers prefer to rebase or charry-pick contributed work on
+top of their `master` branch, rather than mergin it in, to keep a mostly
+linear history. You can move to topic branch and run the rebase command
+to rebuild the changes on top of your current `master` (or `develop` and
+so on) branch. Then you can fast-forward your `master` branch.  
+
+If you prefer to apply a single commit from another branch, you may
+_cherry-pick_ it rather than run rebase:
+```shell
+$ git cherry-pick e43a6
+```
+it creates new SHA-1 value, because the date applied is different  
+<!-- }}} -->
+#### Rerere <!-- {{{ -->
+If you're doing lots of merging and rebasing, you you're maintaining a
+long-lived topic branch, Git has a feature called "rerere' that can
+help".  
+
+Rerere stands for "reuse recorded resolution" - it's a way of
+shortcutting manual conflict resolution. When **rerere** is enabled, Git
+will keep a set of pre- and post-images from successful merges, and if
+it notices that there's a conflict that looks exatly like one you've
+already fixed, it'll just use the fix from last time, without bothering
+you with it.  
+To enable:
+```shell
+$ git config --global rerere.enabled true
+```
+You can interact with the **rerere** cache using the `git rerere`
+command. When it's invoked alone, Git checks its database of resolutions
+and tries to find a match with any current merge conflicts and resolve
+them.  
+<!-- }}} -->
+<!-- }}} -->
+### Tagging Your Releases <!-- {{{ -->
+**Exporting gpg keys and signed-tagging your releases**  
+If you decide to sign the tag as the maintainer, the tagging may look
+something like this:
+```shell
+$ git tag -s v1.5 -m 'my signed 1.5 tag'
+You need a passphrase to unlock the secret key for
+user: "Scott Chacon <schacon@gmail.com>"
+1024-bit DSA key, ID F721C45A, created 2009-02-09
+```
+To unclude your public key as blob in the repository and then adding a
+tag that points directly to that content. To do this, you can figure out
+which key you want by running `gpg --list-keys`  
+
+Then you can directly import the key into the Git database by exporting
+it and piping that through `git hash-object`, which writes a new blob
+with those contents into Git and gives you back the SHA-1 of the blob:
+```shell
+$ gpg -a --export F721C45A | git hash-object -w --stdin
+```
+
+Now you can create a tag that points directly to it by specifying the
+new SHA-1 value that the `hash-boject` command gave you:
+```shell
+$ git tag -a maintainer-pgp-pub 659...
+```
+
+If you run `git push --tags`, the `maintainer-pgp-pub` tag will be
+shared with everyone.  
+If anyone wants to verify a tag, then can directly import your PGP key
+by pulling the blob directly out of the database and importing it into
+GPG
+```shell
+$ git show maintainer-pgp-pub | gpg --import
+```
+Also, if you include instructions in the tag message, running `git show
+<tag>` will let you give the end user more specific instructions about
+tag verification.  
+
+<!-- }}} -->
+### Generating a Build Number <!-- {{{ -->
+If you want to have a human-readable name to go with a commit, you can
+run `git describe` on that commit. In response, Git generates a string
+consisting of:  
+
++ name of the most recent tag earlier than that commit  
++ number of commits since taht tag  
++ partial SHA-1 value (prefixed with the letter "g" meaning Git)  
+
+```shell
+$ git describe master
+v1.6.2-rc1-20-g8c5b85c
+```
+
+By default, the `git describe` command requires annotated tags (tags
+created with the `-a` or `-a` flag); if you want to take advantage of
+lightweight tags, add `--tags` option. You can also use this string as
+the target of a `git checkout` or `git show` command.  
+
+<!-- }}} -->
+### Preparing a Release <!-- {{{ -->
+Now you want to release a build. One of the things you'll want to do is
+create an archive of the latest snapshot of your code for those poor
+sould who don't use Git. The command to do this is `git archive`:
+```shell
+$ git archive master --prefix='project/' | gzip > `git describe
+master`.tar.gz
+```
+
+You can also create a zip archieve by passing the `--format=zip` option:
+```shell
+$ git archive master --prefix='project/' --format=zip > `git describe
+master`.zip
+```
+
+
+<!-- }}} -->
+### The Shortlog <!-- {{{ -->
+Nice way of quickly getting a sort of changelog of what has been added
+to your project since your last release or email is to use the `git
+shortlog` command. If summarizes all the commits in the range you give
+it;
+```shell
+$ git shortlog --no-merges master --not v1.0.1
+Chris Wanstrath (6):
+    ...
+Top Preston-Werner (4):
+    ...
+```
+
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+# GitHub <!-- {{{ -->
+This chapter is about using GitHub effectively.  
+If you are not interested in using GitHub, you can safely skip to `Git
+Tools`.  
+
+## Account Setup and Configuration <!-- {{{ -->
+SSH Access - add on GitHub your `~/.ssh/id_rsa.pub` key.  
+Two Factior Authentication.  
+<!-- }}} -->
+## Contributing to a Project <!-- {{{ -->
+### Forking Projects <!-- {{{ -->
+**Fork button** will create copy of repository in your namespace.  
+<!-- }}} -->
+### The GitHub Flow <!-- {{{ -->
+
+1. Fork the project  
+2. Create a topic branch from `master`  
+3. Make some commits to improve the project  
+4. Push this branch to your GitHub project  
+5. Open a Pull Request on GitHub  
+6. Discuss, and optionally continue committing  
+7. The project owner merges or closes the Pull Request  
+8. Sync the updated master back to your fork  
+
+#### Creating a Pull Request <!-- {{{ -->
+Just do what you know, but notice adding commits to an existing Pull
+Request doesn't trigger a notification, so you want to leave a comment.  
+
+Also GitHub checks to see if the Pull Request merges cleanly and
+provides a button to do the merge for you on the server. If you click
+button GitHub will perform a "non-fast-forward" merge, meaning that even
+if the merge **could** be a fast-forward, it will still create a merge
+commit.  
+
+After merge, the Pull Request will automatically be closed.  
+
+You can also open Pull Request between two branches in the same
+repository (if you both ahve write access)
+<!-- }}} -->
+<!-- }}} -->
+### Advanced Pull Requests <!-- {{{ -->
+Lets cover a fiew interesting tips and tricks about PullRequests.  
+#### Pull Requests as Patches <!-- {{{ -->
+<!-- TODO: stopped here -->
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
