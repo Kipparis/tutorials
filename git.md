@@ -1607,8 +1607,171 @@ repository (if you both ahve write access)
 ### Advanced Pull Requests <!-- {{{ -->
 Lets cover a fiew interesting tips and tricks about PullRequests.  
 #### Pull Requests as Patches <!-- {{{ -->
-<!-- TODO: stopped here -->
+Think of patches as history of "why certain thing exist".
 <!-- }}} -->
+#### References <!-- {{{ -->
+Simply put `#<issue id>` or `#<pull request id>`  
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+## Maintaining a Project <!-- {{{ -->
+### Pull Request Refs <!-- {{{ -->
+Run `git ls-remote <remote>` and pseudo branches (_pull request_) will
+have prefix _refs/pull/_. To fetch some, use `git fetch <remote>
+refs/pull/<pr#>/head`  
+
+To fetch all of the pull request automatically, modify your config file
+as follows:
+```txt
+[remote "origin"]
+    url = https://github.com/libgit2/libgit2
+    fetch = +refs/heads/*:refs/remotes/origin/*
+```
+e.g. the things on the remote that are under _refs/heads_ should go in
+my local repository under _refs/remotes/origin_.  
+There's also a _refs/pull/#/merge_ ref on the GiHub side, which
+represents the commit that would result if you push the "merge" button
+on the site.  
+<!-- }}} -->
+### Email Notifications <!-- {{{ -->
+There are a lot of useful information in e-mail metadata.  
+<!-- }}} -->
+### Special Files <!-- {{{ -->
+README - lands on open page of repository.  
+CONTRIBUTING - show it when anyone starts opening a Pull Request.  
+<!-- }}} -->
+<!-- }}} -->
+## Scripting GitHub <!-- {{{ -->
+### Services and Hooks <!-- {{{ -->
+**Hooks** - you specify a URL and GitHub will post an HTTP payload to
+that URL on any even you want.  
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+# Git Tools <!-- {{{ -->
+## Revision Selection <!-- {{{ -->
+Git allows you to refer to a single commit, set of commits, or range of
+commits in a number of ways. They aren't necessarily ovious but are
+helpful to know.
+
+### Single Revisions <!-- {{{ -->
+You can refer with first few (unique) characters of the SHA-1 hash.
+To list them use `git log --abbrev-commit`  
+<!-- }}} -->
+### Branch References <!-- {{{ -->
+If commit is on top of some branch, you can simply use that branch name:
+```shell
+$ git shot topic1
+```
+To see SHA-1 hash to which top commit of branch points to use:
+```shell
+$ git rev-parse topic1
+ca82a6dff...
+```
+
+<!-- }}} -->
+### Reflog Shortnames <!-- {{{ -->
+You can see reflog by using `git reflog`.  
+```shell
+$ git show HEAD@{5}
+# another example
+$ git show master@{yesterday}
+```
+
+Note: this nechnique only works for data that's still in your reflog, so
+you can use it to look for commits older than a few months.  
+
+To see reflog information formatted like the `git log`, you can run `git
+log -g`  
+
+<!-- }}} -->
+### Ancestry References <!-- {{{ -->
+If you place a `^` (caret) at the end of a reference, Git resolves it to
+mean the parent of that commit. You can also specify a number after the
+`^`to identify _which_ parent you want. The first parent of a merge
+commit is from the branch you were on when you merged (frequently
+`master`), while the _second_ parent - branch that was merged (say,
+`topic`)  
+
+If you place a `~` at the end, it will refer to the parent. Unlike `^`
+when chaining, if will expand as "first parent of the first parent..."  
+<!-- }}} -->
+### Commit Ranges <!-- {{{ -->
+#### Double Dot <!-- {{{ -->
+This basically asks Git to resolve a range of commits that are reachable
+from one commit but aren't reachable from another.  
+
+`master..experiment` means "all commits reachable from `experiment` that
+aren't reachable from `master`"  
+
+Another frequent example is:
+```shell
+git log origin/master..HEAD
+# or equivalent
+git log origin/master..     # Git substitutes HEAD if one side is missing
+```
+
+<!-- }}} -->
+#### Multiple Points <!-- {{{ -->
+Git allow you to specify  other branches or commits by using either the
+`^` character or `--not` before any reference from which you don't want
+to see reachable commits. The following three commands are equivalent:
+```shell
+$ git log refA..refB
+$ git log ^refA refB
+$ git log refB --not refA
+```
+this is nice, because you can specify more than two references in your
+query.  
+
+<!-- }}} -->
+#### Triple Dot <!-- {{{ -->
+Specify the list of commits that are reachable by _either_ of two
+references but not by both of them.  
+
+`--left-right` opriont shows you which side of the range each commit is
+in.
+```shell
+$ git log --left-right master...experiment
+```
+
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+## Interactive Staging <!-- {{{ -->
+If you run `git add` with the `-i` or `--interactive` option, Git enters
+an interactive shell mode.  
+
+### Staging and Unstaging Files <!-- {{{ -->
+If you time `u` (for update), you're prompted for which files you want
+to stage. Then you enter indexes of files (Git will mark selected files
+with `*` next to each file). If you press Enter after typing nothing at
+the propmpt, Git takes anything selected and stages it for you.  
+
+To unstage you can use the `r` (for revert) option.  
+
+To see the diff of what you've staged, you can use the `d` (for diff)
+command (much like `git diff --cached`).  
+<!-- }}} -->
+### Staging Patches <!-- {{{ -->
+It's also possible for Git to stage certain _parts_ of files and not the
+rest.  
+
+From same interactive prompt type `p` (for the patch). Then, after file
+choosing, Git will display hunks of the file diff and ask if you would
+like to stage them, one by one (at this point typing `?` shows a list of
+what you can do)  
+
+You can run described patch mode from shell by using `git add -p` or
+`git add --patch`.  
+You can use patch mode for:  
+
++ partially resetting files with the `git reset --patch`  
++ checking out parts of files with the `git checkout --patch` command  
++ stashing parts of files with the `git stach save --patch` command  
+<!-- }}} -->
+### Stashing and Cleaning <!-- {{{ -->
+
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
