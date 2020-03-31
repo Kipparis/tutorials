@@ -18,6 +18,8 @@ scripting:
 + `declare` - displays the values of all variables in the environment
 or set variable attributes  
 + `readonly name` - makes variable name be a type of readonly  
++ see _Command-line processing_ for order of processing pipelines and
+  how to alter this order  
 <!-- TODO: once read, go throw -->
 <!--     options -->
 <!--     env variables -->
@@ -1383,7 +1385,199 @@ stderr (`>&2`).
 <!-- }}} -->
 <!-- }}} -->
 ## Command-Line Processing <!-- {{{ -->
-<!-- TODO: stopped here -->
+Each line that the shell reads from the standard input or a script
+- **_pipeline_** (contains one or more _commands_ separeted by zero or
+  more pipe characters (`|`))  
+
+**Steps in command-line processing:**  {{{
+
+1. Splits the command into tokens that are separeted by the fixed set of
+   metacharacters: SPACE, TAB, NEWLINE,**:**,**(**, **)**, **<**,
+   **>**, **|** and **&**. Types of tokens include words, keywords, I/O
+   redirectors and semicolons.  
+2. Checks the first token of each command to see if it is a keyword with
+   no quotes or backslashes if it's an opening keyword, like
+   control-structure openers, **function**, **{**, **(**, then the
+   command is actually compound command. The shell sets things up
+   internally, reads the next command and starts the process again. If
+   the keyword isn't a compund command opener the shell signals a syntax
+   error.  
+3. Checks the first word of each command against the list of aliases. If
+   a match is found, it substitutes the alias's definition and goes back
+   to Step 1; otherwise, it goes on to Step 4. This scheme allows
+   recursive aliases. Also allows aliases for keywords (`alias
+   aslongas=while` or `alias procedure=function`)  
+4. Performs brace expansion.  
+5. Substitutes the user's home directory for tilde if it is at the
+   beginning of a word.  
+6. Performs parameter (variable) su bstitution for any expression that
+   starts with a dollar sign (**$**).  
+7. Does command substitution for any expression of the form `$(string)`  
+8. Evaluates arithmetic expressions of the form `$((string))`.  
+9. Takes the parts of the line that resulted from paremeter, command,
+   and arithmetic substitution and splits them into words again. This
+   time depending on $IFS as delimiter instead of the set of
+   metacharacters in Step 1.  
+10. Performs pathname expansion, a.k.a. wildcard expansion, for any
+   occurrences of \*,?, and [] pairs  
+11. Uses the first word as a command by looking up its source, i.e., as
+   a function command, then as a built-in, then as a file in any of the
+   directories in $PATH  
+12. Runs the command after setting up I/O redirection and other such
+   things.  
+
+Example or command
+```shell
+ll $(type -path cc) ~alice/.*$(($$%1000))
+```
+
+1. `ll $(type -path cc) ~alice/.*$(($$1000))` splits the input into
+   words.  
+2. `ll` is not a keyword, so Step 2 does nothing.  
+3. `ls -l $(type -path cc) ~alice/.*$(($$%1000))` substitutes **ls -l**
+   for its alias "ll". The shell then repeats Steps 1 through 3; Step 2
+   splits the **ls -l** into two words.  
+4. `ls -l $(type -path cc) ~alice/.*$(($$%1000))` does nothing.  
+5. `ls -l $(type -path cc) /home/alice/.*$((%1000))` - expands **~alice** into `home/alice`  
+6. `ls -l $(type -path cc) /home/alice/.*$((2537%1000))` substitutes **2537** for **$$**.  
+7. `ls -l /usr/bin/cc /home/alice/.*$((2537%1000))` does command
+   substiturion on "type -path cc".  
+8. `ls -l /usr/bin/cc /home/alice/.*537` evaluates the arithmetic
+   expression **2537%1000**  
+9. `ls -l /usr/bin/cc /home/alice/.*537` does nothing  
+10. `ls -l /usr/bin/cc /home/alice/.hist537` substitutes the filename
+  for the wildcard expression `.*537`  
+11. The command **ls** is found in `/usr/bin`/  
+12. `/usr/bin/ls` is run with the option `-l` and the two arguments.  
+
+The are still five ways to _modify_ the process: quoting; using
+**command**, **builtin**, or **enable**; and using the adbanced command
+**eval**.  
 <!-- }}} -->
 
+Quoting<!-- {{{ -->
+=======
+
++ **Single quotes** bypass everything through Step 10 - including
+  aliasing.  
++ **Souble quotes** bypass Steps 1 through 4, plus steps 9 and 10. They
+  ignore pipe characters, aliases, tilde substitution, wildcard
+  expansion, and splitting into words via delimiters inside the double
+  quotes. They allow parameter substitution, command substitution, and
+  arithmetic expression evaluation.  
+<!-- }}} -->
+command, builtin, and enable<!-- {{{ -->
+============================
++ **command** removes alias and function lookup.  
+    - `-p` option guarantees that the command lookup will find all of
+  the standard UNIX utilities.  
++ **builtin** looks up only built-in commands, ignoring functions and
+  commands found in **PATH**.  
++ **enable** disables built-ins  
+    - `-a` displays every built-in  
+    - `-d` deletes a bult-in loaded with **-f**  
+    - `-f filename` loads a new built-in from the shared-object
+  _filename_  
+    - `-n` disables a built-in or displays a list of disabled built-ins  
+    - `-p` displays a list of all of the built-ins  
+    - `-s` restricts the output to POSIX "special" built-ins  
+<!-- }}} -->
+eval<!-- {{{ -->
+====
+**eval** lets you go through the process again. It lets you write
+scripts that create command strings on the fly and then pass them to the
+shell for execution.  
+
+examples:
+```shell
+eval sort -nr \$1 ${2:+"| head -\$2"}
+```
+if you have _start_ command that lets you run command in the background
+and save output to log file you could run
+```shell
+eval "$@" > logfile 2>&1 &
+```
+
+
+<!-- }}} -->
+
+<!-- }}} -->
+
+<!-- }}} -->
+# Process Handling <!-- {{{ -->
+## Process IDs and Job Nubmers <!-- {{{ -->
+```shell
+$ alice &
+[1] 93
+```
+where `[1]` - job number (assigned by the shell, refer to background
+processes that are currently running under your shell), while `93` -
+process ID refer to all processes currently running on the entire
+system.  
+<!-- }}} -->
+## Job Control <!-- {{{ -->
+
+Foreground and Background<!-- {{{ -->
+=========================
+The built-in command **fg** brings a background
+job into the foreground. To use pass reference to the job as described
+in the underneath table:  
+
+**Options:**  
+
++ `-l` lists process IDs.  
++ `-p` lists _only_ process IDs (could be useful with command
+  substitution)  
++ `-n` lists only those jobs whose status has changed since the shell
+  last reported it  
++ `-r` restricts the list to jobs that are running  
++ `-s` restricts the list to jobs that are stopped  
++ `-x` execute a command  
+    `jobs -x echo %1` - will print the process ID of _alice_.  
+
+**Ways to refer to background jobs:**  
+
++ `%N` - job number _N_  
++ `%string` - job whose command begins with _string_  
++ `%?string` - job whose command contains _string_  
++ `%+` - most recently invoked background job  
++ `%%` - same as above  
++ `%-` - second most recently invoked background job  
+<!-- }}} -->
+Suspending a Job<!-- {{{ -->
+================
+To suspend a job, type CTRL-Z while it is running.  
+If you need the command to finish, but you would also like to control of
+your terminal back - you can type `bg`, which moves the job to the
+background.  
+<!-- }}} -->
+### Signals <!-- {{{ -->
+A signal is a message that one process sends to another when it wants
+the other process to do something.  
+
+To list all signals on your system, by name and number type `kill -l`
+(signal names are more portable to other versions of UNIX that signal
+numbers)  
+
+Control-Key Signals <!-- {{{ -->
+===================
++ Typing CTRL-C make shell to send the INT (for "interrupt") signal to the
+current job;  
++ CTRL-Z sends TSTP (on most systems, for "terminal stop").  
++ CTRL-\ sends QUIT signal (stronger version of CTRL-C) use it only when
+CTRL-C doesn't work  
+
+There are also "panic" signal called KILL that you can send to a process
+when even CTRL-\ doesn't work.  
+
+You can customize the control keys used to send signals with options of
+the _stty_ command.  
+
+<!-- }}} -->
+kill<!-- {{{ -->
+====
+<!-- TODO: stopped here -->
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
 <!-- }}} -->
