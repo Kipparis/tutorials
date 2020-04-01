@@ -747,7 +747,6 @@ An `ostringstream` is useful when we need to build up our output a
 little at a time but do not want to print the output until later.  
 <!-- }}} -->
 <!-- }}} -->
-<!-- Summary p. 415 -->
 <!-- }}} -->
 # Sequential Containers <!-- {{{ -->
 ## Preface <!-- {{{ -->
@@ -1317,6 +1316,225 @@ May contain an e or E to designate the exponent.
 
 <!-- }}} -->
 ## Container Adaptors <!-- {{{ -->
+An **adaptor** is a general concept in the library. There are container,
+iterator, and function adaptors. Essentially, an adaptor is a mechanism
+for making one thing act line another.  
+
+**Operations and Types Common to the Container Adaptors:**  {{{
+
++ `size_type` - type large enough to hold the size of the largest
+  object.  
++ `value_type` - element type  
++ `container_type` - type of the underlying container on which the
+  adaptor is implemented  
++ `A a;` - create a new empty adaptor named _a_  
++ `A a(c);` - create a new adaptor named _a_ with a copy of the
+  container _c_  
++ `relational operators` - each adaptor supports all the relational
+  operators: _==_, _!=_, _<_, _>=_, etc. These operators return the
+  result of comparing the underlying containers.  
++ `a.empty()`  
++ `a.size()`  
++ `swap(a,b)`, `a.swap(b)`  
+<!-- }}} -->
+### Defining an Adaptor <!-- {{{ -->
+We can override the default container type:
+```cpp
+// empty stack implemented on top of vector
+stack<string, vector<string>> str_stk;
+// str_stk2 is implemented on top of vector and initially holds a copy of svec
+stack<string, vector<string>> str_stk2(svec);
+```
+
+Constraints:  
+
++ require the ability to add and remove elements (as a result, they
+  cannot be built on an _array_)  
+
+<!-- }}} -->
+### Stack Adaptor <!-- {{{ -->
+Stack Operations:  
+
++ `s.pop()` - removes the top element from the _s_.  
++ `s.push(item)` - creates a new top element  
++ `s.emplace(args)` - constructs top element from _args_  
++ `s.top()` - returns top element  
+<!-- }}} -->
+### Queue Adaptor <!-- {{{ -->
+`queue` and `priority_queue` adaptors are defined in the _queue_ header.  
+
++ `q.pop()` - removes the front element or highest-priority element  
++ `q.front()`, `q.back()` - returns the front or back element  
++ `q.top()` - returns, the highest-priority element  
++ `q.push(item)` - create an element or construct it from _args_ and
+  insert in the appropriate position  
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+# Generic Algorithms <!-- {{{ -->
+Rather than define each of these operations as members of each container
+type, the standard library defines a set of **generic algorithms**:
+"algorithms" because they implement common classical algorithms such as
+sorting and searching, and "generic" because they operate on elements of
+differing type and across multiple container types.  
+
+## Overview <!-- {{{ -->
+
++ most of the algorithms are defined in the _algorithm_ header  
++ numeric algorighms are defined in the _numeric_ header  
+
+Alghorithms require some comparison operators to be defined. However
+we'll see, most algorithms provide a way for us to supply our own
+operation to use in place of the default operator.  
+<!-- }}} -->
+## A First Look at the Algorithms <!-- {{{ -->
+**input range** - range of elements on which algorithms operate.  
+How alghorithms use the elements in that range:  
+
++ read elements;  
++ write elements;  
++ rearrange the order of the elments;  
+
+Elements in the sequence must match or be convertible to the type of the
+third argument.  
+
+Algorithms that write to a destination iterator _assume_ the destination
+is large enough to hold the number of elements being written.  
+
+### Read-Only Algorithms <!-- {{{ -->
+
++ `find` - finds element in input range  
+    - `find_if` (third argument as predecate)  
++ `count` - calculates number of elements in input range  
++ `accumulate` (defined in the _numeric_ header) - sums elements in input
+  range with starting point as third argument  
+    `int sum = accumulare(vec.cbegin(), vec.cend(), 0);`
++ `equal(itb1,ite1,itb2)` - compares input range against second
+  iterator (must be at least as long as input range)  
+
+<!-- }}} -->
+### Algorithms That Write Container Elements <!-- {{{ -->
+Algorithms do not perform container operations,  so you must set correct
+size of container by yourself.  
+
++ `fill` takes input range and value as third argument. It fills all
+  elements in specified range with that value.  
++ `fill_n(dest_it, count, value)` writes _count_ times _value_ starting
+  from *dest\_it* iterator.  
++ `copy(src_b,src_e,dest_b)` - copies input range from _src_ to _dest_  
+```cpp
+int a1[] = {0,1,2,3,4,5,6,7,8,9};
+int a2[sizeof(a1)/sizeof(*a1)];
+// ret points just past the last element copied into a2
+auto ret = copy(begin(a1), end(a1), a2);
+```
++ `replace(beg,end,match,repl)` - replaces every entry of _match_ in
+  input range with _repl_.  
++ `replace_copy(beg,end,dest,match,repl)` - same us above but leave
+  source sequence unchanged  
+
+<!-- }}} -->
+### Introducing `back_inserter` <!-- {{{ -->
+One way t o ensure that an algorithm has enough elements to h old the
+output is to use an **insert iterator**. An insert iterator is an
+iterator that _adds_ elements to a container. When we assign through an
+insert iterator, a new element equal to the right-hand value is added to
+the container.  
+
+For now we will use `back_inserter` which is a function defined in the
+_iterator_ header.  
+
+`back_inserter` takes a reference to a container and returns an insert
+iterator. When we assign through that iterator, the assignment calls
+`push_back` to add an element with the given value to the container.  
+<!-- }}} -->
+### Algorithms That Reorder Container Elements <!-- {{{ -->
+
++ `sort` - arranges the elements in the input range into sorted order  
+
+#### Eliminating Duplicates <!-- {{{ -->
+
++ sort so duplicates are appear adjacent to each other  
++ unique so unique elements will go at the beginning (returns iterator
+  one past the last unique element)  
++ erase with range to erase non-unique elements  
+
+<!-- }}} -->
+
+<!-- }}} -->
+<!-- }}} -->
+## Customizing Operations <!-- {{{ -->
+The library also defines versions of these algorithms that let us supply
+our own operation to use in place of the default operator.  
+
+### Passing a Function to an Algorithm <!-- {{{ -->
+Other version of `sort` takes a third argument that is a
+**predicate** (and uses it instead of default `<`).  
+**Predicate** - unary or binary function that returns bool.  
+<!-- }}} -->
+### Sorting Algorithms <!-- {{{ -->
+We may use `stable_sort` if we want to.  
+<!-- }}} -->
+### Lambda Expressions <!-- {{{ -->
+When we need to do processing that requires more arguments that the
+algorithm's predicate allows, we use **lambda expressions**.  
+
+A lambda expression represents a callable unit of code (e.g. unnamed,
+inline function).  
+Lambda expression has the form:
+```cpp
+[capture list] (parameter list) -> return type { function body }
+```
+
+We can omit either or both of the parameter list and return type but
+must always include the capture list (often empty) and function body  
+
+> Lambdas with function bodies that contain anything other than a single
+> return statement that do not specify a return type return void.  
+
+#### Using the Capture List <!-- {{{ -->
+Inside the `[]` that begins a lambda we can provide a comma-separated
+list of names defined in the surrounding function.  
+A lambda can use names that re defined outside the function in which the
+lambda appears.  
+
+`make_plural` to print _word_ or _words_, depending on whether that size
+is equal to 1.  
+<!-- }}} -->
+
+<!-- }}} -->
+### The `for_each` Algorithm <!-- {{{ -->
+`for_each` takes a callable object and calls that object on each element
+in the input range.  
+<!-- }}} -->
+### Lambda Captures and Returns <!-- {{{ -->
+By default, the class generated from a lambda contains a data member
+corresponding to the variables captured by the lambda. Like the data
+members of any class, they are initialized when a lambda object is
+created  
+
+**Type of capturing**:  <!-- {{{ -->
+
++ `[]` - empty capture list. The lambda may not use variables from the
+  enclosing function  
++ `[names]` - _names_ is a comma-separated list of names. By default,
+  variables are copied. A name preceded by _&_ is captured by reference.  
++ `[&]` - implicit by reference capture list. Entities from the
+  inclosing function used in the lambda body are used by reference.  
++ `[=]` - same but for copying  
++ `[&,identifier_list]` - *identified_list* is a comma-separated list of
+  zero or more variables from the enclosing function. These variables
+  are captured by value; any implicitly captured variables are captured
+  by reference.  
++ `[=,reference_list]` - same as above but reversed logic.  
+
+Note: avoid capturing pointers or references  
+<!-- }}} -->
+#### Mutable Lambdas <!-- {{{ -->
 <!-- TODO: stopped here -->
+<!-- }}} -->
+
+<!-- }}} -->
+
 <!-- }}} -->
 <!-- }}} -->
