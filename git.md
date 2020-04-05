@@ -1770,8 +1770,276 @@ You can use patch mode for:
 + checking out parts of files with the `git checkout --patch` command  
 + stashing parts of files with the `git stach save --patch` command  
 <!-- }}} -->
-### Stashing and Cleaning <!-- {{{ -->
+<!-- }}} -->
+## Stashing and Cleaning <!-- {{{ -->
+If you do not want to move to another branch, but don't
+- commit of half-done work, command `git stash` helps you.  
+Takes messy from your dir, saves it (staged and unstaged files) so you
+may back to those changes later.  
+
+### Stashing Your Work <!-- {{{ -->
+In working directory type `git stash` or `git stash push`. Now your
+working directory is clean.  
+To see what you've stashed - `git stash list`.  
+
+To **apply** most recent stash use `git stash apply` command.  
+To apply more _older_ stashes use `git stash apply stash@{2}`  
+The changes to your files were reapplied, but the file you staged before
+wasn't restaged. To do that you mast pass `--index` option to `git stash
+apply` command.  
+
+After applying you still have that snapshot in stash list. To remove use
+`git stash drop` command with the name of the stash to remove.  
+<!-- }}} -->
+### Creative Stashing <!-- {{{ -->
+Common options that can be usefull:  
+
++ `--keep-index` - include all staged content and leave them in the
+  index (changes will persist in directory)  
++ `--include-untracked` or `-u` - include untracked files in the stash
+  being created.  
+    - to include ignored files use `--all` or `-a`  
++ `--patch` - prompt you interactively which of the changes you would
+  like to stach.  
+<!-- }}} -->
+### Creating a Branch from a Stash <!-- {{{ -->
+If your stash doesn't applied cleanly, but you need to test some of
+those, you may create branch from stashed itemes with `git stash branch
+<new branchname>` and continue work there.  
+This command will drop applyed stash if applying were sucessfull  
+<!-- }}} -->
+### Cleaning your Working Directory <!-- {{{ -->
+Remove cruft files or clean your working directory:  
+
++ `git clean`  
++ `git clean -f -d` - remove all the untracked files (-f - force).  
++ `--dry-run`, or `-n` - do a dry run and tell me what you
+  _would_ have removed.  
+
+By default will only remove untracked untracked files that are not
+ignored.  
+
++ `-x` - extend removing on untracked files from .gitignore  
++ `-i` - interactive mode  
++ `-f -f` - extra forceful  
+<!-- }}} -->
+<!-- }}} -->
+## Signing Your Work <!-- {{{ -->
+If you're taking work from others on the internet and want to verify
+that commits are actually from a trusted source, Git has a few ways to
+sign and verify work using GPG.
+
+### GPG Introduction <!-- {{{ -->
+
++ `$ gpg --list-keys` - list installed keys  
++ `$ gpg --gen-key` - generate your key  
++ `$ git config --global user.signingkey <code>` now Git will use your
+  key by default to sign tags and commits if you want.  
+<!-- }}} -->
+### Signing Tags <!-- {{{ -->
+All you have to do is use `-s` instead of `-a`:
+```shell
+$ git tag -s v1.5 -m 'my signed 1.5 tag'
+```
+If you run `git show` on that tag, you can see your GPG signature
+attached to it.  
 
 <!-- }}} -->
+### Verifying Tags <!-- {{{ -->
+`git tag -v <tag-name>`. You need the signer's public key in your
+keyring for this to work properly.  
+<!-- }}} -->
+### Signing Commits <!-- {{{ -->
+All you need to do is add a `-S` to your `git commit` command.  
+
+To see and verify these signatures, there is also a `--show-signature`
+option to `git log`  
+To configure `git log` to check any signatures - use `%G?` format.  
+
+Also `git merge` and `git pull`can be told to inspect and reject when
+merging a commit that does not carry a t rusted GPG signature with the
+`--verify-signatures` command. If branch contains not signed and valid
+commits the merge will not work.
+```shell
+$ git merge --verify-signatures non-verified-branch
+fatal: Commit ab06180 does not have a GPG signature.
+```
+you can also add `-S` option to the `git merge` command to sign the
+resulting merge commit.  
+
+<!-- }}} -->
+### Everyone Must Sign <!-- {{{ -->
+Make sure you understand GPG and the benefits of signing things. And if
+you choose to use, make sure all of your team will understands how to do
+so.  
+<!-- }}} -->
+<!-- }}} -->
+## Searching <!-- {{{ -->
+You'll often need to find where a function is called or defined, or
+display the history of a method.  
+
+### Git Grep <!-- {{{ -->
+By default, `git grep` will look through the files in your working
+directory.  
+
++ You can use either of the `-n` or `--line-number` options to print out
+the line numbers where Git has found matches:  
+```shell
+$ git grep -n gmtime_r
+```
++ You can ask git to summorize output - how many entries in each file.
+```shell
+$ git grep --count gmtime_r
+```
++ You can specify _context_ (pattern for searched files) with either of
+the `-p` or `--show-function` options:
+```shell
+$ git grep -p gmtime_r *.c
+```
++ You can combine expressions with `--and` flag, which ensures that
+multiple matches must occur in the same line of text.  
+Example: we'll look for any lines that define a constant whose name
+contains either of the substrings "LINK" or "BUF_MAX", specifically in
+an older version of the Git codebase represented by the tag `v1.8.0`
+(we'll throw in the `--break` and `--heading` options which help split
+up the output into a more readable format):
+```shell
+$ git grep --break --heading -n -e '#define' --and \( -e LINK -e \
+BUF_MAX \) v1.8.0
+```
+
+<!-- }}} -->
+### Git Log Searching <!-- {{{ -->
+Would be usefull if you're looking not for _where_ a term exists, but
+_when_ it existed or was introduced.  
+
++ `-S` option tells git log to output only those mathces that changed
+  number of occurences.  
+```shell
+$ git log -S ZLIB_BUF_MAX --oneline
+```
++ `-G` allows you to provide a regular expression to search.  
+
+#### Line Log Search <!-- {{{ -->
+`-L` option to `git log` command shows the history of a function or
+line of code. It will figure out the bounds of passed
+function name and then look through the history and show us every change
+that was made to the function as a series of patches.  
+
+```shell
+$ git log -L :git_deflate_bound:zlib.c
+```
+
+If Git can't figure out how to match a function or method, you can
+provide regular expression. For example above what be similar to:
+```shell
+$ git log -L '/unsigned long git deflate_bound/',/^}/:zlib.c
+```
+
+You could also give it a range of lines or a single line number.  
+
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+## Rewriting History <!-- {{{ -->
+
++ Decide what files go into which commits right before you commit with
+  the staging area  
++ that you didn't mean to be working on something yet with `git stash`  
++ refrite commits that already happened so they look like thay happened
+  in a different way.  
+    - changing order of the commits  
+    - changing messages  
+    - modifying files in a commit  
+    - squashing together of splitting apart commits  
+    - removing commits entirely  
+
+_all before you share your work with others._  
+
+One cardinal rule:
+> Don't push your work until you're happy with it  
+
+### Changing the Last Commit <!-- {{{ -->
+If you simply want to modify your last commit message:
+```shell
+$ git commit --amend
+```
+
+If you want to change content, you should change, stage and you command
+above.  
+
+If you don't want to chagne message append `--no-edit` option  
+
+<!-- }}} -->
+### Changing Multiple commit Messages <!-- {{{ -->
+Git doesn't provide any modify-hstory tool, but you can use the rebase
+tool to rebase a series of commits onto the HEAD they were originally
+based on instead of moving them to another one.  
+With the interactive rebase tool you can:  
+
++ stop after each commit  
++ modify and chagne the message, add files, or do whatever you with  
+
+You can run rebase by adding the `-i` option to `git rebase`.  
+You must indicate how far back you want to rewrite commits by telling
+the command which commit to rebase onto.  
+
+For example, if you want to change last 3 commits (or any of those), you
+supply as an argument to `git rebase -i` the parent of the last commit
+you want to edit, which is `HEAD~2^` or `HEAD~3`.  
+
+Commands above will open a list of commits in your text editor. The list
+of commits is listed in the **opposite order**.  
+
+Mark commits that you want to edit with `edit` instead of `pick`.  
+Then Git will help you to do the rest.  
+<!-- }}} -->
+### Reordering Commits <!-- {{{ -->
+To reorder open interactive rebase tool and simply remove lines with
+commits you don't want to exist and reorder the rest lines in the way
+you prefer (remember reverse order from `git log`)  
+<!-- }}} -->
+### Squashing Commits <!-- {{{ -->
+Open interactive rebase tool and instead of "pick" or "edit" specify
+"squash". Git applies both that change and the change directly before it
+and makes you merge the commit messages together.  
+So if you want to make a single commit from these three commits:
+```txt
+pick <SHA-1> <msg>
+squash ....
+squash ....
+```
+
+When you exit git will apply all three changes and then puts you back
+into the editor to merge the three commit messages.  
+
+<!-- }}} -->
+### Splitting a Commit <!-- {{{ -->
+Mark selected commits in interactive rebase tool with "pick" word. Then
+in command-line this will help you:
+```shell
+$ git reset HEAD^   # undoes that commit and leaves the modified files
+$ git add README
+$ git commit -m 'updated README formatting'
+$ git add lib/simplegit.rb
+$ git commit -m 'added blame'
+$ git rebase --continue
+```
+
+And your history looks like this:
+```shell
+$ git log -4 --pretty=format:"%h %s"
+... added cat-file
+... added blame
+... updated README formatting
+... changed my name a bit
+```
+
+
+<!-- }}} -->
+### The Nuclear Option: filter-branch <!-- {{{ -->
+
+<!-- }}} -->
+
 <!-- }}} -->
 <!-- }}} -->
