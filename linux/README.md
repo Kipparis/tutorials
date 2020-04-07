@@ -20,6 +20,10 @@ or set variable attributes
 + `readonly name` - makes variable name be a type of readonly  
 + see _Command-line processing_ for order of processing pipelines and
   how to alter this order  
++ `trap` - process signals  
++ `nohup` - executes arguments and ignore HUP signal (default output to
+  _nohup.out_)  
++ `disown` - removes process from the list of jobs  
 <!-- TODO: once read, go throw -->
 <!--     options -->
 <!--     env variables -->
@@ -1576,8 +1580,114 @@ the _stty_ command.
 <!-- }}} -->
 kill<!-- {{{ -->
 ====
-<!-- TODO: stopped here -->
+**kill** - send signal to any process you created. It takes as an
+argument: process iD, job number, or command name of the process. By
+default it sends the TERM (terminate) signal ( which usually similar to INT).
+`-<SIGNAL>` - send different signal  
+
+How do you should stop programs from running:
+
++ `kill`  
++ `kill -QUIT`  
++ `kill -KILL`  
 <!-- }}} -->
+ps<!-- {{{ -->
+==
+Use this when you need to know the ID of a process. By default lists all
+processes started from the current terminal or pseudo-terminal. To get
+all processes pass `-a` option  
+
+To output _zombies_ and _orphants_ use `-ax` or `-e`option to `ps`
+command  
+<!-- }}} -->
+<!-- }}} -->
+trap<!-- {{{ -->
+====
+React appropriately to abnormal events.  
+Syntax is:
+```bash
+trab cmd sig1 sig2 ...
+```
+that is, when any of _sig1_, _sig2_, etc., are received, run _cmd_, then
+resume execution.  
+
+By default outputs list of traps that have been set.  
+
+**traps and functions**.  
+Traps defined in the invoking shell will be recognized inside the
+function, and any traps defined in the function will be recognized by
+the invoking shell. (traps can be overwritten)  
+
+### Process ID Variables and Temporary Files <!-- {{{ -->
++ `$$` - process ID of the current shell  
++ `$!` - process ID of the most recent background job  
+<!-- }}} -->
+### Ignoring Signals <!-- {{{ -->
+Signal called HUP (hangup) called when network disconnection occure. You
+could write function that ignore that signal. Also there's keyword
+`nohup` which does the same.  
+<!-- }}} -->
+disown<!-- {{{ -->
+======
+Removes job from list of jobs.  
+
++ `disown -h` - same os `nohup` command  
++ `disown -a` - disown's all jobs owned by the shell  
++ `disown -r` - same as above but only for currently running jobs  
+<!-- }}} -->
+### Resetting Traps <!-- {{{ -->
+When you pass `-`(dash) as the command argument trap is resetted to
+default (usually is termination of the process).  
+<!-- }}} -->
+<!-- }}} -->
+### Coroutines <!-- {{{ -->
+Coroutines - two or more processes are explicitly programmed to run
+simultaneously and possibly communicate with each other.  
+
+our initial solution would be this:
+```bash
+alice &
+hatter
+```
+
+If **alice** is still running when the script finishes, then it becomes
+an _orphant_.  
+
+wait<!-- {{{ -->
+====
+By default `wait` simpy waits until all background jobs have finished.  
+
+If you have specific job you need to wait, you can pass PID as argument
+to `wait`.  
+<!-- }}} -->
+#### Advantages and Disadvantages of Coroutines <!-- {{{ -->
+Three characteristics of process:  
+
++ _CPU-intensive_  
++ _I/O-intensive_  
++ _interactive_  
+
+It's usefull to parallel processes of different type.
+But harmfull to parallel same type.  
+<!-- }}} -->
+#### Parallelization <!-- {{{ -->
+Breaking up a process into coroutines is sometimes called _parallelizing_ the job.  
+
+Simple program that parallels copying file to multiple dests:
+```bash
+for dest in "$@"; do
+    cp $file $dest &
+done
+wait
+```
+nothing would go wrong. But what if user specifies two same dest's?
+Generaly speaking this is _concurrency control_ issues.  
+
+<!-- }}} -->
+
+<!-- }}} -->
+### Subshells <!-- {{{ -->
+<!-- TODO: stopped here -->
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
