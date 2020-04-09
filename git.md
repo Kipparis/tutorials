@@ -2038,8 +2038,151 @@ $ git log -4 --pretty=format:"%h %s"
 
 <!-- }}} -->
 ### The Nuclear Option: filter-branch <!-- {{{ -->
+Rewrite a larger number of commits in some scriptable way. The command is
+`filter-branch`.
+
+> `git filter-brach` has many pitfalls, and is no longer the recommended
+> way to rewrite history. Instead, consider using `git-filter-repo`.  
+
+#### Removing a File from Every Commit <!-- {{{ -->
+For example, to remove a file named `passwords.txt` from your entire
+history, you can use the `--tree-filter` option to `filter-branch`:
+```shell
+$ git filter-branch --tree-filter 'rm -f passwords.txt' HEAD
+```
+
+To run `filter-branch` on all branches, pass `--all` option.  
 
 <!-- }}} -->
+#### Making a Subdirectory the New Root <!-- {{{ -->
+If you want to make the _trunk_ subdirectory be the new project root for
+every commit, `filter-branch` can help you do that:
+```shell
+$ git filter-branch --subdirectory-filter trunk HEAD
+```
+Now your new project root is what was in the _trunk_ subdirectory each
+time. Git will also automatically remove commits that did not affect the
+subdirectory.  
 
+<!-- }}} -->
+#### Changing Email Addresses Globally <!-- {{{ -->
+Use `--commit-filter`:
+```shell
+$ git filter-branch --commit-filter '
+    if [ "$GIT_AUTHOR_EMAIL" = "schacon@localhost" ];
+    then
+        GIT_AUTHOR_NAME="Scott Chacon";
+        GIT_AUTHOR_EMAIL="schacon@example.com";
+        git commit-tree "$@";
+    else
+        git commit-tree "$@";
+    fi' HEAD
+```
+
+<!-- }}} -->
+<!-- }}} -->
+
+<!-- }}} -->
+## Reset Demystified <!-- {{{ -->
+For Git commands `reset` and `checkout` it seems hard to actually
+understand what they do. Buy check out a simple mataphor.  
+
+### The Three Trees <!-- {{{ -->
+If easier way is to consider of Git being a content manager of three
+different trees. Git as a system manages and manipulates three trees in
+its normal operation:  
+
++ **HEAD** - last commit snapshot, next parent  
++ **Index** - proposed next commit snapshot  
++ **Working Directory** - sandbox  
+
+#### The HEAD <!-- {{{ -->
+If fact, it's pretty easy to see what snapshot looks like. Here is an
+example of getting the actual directory listing and SHA-1 checksums for
+each file in the HEAD snapshot:
+```shell
+$ git cat-file -p HEAD
+tree ...
+author ...
+committer ...
+
+<commit_name>
+
+$ git ls-tree -r HEAD
+100644 blob ... README
+100644 blob ... Rakefile
+040000 tree ... lib
+```
+
+<!-- }}} -->
+#### The Index <!-- {{{ -->
+The _index_ is your **proposed next commit** ("Staging Area").  
+```shell
+$ git ls-files -s
+```
+
+<!-- }}} -->
+#### The Working Directory <!-- {{{ -->
+Think of the working directory as a **sandbox**, where you can try
+changes out before committing them to your staging area (index) and then
+to history
+```shell
+$ tree
+    ....
+```
+
+<!-- }}} -->
+<!-- }}} -->
+### The Workflow <!-- {{{ -->
++ `git reset --soft HEAD~` - simply undoes last commit command (but
+  don't remove this commit from history)  
++ `git reset [--mixed] HEAD~` - updates index to HEAD~  
++ `git reset --hard HEAD~` - updates your working directory  
+
+You can call `git reset file.txt` (`git reset --mixed HEAD file.txt`)
+so Git will ignore first step and execute other only for a file
+(reverse for `git add`).  
+
+It's the same as "pull the data from HEAD". Also we call
+`git reset eb43bf file.txt` to be more precise.  
+
+`git reset` (like `git add`) accept a `--patch` option to unstage
+content on a hunk-by-hunk basis.  
+<!-- }}} -->
+### Squashing <!-- {{{ -->
+If you have series of commits like: "oops.", "WIP", "forgot this file".
+You can use `reset` to quickly and easily squash them into a single
+commit:  
+Suppose you want to keep your first commit (of three), then you run `git
+reset --soft HEAD~2` (which only moves master pointer back two
+commits). Then do `commit` and you're done. The history will look like
+you create first commit, then in second commit you done all other
+things.  
+<!-- }}} -->
+### Check It Out <!-- {{{ -->
+What the difference between `checkout` and `reset`. Like `reset`,
+`checkout` manipulates the three trees, and it is a bit different
+depending on whether you give the command a file path or nor.  
+
+#### Without Paths <!-- {{{ -->
+Running `git checkout [branch]` is pretty similar to running `git reset
+--hard [branch]`. But `checkout` is smarter. It will:  
+
++ check to make sure it's not blowing away files that have changes to
+  them.  
++ try to do a trivial merge in the working directory, so all of the
+  files you haven't changed will be updated.  
+
+`checkout` will move HEAD itself to point to another branch.  
+<!-- }}} -->
+#### With Paths <!-- {{{ -->
+It's like `git reset --hard [branch] file`. Also, like `git reset`
+and `git add`, `checkout` will accept a `--patch` option to allow you to
+selectively revert file contents on a hunk-by-hunk basis.  
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+## Advanced Merging <!-- {{{ -->
+<!-- TODO: stopped here -->
 <!-- }}} -->
 <!-- }}} -->
