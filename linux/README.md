@@ -24,6 +24,10 @@ or set variable attributes
 + `nohup` - executes arguments and ignore HUP signal (default output to
   _nohup.out_)  
 + `disown` - removes process from the list of jobs  
+
+Usefull things:
+
++ `kill %+` - kill last job (send signal TERM by default)  
 <!-- TODO: once read, go throw -->
 <!--     options -->
 <!--     env variables -->
@@ -1686,8 +1690,181 @@ Generaly speaking this is _concurrency control_ issues.
 <!-- }}} -->
 
 <!-- }}} -->
-### Subshells <!-- {{{ -->
-<!-- TODO: stopped here -->
+<!-- }}} -->
+## Subshells <!-- {{{ -->
+We saw earlier that when you run a shell script, you actually invoke
+another copy of the shell that is a subprocess of the main, or _parent_,
+shell process.  
+
+### Subshell Inheritance <!-- {{{ -->
+They _inherit_ from their parents:  
+
++ the current directory  
++ environment variables  
++ standard input, output, error, plus any other open file descriptors  
++ signals that are ignored  
+
+Does not inherit:  
+
++ shell variables, except environment variables and those defined in the
+  environment file (usually _.bashrc_)  
++ Handling of signals that are not ignored  
+<!-- }}} -->
+### Nested Subshells <!-- {{{ -->
+Just surround some shell code with parentheses, and that code will run
+in a subshell. That is _nested_ subshell.  
+Example:
+```bash
+( while read line; do
+    echo "$(alg2rpn $line)"
+    done
+) | dc
+```
+This is usually less efficient than a command block.  
+Variable and traps defined inside a command block are known to the shell
+code after the block, whereas those defined in a subshell are not.  
+
+<!-- }}} -->
+<!-- }}} -->
+## Process Substitution <!-- {{{ -->
+Two forms:  
+
++ input to a process: `>(proc)`  
++ output from a process: `<(proc)`  
+
+It actually creates _names pipe_. Or simply a temporary file that acts
+like a pipe with a name  
+
+For example, if we want to compare output of two programms:
+```bash
+cmp <(prog1) <(prog2)
+```
+_prog1_ and _prog2_ are run concurrently and connect their outputs to
+names pipes. _cmp_ reads from each of the pipes and compares the
+information.  
+
+<!-- }}} -->
+<!-- }}} -->
+# Debugging Shell Programs <!-- {{{ -->
+The debugger, called _bashdb_, is a basic yet functional program that
+will not only serve as an extended example of various shell programming
+techniques, but will also provide you with a useful tool for examining
+the working of your own shell scripts.  
+
+## Basic Debugging Aids <!-- {{{ -->
+Sterps through debugging code:
+
++ first you decide _what_ is causing your program to behave badly  
++ then _where_ the problem occure  
++ then _how_ to fix it  
+
+First aid is **echo**, but you'll spend a lot of time  
+
+### Set Options <!-- {{{ -->
+Debugging options:
+`set -o` option - command-line option - action
+
++ `noexec` - `-n` - don't run commands; check for syntax errors only  
+    - note, once you nurned it on, you won't be able to turn it off;
+  a `set+o noexec` will never be executed  
++ `verbose` - `-v` - echo commands before running them  
++ `xtrace` - `-x` - echo commands after command-line processing  
+    - uses `PS4` variable to mark levels of expanding  
+    - `PS4='$0 line $LINENO: '` - good way to set this variable  
+
+<!-- }}} -->
+<!-- }}} -->
+## Fake Signals <!-- {{{ -->
+Fake singlas work in the same way as ordinary do, but they are generated
+by the shell itself, as opposed to the other signals which are generated
+externally. They represent runtime events that are likely to be of
+interest of debuggers.  
+
+List of them:  
+
++ EXIT - the shell exits from script  
+    - will be called whenever the script within which it was set exits  
++ ERR - a command returning a non-zero exit status  
+    - `$?` survives trap and accessible at the beginning of the
+  trap-handling code  
+    - For debugging purposes to pass line number to trap-function:  
+    ```bash
+    function errtrap {
+        es=$?
+        echo "ERROR line $1: Command exited with status $es."
+    }
+    trap 'errtrap $LINENO' ERR
+    ```
+    - ERR trap is not inherited by shell functions, command
+  substitutions, and commands executed in a subshell. To toggle this
+  feature use `set -o errtrace` (or `set -E`)  
++ DEBUG - the shell has executed a statement  
+    - not inherited in subshells, command substitution, etc. To toggle
+  you may either `declare -t` the function or `set -o functrace` (or
+  `set -T`)  
++ RETURN - a shell function or script executed with the `.` or `source`
+  builtins finishes executing  
+    - to turn on ineritence use `declare -t` to define functions and\or
+  `set -o functrace` (`set -T`)  
+
+Some debugging features bash 3.0 introduced:  
+
++ **extdebug** option to the **shopt** command:  
+    - `-F` option to **declare** displays the source filename and line
+  number  
+    - the command that is runned by the DEBUG trap returning a non-zero
+  value, the next command is skipped and not executed  
+    - if the command run by the DEBUG trap returns a value of 2, and the
+  shell is executing in a subroutine (a shell function or a shell
+  script by the `.` or `source`), a call to **return** is simulated.  
++ `debugger` option, which switches on both the **extdebug** nad
+  **functrace** functionality.  
+<!-- }}} -->
+## Debugging Variables <!-- {{{ -->
+Bash 3.0 added some useful environment variables to facilitate
+developing:  
+
++ BASH_SOURCE - contains an array of filnames that correspond to what is
+  currently executing;  
++ BASH_LINENO - an array of line numbers that correspond to function
+  calls that have been made;  
++ BASH_ARGC, BASH_ARGV - number of parameters in each frame and
+  parameters themselves  
+<!-- }}} -->
+exec<!-- {{{ -->
+====
+**exec** takes its arguments as a command line and runs the ocmmand in
+place of the current program, in the same process.  
+<!-- }}} -->
+<!-- }}} -->
+# Bash Administration <!-- {{{ -->
+Two fields for system administrators maintaining shell:  
+
++ generic environment for users  
++ for system security  
+
+## Installing bash as the Standard Shell <!-- {{{ -->
+Better way to install bash is to install it in any directory, than
+simplink `/bin/sh` to it (it'll mimic the Bourne shell as closely as
+possible, ignoring `~/.bash_profile` on login and `~/.bashrc` when
+interactive).  
+<!-- }}} -->
+## POSIX Mode <!-- {{{ -->
+The POSIX (Portable Operating System Interface) standard defines
+guidelines for standardizing UNIX.  
+_bash_ is nearly 100% POSIX-compliant in its native mode. It you want
+strict POSIX adherence, you can either start _bash_ with the `posix`
+option, or set it from within the shell with `set -o posix`  
+<!-- }}} -->
+## Command-Line Options <!-- {{{ -->
+I won't list those. Open man, type `/OPTIONS` and here you are.  
+<!-- }}} -->
+## Environment Customization <!-- {{{ -->
+_bash_ uses the file _/etc/profile_ for system-wide customization and
+login. After which he reads *.bash_profile*  
+
+umask<!-- {{{ -->
+=====
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
