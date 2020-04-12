@@ -1683,9 +1683,221 @@ cout << accumulate(in, eof, 0) << endl;
   out. Each operator returns _out_.  
 
 #### Operations on `ostream_iterators` <!-- {{{ -->
-<!-- TODO: stopped here -->
+We may provide a string to print after each element:
+```cpp
+ostream_iterator<int> out_iter(cout, " ");  // writes " " after each elemnt
+for (auto e : vec)
+    *out_iter++ = e;    // the assignment writes this element to cout
+cout << endl;
+```
+Provided string must be literal string or null-terminated C-style array.  
+
+It's worth noting we can omit the dereference and the increment when we
+assign to `ostream_iterator<>`, that is:
+```cpp
+for (auto e : vec)
+    out_iter = e;   // the assignment writes this element to cout
+cout << endl;
+```
+
+Rather than writing the loop by hands, we can more easily print the
+elements in _vec_ by calling `copy`:
+```cpp
+copy(vec.begin(), vec.end(), out_iter);
+cout << endl;
+```
+
+
+<!-- }}} -->
+#### Using Stream Iterators with Class Types <!-- {{{ -->
+WE can create an `istream_iterator` and `ostream_iterator` for any type
+as long as it has corresponding operator (`>>`, `<<`)  
+```cpp
+istream_iterator<Sales_item> item_iter(cin), eof;
+ostream_iterator<Sales_item> out_iter(cout, "\n");
+// store the first transaction in sum and read the next record
+Sales_item sum = *item_iter++;
+while (item_iter != eof) {
+    // if the current transaction (which is stored in item-iter)
+    // has the same ISBN
+    if (item_iter->isbn() == sum.isbn())
+        sum += *item_iter++;    // add it to sum and read the next
+        // transaction
+    else {
+        out_iter = sum;     // write the current sum
+        sum = *item_iter++; // read the next transaction
+    }
+}
+out_iter = sum;     // remember to print the last set of records
+```
+
 <!-- }}} -->
 
 <!-- }}} -->
+### Reverse Iterators <!-- {{{ -->
+A reverse iterator inverts the meaning of increment (and decrement).  
+```cpp
+sort(vec.begin(), vec.end());   // sorts in "normal" order
+sort(vec.rbegin(), vec.rend()); // sorts in reverse order
+```
+**Reverse Iterators Require Decrement Operators**.  
+If you want to use reversed iterators in place of forward &rarr; you
+want to use `reverse_iterator`'s `base` member:
+```cpp
+cout << string(rcomma.base(), line.end()) << endl;
+```
+
+> When we initialize or assign a reverse iterator from a plain iterator,
+> the resulting iterator dies not refer to the same element as the
+> original.  
+
 <!-- }}} -->
+<!-- }}} -->
+## Structure of Generic Algorithms <!-- {{{ -->
+The it erator operations required by the algorithms are grouped into
+five **iterator categories**. Each algorithms specifies what kind of
+iterator must be supplied for each of its iterator parameters:  
+
++ `input iterator` - read, but not write; single-pass, increment only  
++ `output iterator`- write, but not read; single-pass, increment only  
++ `forward iterator` - read and write; multi-pass, increment only  
++ `bidirectional iterator` - read and write; multi-pass, increment and
+  decrement  
++ `random-access iterator` - read and write; multi-pass, full iterator
+  arithmetic  
+
+### The Five Iterator Categories <!-- {{{ -->
+For each parameter, the iterator must be at least as powerful as the
+stipulated minimum. Passing an iterator of a lesser power is an error.  
+
+#### The Iterator Categories <!-- {{{ -->
+**Input iterators**: can read elements in a sequence. It must provide:  
+
++ Equality and inequality operators - `==`, `!=`  
++ Prefix and postfix increment - `++`  
++ Dereference operator - `*`  
++ The arrow operator `->` as a synonym for `(*it)->member`  
+
+With input iterators we are guaranteed that `*it++` is valid, but it may
+invalidate all other iterators into the stream. Input iterators,
+therefore, may be used only for single-pass algorithms.  
+
+**Output iterators**: they can be thought of as having complementary
+functionality to input iterators - they write rather than read elements.
+They must provide:  
+
++ Prefix and postfix increment - `++`  
++ Dereference - `*`  
+
+This type of iterators can be used only for single-pass algorithms. The
+`ostream_iterator` type is an output iterator.  
+
+**Forward iterators**: all operations of both input iterators and output
+iterators. Moreover, they can read or write the same element multiple
+times. Therefore, we can use the save state of a forward iterator.
+Hence, algorithms that use forward iterators may make multiple passes
+through the sequence.  
+
+**Bidirectional iterators**: all operations of a forward iterator +
+prefix and postfix decrement `--`. Library containers supply iterators
+that meet the requirement for a bidirectional iterator.  
+
+**Rendom-access iterators**: all the functionality of bidirectional
+iterators + contant-time access to any position in the sequence. Must
+provide:  
+
++ Relational operators - `<`, `<=`, `>`, and `>=` to compare the
+  relative positions of two iterators  
++ Addition and substraction operators - `+`, `+=`, `-`, and `-=` on an
+  iterator and an integral v alue. The result in the iterator advance
+  (or retreated) the integral number of elements within the sequence.  
++ The subtraction operator `-` when applied to two iteratos, which
+  yields the distance between two iterators.  
++ The subscript operator `iter[n]` as a synonym for `*(iter+n)`  
+
+The _sort_ algorithms require random-access iterators.  
+<!-- }}} -->
+<!-- }}} -->
+### Algorithm Parameter Patterns <!-- {{{ -->
+Most of the algorithms have one of the following four forms:
+```cpp
+alg(beg, end, other args);
+// algorithms can write its output
+// it's assumed that it iss safe to write as many elements as needed
+alg(beg, end, dest, other args);
+// typically use the elements from the second range in combination with
+// the input range to perform a computation
+alg(beg, end, beg2, other args);
+alg(beg, end, beg2, end, other args);
+```
+
+<!-- }}} -->
+### Algorithm Naming Conventions <!-- {{{ -->
+Theses conventions deal with how we supply and operation to use in place
+of the default `<` or `==` operator and with whether the algorithm write
+to its input sequence or to a sepaarate destination.  
+
+**Some Algorithms Use Overloading to Pass a Predicate**  
+```cpp
+unique(beg, end);   // uses the == operator to compare the elements
+unique(beg, end, comp); // uses comp to compare the elements
+```
+
+**Algorithms with** \_if **versions**  
+Algorithms that take and element value typically have a second named
+(not overloaded) version that takes a predicate in place of the value.
+The algorithms that take a predicate have the suffix `_if` appended:
+```cpp
+find(beg, end, val);    // find the first instance of val
+find_if(beg, end, pred);    // find the first instance for which pred is true
+```
+
+**Distinguishing Versions That Copy from Those That Do Not**  
+By default, algorithms that rearrange elements write new version back
+into the given input range. These algorithms provide a second version
+that writes to a specified output destination (`_copy` suffix):
+```cpp
+reverse(beg, end);  // reverse elements in the input range
+reverse_copy(beg, end, dest);   // copy elements in reverse order into dest
+```
+Some algorithms provide both `_copy` and `_if` versions:
+```cpp
+// removes the odd elements from v1
+remove_if(v1.begin(), v1.end(), [](int 1){return i % 2; });
+// copies only the even elements from v1 into v2; v1 in uncahnged
+remove_copy_if(v1.begin(), v1.end(), back_inserter(v2),
+        [](int i) { return 1 % 2; });
+```
+
+
+
+<!-- }}} -->
+<!-- }}} -->
+## Container-Specific Algorithms <!-- {{{ -->
+Unlike the other containers, `list` and `forward_list` define several
+algorithms as members.  
+
++ `lst.merge(lst2)`, `lst.merge(lst2, comp)` - merges elements from
+  _lst2_ onto _lst_. After the merge _lst2_ is empty.  
++ `lst.remove(val)`, `lst.remove_if(pred)` - calls `erase` to remove
+   matching elements.  
++ `lst.reverse()` - reverses the order of the elements in _lst_.  
++ `lst.sort()`, `lst.sort(comp)` - sorts the elements  
++ `lst.unique()`, `lst.unique(pred)` - calls `erase` to remove
+  consecutive copies of the same value.  
++ `lst.splice(p, lst2[, args])` - moves elements to or from _lst_ or
+  _lst2_. For _args_:
+    - _p_ is usually iterator TO an elemnt (in _list_), or an iterator
+  just BEFORE an element (in *forward_list*)  
+    - ` ` - just move elements from _lst2_ to _lst_ where the iterator
+  points  
+    - `p2` - moves elements right after the _p2_ located in _lst2_   
+    - `b, e` - same as above, but range given  
+    - afterwards those elements are removed from _lst2_  
+
+**The List-Specific Operations Do Change the Containers.**  
+<!-- }}} -->
+<!-- }}} -->
+# Associative Containers <!-- {{{ -->
+
 <!-- }}} -->
