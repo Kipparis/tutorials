@@ -1865,6 +1865,94 @@ login. After which he reads *.bash_profile*
 
 umask<!-- {{{ -->
 =====
+It lets you specify the default permissions that files have when users
+create them.  
+Digits in permissions stands from left to right - owner, owner's group,
+and all other users. Each digit consists of read, write, execute bits.  
+
+022 is a common **umask** value. This implies that when a file created,
+the 'most' permission it could possibly have is 755 - which is the usual
+permission of an executable that a compiler might create (which is
+common file permissions for file craeted by compiler). A text editor, on
+the other hand, might create a file with 666 mermission, but the **umask**
+forces it to be 644 isntead.  
+<!-- }}} -->
+ulimit<!-- {{{ -->
+======
+Originaly used to specify the limit on file creation size. But _bash_'s
+(zsh too) version has options that let you put limits on several
+different system resources.  
+
+**Option** - **Resource limited**  
+
++ `-a` - output all limits  
++ `-c` - core file size ( 1 Kb blocks)  
++ `-d` - process data segment ( Kb )  
++ `-f` - file size (1 Kb blocks )  
++ `-l` - maximum size of a process that can be locked in memory (Kb)  
++ `-m` - maximum resident set size  
++ `-n` - file descriptors  
++ `-p` - pipe size (512 byte blocks)  
++ `-s` - process stack segment (Kb)  
++ `-t` - process CPU time (seconds)  
++ `-u` - maximum number of processes available to a user  
++ `-v` - virtual memory (Kb)  
+
+**ulimit** provides _hard_ and _soft_ limits. Hard could be decreased by
+user and only increased by superuser. Whereas soft limits can be
+inc/decreased by user as well as _hard_ limits allow this.  
+
++ `-H` set hard limits  
++ `-S` set soft limits  
+
+Example:
+```bash
+ulimit -Sn 64
+ulimit -Hn unlimited
+```
+
+<!-- }}} -->
+<!-- }}} -->
+## Types of Global Customization <!-- {{{ -->
+file _/etc/profile_ contains definitions such as **PATH** and **TERM**.  
+
+The variable **TMOUT** is useful when your system supports dialup lines
+and you want to set timeout for prompt.  
+
+Also you can set up global functions.  
+<!-- }}} -->
+## System Security Features <!-- {{{ -->
+_bash_ has two features that help solve security problem:  
+
++ _restricted shell_ which is intentionally "brain damaged"  
++ _privileged mode_ which is used with shell scripts that run as if the
+  user were **root**.  
+
+### Restricted Shell <!-- {{{ -->
+It's designed to put the user into an environment where her ability to
+move around and write files is severely limited. You can make a user's
+login shell restricted by putting **rbash** in the user's /etc/passwd
+entry (`git` utility has the same feature, but session restricts only to
+manipulate git directory with internal commands).  
+
+Constraints imposed by the restricted shell are disallow the user from
+doing the following:  
+
++ change working directory  
++ redirect output to a file  
++ assigning a new value to the environment variables **ENV**,
+__BASH_ENV__, __SHELL__, or **PATH**  
++ specifying any commands with slashes in them  
++ using the **exec** built-in.  
++ specifying a filename containing a / as an argument to the . built-in
+  command.  
++ import function definitions from the shell environment at startup  
++ adding or deleting built-in commands  
++ specifying the **-p** option to the bultin command.  
++ turning off restricted mode with **set +r**  
+<!-- }}} -->
+### A System Break-In Scenario <!-- {{{ -->
+<!-- TODO: stopped here -->
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
