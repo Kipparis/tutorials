@@ -2183,6 +2183,262 @@ selectively revert file contents on a hunk-by-hunk basis.
 <!-- }}} -->
 <!-- }}} -->
 ## Advanced Merging <!-- {{{ -->
-<!-- TODO: stopped here -->
+If you watit too long to merge two branches that diverge quickly, you
+can run into some issues.  
+
+We'll go through possible issues and what tools does Git offers to solve
+them. We'll also cover non-standard types of merges you can do, as well
+as how to back out merges.  
+
+### Merge Conflicts <!-- {{{ -->
+They could be caused by different line endings.  
+<!-- }}} -->
+### Aborting a Merge <!-- {{{ -->
+If you don't ready for the situation, run `git merge --abort`. The only
+cases where it may not be able to do its job perfectly would be if you
+had unstashed, uncommitted changes in your working directory.  
+<!-- }}} -->
+### Ignoring Whitespace <!-- {{{ -->
+Git's `merge` command takes additional options related to whitespace
+processing. Those are:  
+
++ `-Xignore-all-space` - ignores whitespace **completely** when
+  comparing lines  
++ `-Xignore-space-change` - treats sequences of one or more whitespace
+  characters as equivalent  
+
+<!-- }}} -->
+### Manual File Re-merging <!-- {{{ -->
+There are other types of changes that perhaps Git can't handle
+automatically, but are scriptable fixes. Let's pretend Git could not
+handle the whitespace change and we needed to do it by hand.  
+
+1. Get into merge conflict state:  
+    + Get copies of our, their, and common versions of file.  
+2. Fix either our or their side  
+3. Re-try the merge again for just this single file  
+
+Git stores all of these versions in the index under "stages" which each
+have numbers associated with the. 1 - common acestor, 2 - your version,
+3 - is from `MERGE_HEAD`, the version you're merging in ("theirs")  
+
+You can extract a copy of each of these versions:
+```shell
+$ git show :1:hello.rb > hello.common.rb
+$ git show :2:hello.rb > hello.ours.rb
+$ git show :3:hello.rb > hello.theirs.rb
+```
+
+Then we want to correct their version and run `git merge-file` command:
+```shell
+$ dos2unix hello.theirs.rb
+    ...
+$ git merge-file -p \
+    hello.ours.rb hello.common.rb hello.theirs.rb > hello.rb
+
+$ git diff -b # prints summary of what introduced from both sides
+```
+
+To get information of what introduced from you:
+```shell
+$ git diff --ours
+```
+
+To see how result of the merge differed from what was on their side:
+```shell
+$ git diff --theirs -b
+```
+`-b` options strips out the whitespace  
+
+Finally, you can see how the file has changed from both sides with:
+```shell
+$ git diff --base -b
+```
+
+At this point we can use the `git clean` command to clear out the extra
+files we created to do the manual merge:
+```shell
+$ git clean -f
+```
+
+
+
+
+
+<!-- }}} -->
+### Checking Out Conflicts <!-- {{{ -->
+For example manual editing still didn't work and we need more context.  
+
+Let's change up things a little bit. For this example, we have two
+longer lived branches that each have a few commits in them but create a
+legitimate content conflict when merged.  
+
+`git checkout` with the `--conflict` option will re-checkout the file
+again and replace the merge conflict markers (if you want to reset the
+markers and try to resolve them again)  
+
+You can pass `--conflict` either `diff3` or `merge` (which is default).
+If you pass it `diff3`, Git will use a slightly different version of
+conflict markers, not only giving you the "ours" and "theirs" versions,
+but also the "base" version inline to give your more context.  
+
+If you like this format, you can set it by default by setting the
+`merge.conflictstyle` setting to `diff3`.
+```shell
+$ git config --global merge.conflictstyle diff3
+```
+
+The `git checkout` can also take `--ours` and `--theirs` options, which
+can be really fast way of just choosing either one side or the other
+without merging things at all (usefull for merging binaries, just choose
+one side and commit the changes).  
+
+<!-- }}} -->
+### Merge Log <!-- {{{ -->
+To get a full list of all of the unique commits that were included in
+either branch involved in this merge, we can use the "triple dot"
+syntax:
+```shell
+$ git log --oneline --left-right HEAD...MERGE_HEAD
+< ... update README
+< ... add a README
+< ... update phrase to hola world
+> ... add more tests
+> ... add testing script
+> ... changed text to hello mundo
+```
+
+if we add the `--merge` option, it will only show the commits in either
+side of the merge that touch a file that's currently conflicted.
+```shell
+$ git log --oneline --left-right --merge
+< ... update phrase to hola world
+> ... changed text to hello mundo
+```
+
+<!-- }}} -->
+### Combined Diff Format <!-- {{{ -->
+When you run `git diff` directly after a merge conflict, it will give
+you information in a rather unique diff output format. The format is
+called "Combined Diff" giving you two columns of data next to each line.  
+
+First column shows you if that line is different between the "ours"
+branch and the file in your working directory.  
+Second column does the same between the "theirs" branch and your working
+directory copy.  
+
+You can also get this from the `git log` for any merge with the `--cc`
+option to a `git log -p`. Also you may use `git show` on a merge commit.  
+```shell
+$ git log --cc -p 1
+```
+
+<!-- }}} -->
+### Undoing Merges <!-- {{{ -->
+Assume we have `topic` branch, that we accidantly merged into `master`
+branch.  
+
+#### Fix the references <!-- {{{ -->
+`git reset --hard HEAD~` will do the trick.  
+To understand why, read `Reset Demystified`  
+<!-- }}} -->
+#### Reverse the commit <!-- {{{ -->
+Git gives you the option of making a new commit which undoes all the
+changes from an existing one. Git calls this operation a "revert".
+```shell
+$ git revert -m 1 HEAD
+```
+The `-m 1` flag indicates which parent is the "mainline" and should be
+kept.  
+
+If you want to undo the revert (e.g. un-revert the original merge):
+```shell
+$ git revert ^M
+    ...
+$ git merge topic
+```
+
+<!-- }}} -->
+<!-- }}} -->
+### Other Types of Merges <!-- {{{ -->
+#### Our or Theirs Preference <!-- {{{ -->
+
+We can also tell Git to favor one side or the other when it sees a
+conflict.  
+
+If you would prefer for Git to simply choose a specific side and ignore
+the other side instead of letting you manually resolve the conflict, you
+can pass the `merge` command either a `-Xours` or `-Xtheirs`.  
+
+To pass this option to `merge-file` use `git merge-file --ours`.  
+
+If you don't want Git to even try to merge changes from the other side,
+there is a more draconian option. This will basically do a fake merge.
+It will record a new merge commit with both branches as a parents, but
+it will not even look at the branch you're merging in. It will simply
+record as the result of the merge the exact code in your current branch.
+```shell
+$ git merge -s ours mundo
+Mege made by the 'ours' strategy.
+$ git diff HEAD HEAD~
+$
+```
+
+This can be useful to basically trick Git into thinking that a branch is
+already merged.  
+For example you branched off a `release` branch. Do some work. In the
+meantime some bugfix on `master` needs to be bacckported in to your
+release branch. You can merge the bugfix into `release` branch and also
+`merge -s ours` the same branch into your `master`, so when you later
+merge the `release` branch again, there are no conflicts from the
+bugfix.  
+
+<!-- }}} -->
+#### Subtree Merging <!-- {{{ -->
+Suppose you want to add remote branch as one of the subdirectories:
+```shell
+$ git remote add rack_remote https://github.com/rack/rack
+$ git fetch rack_remote --no-tags
+    ...
+$ git checkout -b rack_branch rack_remote/master
+$ git checkout master
+$ git read-tree --prefix=rack/ -u rack_branch
+```
+if the Rack project updates, we can pull in upstream changes by
+switching to that branch and pulling:
+```shell
+$ git ckecout rack_branch
+$ git pull
+```
+
+If you want to merge those changes back into our `master` branch. To
+pull in the changes and prepopulate the commit message, use the
+`--squash` option, as well as the recursive merge strategy's `-Xsubtree`
+option
+```shell
+$ git checkout master
+$ git merge --squash -s recursive -Xsubree=rack rack_branch
+Squash commit --not updating HEAD
+Automatic merge went well; stopped before committing as requested
+```
+
+If you have submodules structure, you cannot run normal `diff`. Instead
+you must run `git diff-tree` with the branch you want to compare:
+```shell
+$ git diff-tree -p rack_branch
+```
+or
+```shell
+$ git diff-tree -p rack_remote/master
+```
+
+
+
+<!-- }}} -->
+
+<!-- }}} -->
+### Rerere <!-- {{{ -->
+<!-- TODO: stopped hererere -->
+<!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
