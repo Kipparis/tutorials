@@ -2438,7 +2438,168 @@ $ git diff-tree -p rack_remote/master
 
 <!-- }}} -->
 ### Rerere <!-- {{{ -->
-<!-- TODO: stopped hererere -->
+The name stands for "reuse recorded resolution" and, as the name
+implies, it allows you to ask Git to remember how you've resolved a hunk
+conflict so that next time it sees the same conflict, Git can resolve it
+for you automatically.  
+
+To enable `rerere` functionaliry:
+```shell
+$ git config --global rerere.enabled true
+```
+
+Use `git rerere status` to see what it has recorded the pre-merge state:
+```shell
+$ git rerere status
+```
+
+`git rerere diff` will show current state of the resolution
+
+After you resolved conflict, it will be stored in `rerere cache`. And
+each time Git sees same conflict, it will automatically resolve it.  
+To inspect  conflicted file state use:
+```shell
+$ git checkout --conflict=merge hello.rb
+$ cat hello.rb
+    ....
+```
+
+
+<!-- }}} -->
+<!-- }}} -->
+## Debugging with Git <!-- {{{ -->
+### File Annotation <!-- {{{ -->
+If you need to see which commit and commiter is responsible for specific
+changes in file, use `git blame`:
+```shell
+$ git blame -L 69,82 Makefile
+```
+
+`-C` option analyzes the file and lists all code movement.  
+
+<!-- }}} -->
+### Binary Search <!-- {{{ -->
+Annotating a file helps if you know hwere the issue is to begin with.If
+you don't, you'll likely turn to `git bisect` for help.  
+
+Start `bisect` with:
+```shell
+$ git bisect start
+```
+Set end point and start point for binary search:
+```shell
+$ git bisect bad
+$ git bisect good v1.0
+```
+
+Then for every commit type either `$ git bisect good` or `$ git bisect
+bad`. After Git founds bad commit you will be given detailed information
+about it.  
+
+To reset HEAD type:
+```shell
+$ git bisect reset
+```
+
+If you have testing script that returns 0 if project is good and
+non-zero if project is broken, if could automate `git bisect`:
+```shell
+$ git bisect start HEAD v1.0
+$ git bisect run test-error.sh
+```
+
+<!-- }}} -->
+<!-- }}} -->
+## Submodules <!-- {{{ -->
+Submodules allow you to keep a Git repository as a subdirectory of
+another Git repository. This lets you clone another repository and keep
+your commits separate.
+
+### Starting with Submodules <!-- {{{ -->
+To add new submodule you use the `git submodule add` command. You can
+add different path at the end of the command if you want it to go
+elsewhere.  
+
+New file created is `.gitmodules`. This is a configuration file that
+stores the mapping between the project's URL and hte local subdirectory:
+```txt
+[submodule "DbConnector"]
+    path = DbConnector
+    url = https://github.com/chaconinc/DbConnector
+```
+It's better to use public url in that file. To set private url locally
+use `config submodule.DbConnector.url`.  
+
+Git sees submodules simply as commit from specified git repository.  
+
+The `160000` mode means you're recording a commit as a directory entry
+rather than a subdirectory or a file.  
+
+<!-- }}} -->
+### Cloning a Project with Submodules <!-- {{{ -->
+You get all of the directories but they're empty. You must run commands:
+`git submodule init` to initialize your local configuration file, and
+`git submodule update` to fetch all the data from that project and check
+out the appropriate commit listed in your superproject.  
+
+Do all in one step:
+```shell
+$ git clone --recurse-submodules https://github.com/chaconinc/MainProject
+```
+
+If you forgot `--recurse-submodules` option, you may run `git submodule
+update --init`. to initialize, fetch and checkout any nested submodules,
+you can use `git submodule update --init --recursive`  
+
+<!-- }}} -->
+### Working on a Project with Submodules <!-- {{{ -->
+#### Pulling in Upstream Changes from the Submodule Remote <!-- {{{ -->
+You can update Submodule by simple `cd` into that directory and running
+usual Git commands. Afterwards you may go into main project and run `git
+diff --submodule` to see commits that were added. If you don't want to
+type `--submodule` every time, you can set it as the default format by
+setting the `diff.submodule` config value to "log":
+```shell
+$ git config --global diff.submodule log
+$ git diff
+    ...
+```
+
+Other ways to automatically update:  
+
++ `git submodule update --remote` - updates all of the submodules  
++ `git submodule update --remote DbConnector`  
++ `git config -f .gitmodules submodule.DbConnector.branch stable` set
+  branch for updates. `-f .gitmodules` shares this option.  
+
+`status.submodulesummary` configuration variable tells Git to show you a
+short summary of changes to your submodules:
+```shell
+$ git config status.submodulesummary 1
+$ git status
+    ...
+```
+
+Submodules with Git log: `git log -p --submodule`  
+
+
+<!-- }}} -->
+#### Pulling Upstream Changes from the Project Remote <!-- {{{ -->
+Run:  
+
++ `git pull` fetches submodules but does not update  
++ `git submodule update --init --recursive` updates  
+
+If you want to automate this process, you can add `--recurse-submodules`
+flag to the `git pull`command (will run `submodule update` right after `pull`).
+Moreover, if you want Git always pull such way, you can set the
+configuration option `submodule.recurse` to true.  
+
+If submodules' url changed you must pass `git submodule sync` command  
+<!-- }}} -->
+#### Working on a Submodule <!-- {{{ -->
+<!-- TODO: stopped here -->
+<!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
