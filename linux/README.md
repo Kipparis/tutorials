@@ -1952,7 +1952,240 @@ __BASH_ENV__, __SHELL__, or **PATH**
 + turning off restricted mode with **set +r**  
 <!-- }}} -->
 ### A System Break-In Scenario <!-- {{{ -->
-<!-- TODO: stopped here -->
+_suid_ allows change effective user ID equal to the owner of the file,
+which is usually **root**. To set a file's _suid_ bit, the superuser can
+type `chmod 4755 filename` the **4** is the _suid_ bit.  
+<!-- }}} -->
+### Privileged Mode <!-- {{{ -->
+To set this mode type `set -o privileged` or `set -p`. In privileged
+mode, when as _suid bash_ shell script is invoked, the shell does not
+run the user's environment file. On exit shell automatically changes its
+effective user ID to be the same as the real user ID.  
 <!-- }}} -->
 <!-- }}} -->
+<!-- }}} -->
+# Shell Scripting <!-- {{{ -->
+This chapter will give a briedf introduction to some aspects of good
+practice and writing maintainable shell scripts along with helpful tips
+and tricks that you can use to make writing scripts easier.  
+
+## What's That Do ? <!-- {{{ -->
+That's common question from current programmer to the same programmer
+but 1 year ago.  
+
+### Comments <!-- {{{ -->
+Always comment your code and add header: filename, purpose, usage,
+author, date.  
+
+Function should have header as well: what it does, what parameters it
+expects, and what it returns.  
+
+Comments within the flow of the code are generally better on a line by
+themselves, while variable declaration comments are better on the same
+line as the variable.  
+<!-- }}} -->
+### Variables and Constants <!-- {{{ -->
+Another way of commenting is use of descriptive variable names.  
+
+Constants should be in uppercase and should normally be declared as
+read-only:
+```bash
+declare -r CAPITAL_OF_ENGLAND="London"
+```
+
+Avoid using "magin numbers":
+```bash
+if [[ $process_result == 68 ]]
+    ...
+```
+should be replace with
+```bash
+declare -ir STAGE_3_FAILURE=68
+...
+if [[ $process_result == $STAGE_3_FAILURE ]]
+    ...
+```
+
+<!-- }}} -->
+
+
+<!-- }}} -->
+## Starting Up <!-- {{{ -->
+Free Software Foundat ion ahs published a set of guidelines for writing
+GNU software that suggests standard ways in which UNIX utilities should
+operate.  
+
+At a minimum your script should provide single letter options (such as
+_-h_) and long options with the double dash (such as _--help_). It
+should also provide:  
+
++ _--help_  
+    brief documentation on standard output, then exit successfully.
+    Other options and arguments should be ignored once this is seen, and
+    the program should not perform its normal function. Near the end of
+    the output there should be a line that says where to mail bug
+    reports. It should have this forms: `Report bugs to mailing-address`
++ _--version_  
+    print its name, version,
+    origin, and legal status, all on standard output, and then exit
+    successfully, other options should be ignored.
+
+For commands accepting several input and only one output, it's good
+practive to only make input filenames as normal arguments, and have
+option for an output (i.e., _command -o filename_).  
+<!-- }}} -->
+## Potential Problems <!-- {{{ -->
+
++ Don't create massive scripts or functions that try to do everything.  
++ Always place the shell execution directive (e.g. _#!/bin/bash_)  
++ Don't use reserved words for variable names.  
++ Be careful with whitespace.  
++ Don't use the same names for variables and functions  
++ Be careful when using the test operator `[...]`.  
+<!-- }}} -->
+## Don't Use `bash` <!-- {{{ -->
+None a languages is good of every task.  
+
++ huge amount of processing or it's required mathematical capabilities:
+  **c** or **c++**  
++ portability across systems: **python** or **perl**  
++ even if _bash_ is not suitable, it can serve for mocking up your
+  solution and trying out various options.  
+<!-- }}} -->
+<!-- }}} -->
+# `bash` for Your System <!-- {{{ -->
+How to get the latest version of _bash_ and install it on your system.
+Potential problems you might encounter along the way.  
+
+## Obtaining `bash` <!-- {{{ -->
+The _bash_ home page is located at
+`http://www.gnu.org/software/bash/bash.html`  
+
+You can also get _bash_ on CD-ROM by ordering it directly from the Free
+Software Foundation, either via the web ordering page at
+`http://order.fsf.org` or from:
+```txt
+Tre Free Software Foundation (FSF)
+59 Temple Place - Suite 330
+Boston, MA 02111-1307 USA
+Phone: +1-617-542-5942
+Fax: +1-617-542-2652
+Email: order@fsf.org
+```
+
+<!-- }}} -->
+## Unpacking the Archive <!-- {{{ -->
+
++ `gunzip bash-3.0.tar.gz`  
++ `tar -xf bash-3.0.tar` it means "extract the archived material from
+  the specified file"  
+
+Archive contains all of the source code needed to compile _bash_ and a
+large aomount of documentation and examples. We'll look at these things
+and how you go about makeing a _bash_ executable in the rest of this
+chapter.  
+
+<!-- }}} -->
+## What's in the Archive <!-- {{{ -->
+
++ MANIFEST - a list of all the files and directories in the archive  
++ COPYING - GNU Copyleft for bash  
++ NEWS - a list of bug fixes and new features since the last version  
++ README - a short introduction and instructions for compiling bash  
++ doc - information related to bash in various formats  
++ examples - examples of startup files, scripts, and functions  
+
+doc<!-- {{{ -->
+===
+You can read manpage by processing it with _nroff_ and piping the output
+to a pager: `nroff -man bash.1 | less`
+
++ _FAQ_ - Frequently Asked Questions  
++ _readline.3_ - manual entry for the _readline_ facility  
++ _article.ms_ - article about the shell that appeared in _Linux Journal_, by the current _bash_ maintainer, Chet Ramey.  
+<!-- }}} -->
+### Configuring and Building `bash` <!-- {{{ -->
+You just type **configure** and the **make**.  
+
++ _configure_ attermpts to work out if you have various utilities nad C
+  library functions, and whereabouts they reside on your system.
+    * Stores relevant information in the _config.h_.  
+    * Creates _config.status_ that is a script you can run to recreate
+  the current configuration information.
+    * sets the location that _bash_ will be installed; (default is the
+  _/usr/local_ area). To specify different path use `--exec-prefix=`
+  option.  
+    * you may toggle features with `--enable-`_feature_ and
+  `--disable-`_feature_  
++ _make_ to built  
+
+Now you may check that bash works properly.  
+
+To install _bash_, type `make install`. This will create all of the
+necessary directories (_bin_, _info_, _man_ and its subdirectories) and
+copy the files to them.  
+
+If you've installed _bash_ locally, be sure add youw own _bin_ path to
+your **PATH** and your own _man_ path to **MANPATH**  
+
+Many other shell features can be turned on or off by modifying the file
+_config-.top.h_  
+
+To clean up the source directory and remove all of the object files and
+executables, type **make clean**.  
+<!-- }}} -->
+### Testing `bash` <!-- {{{ -->
+To run them type **make tests**.  
+<!-- }}} -->
+### Potential Problems <!-- {{{ -->
+If _bash_ didn't compile, the first thing to do is check that _configure_ guessed your machine and operating system correctly.  
+
+Then check files:  
+
++ NOTES - contains some information on specific UNIX systems  
++ INSTALL - for additional information on how to give _configure_ specific
+  compilation instructions.  
+<!-- }}} -->
+### Installing `bash` as a Login Shell <!-- {{{ -->
+Individual users can use the _chsh_ (change shell) utility after they
+log in to  their acocunts. _chsh_ asks for their password and displays a
+list of shells to choose from. Once a shell is chose, _chsh_ changes the
+appropriate entry in _/etc/passwd_. For security reasons, _chsh_ will
+only allow you to change to a shell if it exists in the file
+_/etc/shells_ (if _/etc/shells_ doesn't exist, _chsh_ asks for hte
+pathname of the shell)  
+
+Another way is manually edit _/etc/passwd_ file.  
+
+If you don't have root access and _chsh_ doesn't work you can do
+following. The trick is to replace your current shell with _bash_ by
+using **exec** from within one of the startup files.  
+```bash
+[ -f /pathname/bash ] && exec /pathname/bash --login
+```
+IMPORTANT: you will also have to create an empty file called
+*.bash_profile*. The existence of this file prevents _bash_ from reading
+your _.profile_ and re-executing the **exe`.  `**
+
+<!-- }}} -->
+examples<!-- {{{ -->
+========
+
++ _startup-files_ - examples of waht you can put in your own startup
+  files.  
+    + *bash_aliases*  
++ _functions_ - function definitions that you might find useful.  
++ _scripts_  
+    * adventure game interpreter  
+    * C shell interpreter  
+    * examples of precedence rules  
+    * scrilling text display  
+    * "spinning wheel" progress display  
+    * how to prompt the user for a particular type of answer  
+<!-- }}} -->
+
+<!-- }}} -->
+<!-- }}} -->
+# Who Do I Turn to? <!-- {{{ -->
+Documentation, Internet ofc.
 <!-- }}} -->
