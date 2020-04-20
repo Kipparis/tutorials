@@ -1899,5 +1899,145 @@ algorithms as members.
 <!-- }}} -->
 <!-- }}} -->
 # Associative Containers <!-- {{{ -->
+Associative containers support efficient lookup and retrieval by a key.
+The two primary associative-conatiner types are `map` and `set`.  
 
+The elements in a `map` are key-value pairs: the key serves as an index
+into the `map`, and the value represents the data associated with that
+index.  
+
+A `set` element contains only a key; a `set` supports efficient queries
+as to whether a given key is present.  
+
+The library provides eight associative containers. Each differing along
+three dimensions:  
+
++ `set` or `map`.  
++ unique keys required or not.  
+    * allowed multiple keys has prefix `multi`  
++ stores the elements in order or not.  
+    * order is not stored - `unordered`  
+
+Example: unordered_multi_set, multimap, unordered_map  
+
+## Using an Associative Container <!-- {{{ -->
+Like the sequential containers, the associative containers are
+templates.  
+### Using a `map` <!-- {{{ -->
+If key is not already in the map, the subscript operator creates a new
+element with that key.  
+When we fetch an element from a `map` we get an object of type `pair` -
+template type that holds two (public) data elements called `first` (key)
+and `second` (value).
+<!-- }}} -->
+### Using a `set` <!-- {{{ -->
+Check that element not exists in set:
+```cpp
+if (set_name.find(element) == set_name.end())
+```
+
+<!-- }}} -->
+<!-- }}} -->
+## Overview of the Associative Containers <!-- {{{ -->
+Differences from sequential containers:  
+
++ do not support position-specific operations (`push_front`, `back`)  
++ do not support the constructors or insert operations that take an
+  element value and a count  
++ provide operations and type aliases that sequential containers do not  
++ provide operations for tuning their hash performance  
+
+### Defining an Associative Container <!-- {{{ -->
+Initialization:  
+
++ default constructor &rarr; creates empty container  
++ copy of another container of the same type  
++ from a ranger of values  
+
+```cpp
+map<string, size_t> words_count;    // empty
+// list initialization
+set<string> exclude = {"the", "but", "and", "or"};
+// three elements; authors maps last name to firsts
+map<string, string> authors = { {"Joyce", "James"},
+            {"Austen", "Jane"}, {"Dickens", "Jane"}};
+```
+
+<!-- }}} -->
+### Initializing a `multimap` or `multiset` <!-- {{{ -->
+```cpp
+// define a vector holding two copies of each number from 0 to 9
+vector<int> ivec;
+for (vector<int>::size_type i=0; i != 10; ++i) {
+    ivec.push_back(i);
+    ivec.push_back(i);  // duplicate copies of each number
+}
+// iset holds unique elements from ivec
+// miset holds all 20 elements
+set<int> iset(ivec.cbegin(), ivec.cend());
+multiset<int> miset(ivec.cbegin(), ivec.cend());
+cout << ivec.size() << endl;    // prints 20
+cout << iset.size() << endl;    // prints 10
+cout << miset.size() << endl;   // prints 20
+```
+
+<!-- }}} -->
+### Requirements on Key Type <!-- {{{ -->
+Ordered containers require keys to define `<` operator.  
+
+#### Key Types for Ordered Containers <!-- {{{ -->
+We can provide our own operation to use in place of the `<` operator.
+The specified operation must define a **strict weak ordering** (less
+than) over the key type:  
+
++ two keys cannot both be "less than" each other;  
++ if _k1_ < _k2_ and _k2_ < _k3_, then _k1_ must be < _k3_  
++ if there're two keys, and neither key is "less than" the other, then
+  we'll say that those keys are "equivalent".  
+
+When used as a key to a `map`, there will be only one element associated
+with those keys, and either key can be used to access the corresponding
+value.  
+<!-- }}} -->
+#### Usign a Comparison Function for the Key Type <!-- {{{ -->
+To specify our own operation, we must supply the type of that operation
+when we define the type of an associative container.  
+
+```cpp
+bool comareIsbn(const Sales_data &lhs, const Sales_data &rhs) {
+    return lhs.isbn() < rhs.isbn();
+}
+
+// we could have written &compareIsbn with the same effect
+multiset<Sales_data, decltype(compareIsbn)*> bookstore(compareIsbn);
+```
+
+<!-- }}} -->
+<!-- }}} -->
+### The `pair` Type <!-- {{{ -->
+
+`pair` is a template from which we generate specific types. We must
+summpy two type names when we create a `pair`.
+```cpp
+pair<string, string> anon;
+pair<string, size_t> word_count;
+```
+
+The default `pair` constructor value initializes the data members. But
+we can also provide initializers for each member:
+```cpp
+pair<string, string> author{"James", "Joyce"};
+```
+
+Data members of `pair` are `public`. First element called `first`
+and `second` respectively.  
+
+**Operations on **`pair`**s:**  
+
++ `pair<T1, T2> p;` - _p_ value initialized  
+<!-- TODO: stopped here -->
+
+
+<!-- }}} -->
+<!-- }}} -->
 <!-- }}} -->
