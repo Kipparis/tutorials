@@ -2035,9 +2035,168 @@ and `second` respectively.
 **Operations on **`pair`**s:**  
 
 + `pair<T1, T2> p;` - _p_ value initialized  
++ `pair<T1, T2> p(v1,v2)` - first and second elmeents are initialized
+  from _v1_ and _v2_  
++ `pair<T1, T2> p = {v1, v2}` - equivalent to `p(v1, v2)`  
++ `make_pair(v1, v2)` - returns a pair initialized from _v1_, _v2_  
++ `p.first` - returns the first element  
++ `p.second` - returns the second element  
++ `p1 relop p2` - relational operators (<,>,<=,>=). Comparing goes in
+  lexicographic order  
++ `p1 == p2`, `p1 != p2` - two pairs are equal if their first and second
+  members are respectively equal.  
+
+Since c++11 we can list initialize return value of type `pair`:
+```cpp
+pair<string, int> process(vector<string> &v) {
+    // process v
+    if (!v.empty())
+        return {v.back(), v.back().size()}; // list initialize
+    else
+        return pair<string, int>(); // explicitly constructed return value
+}
+```
+
+
+
+<!-- }}} -->
+<!-- }}} -->
+## Operations on Associative Containers <!-- {{{ -->
+In addition to the already listed types (like size type or iterator type),
+associative containers define:  
+
++ `key_type` - type of the key for this container type  
++ `mapped_type` - type associated with each key; **map types only**  
++ `value_type` - for sets, same as the key type;
+  for maps, `pair<const key_type, mapped_type>`  
+
+### Associative Container Iterators <!-- {{{ -->
+When we dereference an iterator, we get a reference to a value of the
+container's `value_type`.
+
+Iterators for `set`s Are `const`
+================================
+ALthough the `set` types define both the `iterator` and `const_iterator`
+types, both types five us read-only access to the elements in the set.  
+<!-- }}} -->
+### Associative Containers and Algorithms <!-- {{{ -->
+Just don't use algorithms if associative container already has this
+feature (like `find`). Because Generic algorithms actually slower than
+native container's algorithm.  
+<!-- }}} -->
+### Adding Elements <!-- {{{ -->
+`insert` members add one element or a range of elements. Because `map`
+or `set` contain unique keys, inserting an element that is already
+present has no effect.  
+
+Associative Container `insert` Operations:  
+
++ `c.insert(v)`, `c.emplace(args)` - _v_ - *value_type* object; _args_ are used to
+  construct an element. Returns a `pair` containing an iterator
+  referring to the element with the given key and a `bool` indicating
+  whether the element was inserted.  
+  For `multi-` returns an iterator to the new element  
++ `c.insert(b,e)` - _b_, _e_ - iterators that denote a range of values  
++ `c.insert(il)` - _il_ is braced list of such values.  
++ `c.insert(p,v)`, `c.emplace(p,args)` - like `insert(v)` but uses
+  iterator _p_ as a hint for where to begin the search for where
+  the new element should be stored. Returns an iterator to the
+  elment with the given key.  
+
+#### Adding Elements to a `map` <!-- {{{ -->
+```cpp
+// four ways to add word to word_count
+word_count.insert({word, 1});
+word_count.insert(make_pair(word, 1));
+word_count.insert(pair<string, size_t>(word, 1));
+word_count.insert(map<string, size_t>::value_type(word, 1));
+```
+
+<!-- }}} -->
+#### Adding Elements to `multiset` or `multimap` <!-- {{{ -->
+Assume we want to map authors to titles of the books they have written.
+In this case, there might be multiple entries for each author, so we'd
+use a `multimap` rather than `map`
+<!-- }}} -->
+<!-- }}} -->
+### Erasing Elements <!-- {{{ -->
++ `c.erase(k)` - remove every element with key _k_ from _c_. Returns
+  `size_type` indicating the number of elements removed  
++ `c.erase(p)` - removes element denoted by the iterator _p_ from _c_.
+  Returns an iterator to the element after _p_ or _c.end()_  
++ `c.erase(b,e)` - removes the elements in the range denoted by the
+  iterator pair _b_, _e_. Returns _e_.  
+<!-- }}} -->
+### Subscripting a `map` <!-- {{{ -->
++ `map` and `unordered_map` provide the subscript operator and a
+  corresponding `at` function.  
+    - `c[k]` - returns the element with key _k_; if _k_ is not in _c_,
+  adds a new, value-initialized element with key _k_.  
+    - `c.at(k)` - checked access to the element with key _k_; throws an
+  `out_of_range` exception if _k_ is not in _c_  
++ `set` types do not support subscripting  
++ `multimap` or `unordered_multimap` do not support, because there may
+  be more than one value associated with a given key.  
+<!-- }}} -->
+### Accessing Elements <!-- {{{ -->
+Operations to Find Elements in an Associative Container:  
+
++ `c.find(k)` - returns an iterator to the first element with key _k_,
+  or the off-the-end iterator if _k_ is not in the container.  
++ `c.count(k)` - returns the number of elements with key _k_.  
++ `c.lower_bound(k)` - returns an iterator to the first element with key
+  not less than _k_ (>= k). Used to generate iterator range for
+  searching key. off-the-end if key is not presented  
++ `c.upper_bound(k)` - returns an iterator to the first element with key
+  greater than _k_ (> k). Used to generate iterator range for searching
+  key.  
++ `c.equal_range(k)` - returns a `pair` of iterators denoting the
+  elements with key _k_. If _k_ is not present, both members are
+  _c.end()_  
+
+#### Finding Elements in a `multimap` or `multiset` <!-- {{{ -->
+When a `multimap` or `multiset` has multiple lements of a given key,
+those lements will be adjacen within the container.  
+To output all search entries:
+```cpp
+string search_item("Alain de Botton");  // author we'll look for
+auto entries = authors.count(search_item);  // number of elements
+auto iter = authors.find(serach_item);  // first entry for this author
+// loop through the number of entries there are for this author
+while (entries) {
+    cout << iter->second << endl;   // print each title
+    ++iter; // advance to the next title
+    --entries;  // keep track of how many we've printed
+}
+```
+
+<!-- }}} -->
+#### A Different, Iterator-Oriented Solution <!-- {{{ -->
+Using `c.lower_bound(k)` or `c.upper_bound(k)` we can rewrite above
+example as follows:
+```cpp
+// definitions of authors and search_item as above
+// beg and end denote the range of elements for this author
+for (auto beg=authors.lower_bound(search_item),
+            end=authors.upper_bound(search_item);
+    beg != end; ++beg)
+    cout << beg->second << endl;    // print each title
+```
+
+<!-- }}} -->
+#### The `equal_range` Function <!-- {{{ -->
+```cpp
+// definitions of authors and search_item as above
+// pos holds iterators that denote the range of elements for this key
+for (auto pos = authors.equal_range(search_item);
+    pos.first != pos.second; ++pos.first)
+    cout << pos.first->second << endl;  // print each title
+```
+
+<!-- }}} -->
+<!-- }}} -->
+### A Word Transformation Map <!-- {{{ -->
 <!-- TODO: stopped here -->
-
-
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
