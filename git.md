@@ -2598,8 +2598,225 @@ configuration option `submodule.recurse` to true.
 If submodules' url changed you must pass `git submodule sync` command  
 <!-- }}} -->
 #### Working on a Submodule <!-- {{{ -->
+If you want changes in submodule to be tracked:  
+
++ go into each submodule and check out a branch to work on  
+```shell
+$ cd DbConector/
+$ git checkout stable
+    ...
+```
++ tell Git what to do if you have made chagnes  
+    - after changes use `git submodule update --remote --rebase`  
+    - if you forget it, just check out your branch again and merge or
+  rebase manually
++ `git submodule update --remote`  
+    - `--merge` can be usefull  
+<!-- }}} -->
+<!-- }}} -->
+### Submodule Tips <!-- {{{ -->
+#### Submodule Foreach <!-- {{{ -->
+There's a `foreach` submodule command to run some arbitrary command in
+each submodule.  
+
+For example, let's say we want to start a new feature and we have work
+going on in several submodules. We can easily stash all the work in all
+our submodules:  
+```shell
+$ git submodule foreach 'git stash'
+```
+
+<!-- }}} -->
+#### Useful Aliases <!-- {{{ -->
+Usefull aliases for working with submodules:  
+
+```shell
+$ git config alias.sdiff '!'"git diff && git submodule foreach 'git diff'"
+$ git config alias.spush 'push --recurse-submodules=on-demand'
+$ git config alias.supdate 'submodule update --remote --merge'
+```
+
+<!-- }}} -->
+<!-- }}} -->
+### Issues with Submodules <!-- {{{ -->
+#### Switching branches <!-- {{{ -->
+If you init submodule in one branch and switch branches it could be
+confusing that submodule still exists.  
+
+Newer Git versions (Git >= 2.13) simplify all this by adding the
+`--recurse-submodules` flag to the `git checkout` command.  
+
+In older versions you have to run `git clean -ffdx` in branch without
+sumbodule and `git submodule update --init` in branch containing
+submodule  
+
+Commits in submodules will be appeared as modified after each checkout
+(because submodule state is by default not carried over when switching
+branches). For older version you have to run `git submodule update
+--init --recursive` every time to put the submodules in the right state.  
+
+For newer versions (Git >= 2.14) to always use the `--recurse-submodules`
+flag set configuration option `git config submodule.recurse true`  
+<!-- }}} -->
+#### Switching from subdirectories to submodules <!-- {{{ -->
+First you have to remove directory from index, then you may run `git
+submodule add <url>`  
+
+If you checkout to branch that has that directory as well, git will give
+you an error. You can force swith by `checkout -f`, but be carefull -
+unsaved changes will bel ost.  
+
+Then, if you switch bach, you get an empty directory and `git submodule
+update` won't fix it. You may need to go into your submodule directory
+and run a `git checkout .` to get all your files back (`submodule
+foreach` can be helpfull)  
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+## Bundling <!-- {{{ -->
+The `git bundle` command will package up everything that would normally
+be pushed over the wire with a `git push` command into a binary file
+that you can email to someone or put on a flash drive, then unbundle
+into another repository.  
+
+```shell
+$ git bundle create repo.bundle HEAD master
+```
+now you have a file named `repo.bundle` that has all the data needed to
+re-create the repository's `master` branch. With the `bundle` command
+you need to list out every reference or specific range of commits that
+you want to be included. If you intend for this to be cloned somewhere
+else, you should add HEAD as a reference as well as we've done here.  
+
+On the other side:
+```shell
+$ git clone repo.bundle repo
+Cloning into 'repo'...
+...
+$ cd repo
+$ git log --oneline
+```
+
+If you odn't include HEAD in the references, you have to also specify
+`-b master` or whatever branch is included because otherwise it won't
+know what branch to check out.  
+
+Now let's say you do three commits on it and want to send the new
+commits back via a bundle on a USB stick or email. First we need to
+determine the range of commits we want to include in the bundle. To get
+the three commits we can use something like:
+```shell
+$ git log --oneline master ^origin/master
+```
+Now we run `git bundle create` command, giving it a filename we want our
+bundle to be and the range of commits we want to go into it
+```shell
+# last commit is origin/master commit
+$ git bundle create commits.bundle master ^9a466c5
+```
+
+On the other side. `bundle verify` command will make sure the file is
+actually a valid Git bundle and that you have all the necessary
+ancestors to reconstitute it properly.
+```shell
+$ git bundle verify ../commits.bundle
+```
+If you want to see what branches are in the bundle that can be imported,
+there is also a command to just list the heads:
+```shell
+$ git bundle list-heads ../commits.bundle
+```
+To actually pull or fetch you can use `fetch` or `pull` commands. Here
+we'll fetch the `master` branch of the bundle to a branch named
+`other-master`:
+```shell
+$ git fetch ../commits.bundle master:other-master
+```
+
+<!-- }}} -->
+## Replace <!-- {{{ -->
+The `replace` command lets you specify an object in Git and say "every
+type you refer to _this_ object, pretend it's a _different_ object".  
+
+Let's try split repository into two repositoryes: one recent and one
+historical.  
+
+We'll use a simple repository with five simple commits:
+```shell
+$ git log --oneline
+ef989d8 fifth commit
+c6e1e95 fourth commit
+9c68fdc third commit
+945704c second commit
+c1822cf first commit
+```
+we want to break this up into two lines of history: one line goes from
+commit one to commit four - historical one, second line will just be
+commits four and five - that will be the recent history.
+
+Creating history is easy:
+```shell
+# create branch
+$ git branch history c6e1e95
+# add remote containing history
+$ git remote add project-history <url>
+# push our history branch to theirs master
+$ git push project-history history:master
+```
+
+To create smaller history we actually need the base, then rebase fourth
+and fifth commits on top of it. Our base commit will be based on third
+commit. To do that using `commit-tree` command, which just takes a tree
+and will give us a brand new, parentless commit object SHA-1 back.
+```shell
+$ echo 'base commit message' | git commit-tree 9c68fdc^{tree}
+622e88e9cdfbacfb85b5290245b8fb38dfea10cf
+```
+Ok, so now we have a base commit, we can rebase the rest of our history
+on top of that with `git rebase --onto`. The `--onto` argument will be
+the SHA-1 we just got back from `commit-tree` and rebase point will be
+the third commits (the parent of the first commit we want to keep):
+```shell
+$ git rebase --onto 622e88 9c68fdc
+First,rewinding head to replay your work on top of it...
+Applying: fourth commit
+Applying: fifth commit
+```
+Now we have re-written our recent history on top of a throw away base
+commit that now has instructions in it on how to reconstitute the entire
+history if we wanted to. From now we can push that new history to a new
+project and now when people clone that repository, they will only see
+the most recent two commits and then a base commit with instructions.  
+
+On the other side. If we want entire history, one would have to add a
+second remote for the historical repository and fetch:
+```shell
+$ git clone https://github.com/schacon/project
+$ cd project
+
+$ git log --oneline master
+<truncated history>
+$ git log --online project-history/master
+<full history>
+```
+
+To combine them, you can simply call `git replace` with the commit you
+want to replace and then the commit you want to replace it with. So we
+want to replace the "fourth" commit in the `master` branch with the
+"fourth" commit in the `project-history/master` branch:
+```shell
+$ git replace 81a708d c6e1e95
+```
+
+But remember, replaced commit SHA-1 will be still shown in log. Even
+if `cat-file` will hsow you the replaced data. And it will be kept in
+our references  
+
+
+
+
+<!-- }}} -->
+## Credential Storage <!-- {{{ -->
 <!-- TODO: stopped here -->
-<!-- }}} -->
-<!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
