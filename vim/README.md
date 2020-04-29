@@ -185,6 +185,305 @@ care of such cases.
 <!-- }}} -->
 <!-- }}} -->
 # More Mappings <!-- {{{ -->
+You can find out which mapings did you overwrote by reading `:help <key>`  
+<!-- }}} -->
+# Training Your Fingers <!-- {{{ -->
+## Learning the Map <!-- {{{ -->
+The trick to relearning a mapping is to _force_ yourself to use it by
+_disabling_ the old key(s). Run the following command:
+```vim
+:inoremap <esc> <nop>
+```
+This effectively disables the escape key in insert mode by telling Vim
+to perform `<nop>` (no operation) instead. Now you _have_ to use
+your `jk` mapping to exit insert mode.  
 
+<!-- }}} -->
+<!-- }}} -->
+# Buffer-Local Options and Mappings <!-- {{{ -->
+## Mappings <!-- {{{ -->
+Consider following mappings:
+```vim
+:nnoremap          <leader>d dd
+:nnoremap <buffer> <leader>x dd
+```
+First will set mapping globally (for all opened files and buffers),
+while second only to the current opened buffer.  
+
+<!-- }}} -->
+## Settings <!-- {{{ -->
+Some options always apply to all of Vim, but others can be set on a
+per-buffer basis:
+```vim
+:setlocal wrap
+:setlocal number
+```
+
++ `:help local-options` for how this work  
++ `:help setlocal`  
+    - `:setlocal all` displays all local values  
+    - `:setlocal` displays local values which are different from the
+      default  
+    - when used global value - "--" is desplayed before the option name.  
++ `:help map-local`  
+    - `:unmap <buffer> ,w` - unmaps only locally  
+
+<!-- }}} -->
+## Shadowing <!-- {{{ -->
+Consider following mappings:
+```vim
+:nnoremap <buffer> Q x
+:nnoremap          Q dd
+```
+Vim will execute first mapping, because it's _more specific_ than the
+second.  
+
+<!-- }}} -->
+<!-- }}} -->
+# Autocommands <!-- {{{ -->
+Autocommands are a way to tell Vim to run certain commands whenever
+certain events happen.  
+
+By default Vim doesn't actually _create_ the file until you save it for
+the first time. To change this behaviour run this:
+```vim
+:autocmd BufNewFile * :write
+```
+
+## Autocommand Structure <!-- {{{ -->
+```vim
+:autocmd BufNewFile * :write
+         ^          ^ ^
+         |          | |
+         |          | The command to run.
+         |          |
+         |          A "pattern" to filter the event.
+         |
+         The "event" to watch for.
+```
+
+Some of the events:  
+
++ Starting to edit a file that doesn't already exist.  
++ Reading a file, whether it exists or not.  
++ Switching a buffer's `filetype` setting.  
++ Not presing a key on your keyboard for a certain amount of time.  
++ Entering insert mode.  
++ Exiting insert mode.  
+
+`:help autocmd-events` to see a list of all the events you can bind
+autocommands to.  
+
+
+<!-- }}} -->
+## Another Example <!-- {{{ -->
+```vim
+:autocmd BufWritePre *.html :normal gg=G
+```
+Re-indent whole file before saving.  
+
+<!-- }}} -->
+## Multiple Events <!-- {{{ -->
+```vim
+:autocmd BufWritePre,BufRead *.html :normal gg=G
+```
+This is almost like our last command, except it will also reindent the
+code whenever we _read_ and HTML file as well as when we write it.  
+
+A common idiom in Vim scripting is to pair the `BufRead` and `BufNewFile`
+events together to run a command whenever you open a certain kind of file,
+regardless of whether it happend to exist already or not.  
+```vim
+:autocmd BufNewFile,BufRead *.html setlocal nowrap
+```
+
+<!-- }}} -->
+## FileType Events <!-- {{{ -->
+One of the most useful events is the `FileType` event. this event is
+fired whenever Vim sets a buffer's `filetype`.  
+
+Mappings to comment current line:
+```vim
+:autocmd FileType javascript nnoremap <buffer> <localleader>c I// <esc>
+:autocmd FileType python     nnoremap <buffer> <localleader>c I# <esc>
+```
+
+<!-- }}} -->
+<!-- }}} -->
+# Buffer-Local Abbreviations <!-- {{{ -->
+You should understand easily how this words:
+```vim
+:iabbrev <buffer> --- &mdash;
+```
+
+## Autocommands and Abbreviations <!-- {{{ -->
+```vim
+:autocmd FileType python :iabbrev <buffer> iff if:<left>
+:autocmd FileType javascript :iabbrev <buffer> iff if ()<left>
+```
+
+Remember: the best way to learn to use these new snippets is to _disable_
+the old way of doing things. Running `:iabbrev <buffer> return
+NOPENOPENOPE` will _force_ you to use your abbreviation instead. Add
+these "training" snippets to match all theo nes you created to save
+time.  
+
+<!-- }}} -->
+<!-- }}} -->
+# Autocommand Groups <!-- {{{ -->
+## The Problem <!-- {{{ -->
+Sourcing your `vimrc` file rereads the entire file, including any
+autocommands you've defined! This means that every time you source your
+`vimrc` you''be duplicating autocommands, which will make Vim run slower
+because it executes the same commands over and over.  
+<!-- }}} -->
+## Grouping Autocommands <!-- {{{ -->
+Vim has a solution to the problem. The first step is to group related
+autocommands into names groups:
+```vim
+:augroup testgroup
+:   autocmd BufWrite * :echom "Foo"
+:   autocmd BufWrite * :echom "Bar"
+:augroup END
+```
+The indentation in the middle two lines is insignificant.  
+Every time Vim reads same group, it will combine readed with previous one.  
+
+`:help autocmd-groups`  
+<!-- }}} -->
+## Clearing Groups <!-- {{{ -->
+If you want to _clear_ a group you can use `autocmd!` inside the group:
+```vim
+:augroup testgroup
+:   autocmd!
+:   autocmd BufWrite * :echom "Cats"
+:augroup END
+```
+
+<!-- }}} -->
+<!-- }}} -->
+# Operator-Pending Mappings <!-- {{{ -->
+An operator is a command that waits you to enter a movement command, and
+then does something on the text between where you currently are and
+where the movement would take you.  
+
+## Movement Mappings <!-- {{{ -->
+Vim letse you create new movements that work with all existing commands:
+```vim
+:onoremap p i(
+```
+
+When you're trying to think about how to define a new operator-pending
+movement, you can think of it like this:  
+
+1. Start at the cursor position  
+2. Enter visual mode (charwise)  
+3. ... mapping keys go here ...
+4. All the text you want to include in the movement should now be
+   selected.  
+
+`:help omap-info`  
+
+<!-- }}} -->
+## Changing the Start <!-- {{{ -->
+If our movements always have to start at the current cursor position it
+limits what we can do. Of course there's a way around this problem:
+```vim
+:onoremap in( :<c-u>normal! f(vi(<cr>
+```
+This is equivalent to "inside next parantheses". Let's make a companion
+"inside last parentheses":
+```vim
+:onoremap il( :<c-u>normal! F)vi(<cr>
+```
+
+<!-- }}} -->
+## General Rules <!-- {{{ -->
+
++ If your operator-pending mapping ends with some t ext visually
+  selected, Vim will operate on that text.  
++ Otherwise, Vim will operate on the text between the original cursor
+  position and the new position.  
+<!-- }}} -->
+<!-- }}} -->
+# More Operator-Pending Mappings <!-- {{{ -->
+Assume following text in markdown:
+```markdown
+Topic One
+=========
+
+This is some text about topic one.
+
+It has multiple paragraphs.
+
+Topic Two
+=========
+
+This is some text about topic two. It has only one paragraph.
+```
+
+Lets create some mappings that let us target headings with movements.
+Run the following command:
+```vim
+:onoremap ih :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rkvg_"<cr>
+```
+That is operator-pending mapping for acting on current section's heading.
+
+## Normal <!-- {{{ -->
+The `:normal` command takes a set of characters and performs whatever
+action they would do if they were typed in normal mode.  
+<!-- }}} -->
+## Execute <!-- {{{ -->
+The `execute` command takes a Vimscript string and performs it as a
+command. For example this:
+```vim
+:execute "write"
+```
+will write your file, just as if you had typed `:write<cr>`. But why
+bother with this when we could just run the `normal!` command itself?
+Look at the following command:
+```vim
+:normal! gg/a<cr>
+```
+The problem is that `normal!` doesn't recognize "special characters"
+like `<cr>`. When `execute` looks at the string you tell it to run, it
+will substitute any special characters it finds _before_ running it.  
+
+If we perform this replacement in our mapping and look at the result we
+can see that the mapping is going to perform:
+```vim
+:normal! ?^==\+$<cr>:nohlsearch<cr>kvg_
+```
+
+So now `normal!` will execute these characters as if we had typed them
+in normal mode.
+
+The final piece is a sequence of three normal mode commands:  
+
++ `k`: move up a line. Since we were on the first character of the line
+  of equal signs, we're now on the first character of the heading text.  
++ `v`: enter (characterwise) visual mode  
++ `g_`: move to the last non-blank character of the current line. We use
+  this instead of `$` because `$` would highlight the newline character
+  as well, and this isn't what we want.  
+
+<!-- }}} -->
+## Results <!-- {{{ -->
+Let's look at one more mapping:
+```vim
+:onoremap ah :<c-u>execute "normal! ?^==\\+\r:nohlsearch\rg_vk0"
+```
+this will execute operation on whole header (including equal signs)  
+
++ `:help pattern-overview` - regex help  
++ `:help normal`  
++ `:help execute`  
++ `:help expr-quote` to see the escape sequences you can use in strings  
+
+<!-- }}} -->
+
+<!-- }}} -->
+# Status Lines <!-- {{{ -->
+<!-- TODO: stopped here -->
 <!-- }}} -->
 
