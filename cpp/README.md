@@ -2196,6 +2196,274 @@ for (auto pos = authors.equal_range(search_item);
 <!-- }}} -->
 <!-- }}} -->
 ### A Word Transformation Map <!-- {{{ -->
+
+```cpp
+map<string, string> buildMap(ifstream &map_file) {
+    map<string, string> trans_map;  // holds the transformations
+    string key;     // a word to transform
+    string value;   // phrase to use instead
+    // read the first word into key and the rest of the line into value
+    while (map_file >> key && getline(map_file, value))
+        if (value.size() > 1)   // check that there is a transformation
+            trans_map[key] = value.substr(1);   // skip leading space
+        else
+            throw runtime_error("no rule for " + key);
+    return trans_map;
+}
+```
+
+
+<!-- }}} -->
+<!-- }}} -->
+## The Unordered Containers <!-- {{{ -->
+### Using the Unordered Containers <!-- {{{ -->
+
+They are provide same operations (`find`, `insert`, and so on) as the
+ordered containers.  
+
+Elements are stored in buckets in unordered containers. Latest provide a
+set of functions, that let us manage the buckets:  
+
+**Bucket Interface**  
+
++ `c.bucket_count()` - number of buckets in use.  
++ `c.max_bucket_count()` - largest number of buckets this container can
+  hold.  
++ `c.bucket_size(n)` - number of elements in the nth bucket.  
++ `c.bucket(k)` - bucket in which elements with key _k_ would be found.  
+
+**Bucket Iteration**  
+
++ `local_iterator` - iterator type that can access elements in a bucket  
++ `const_local_iterator` - `const` version of the bucket iterator  
++ `c.begin(n)`, `c.end(n)` - iterator to the first, one past the last
+  element in bucket _n_.  
++ `c.cbegin(n)`, `c.cend(n)` - returns `const_local_iterator`.  
+
+**Hash Policy**  
+
++ `c.load_factor()` - average number of elements per bucket. Returns
+  `float`  
++ `c.max_load_factor()` - average bucket size that _c_ tries to
+  maintain. _c_ adds buckets to keep *load_factor <= max_load_factor*.
+  Returns `float`  
++ `c.rehash(n)` - reorganize storage so that *bucket_count >= n* and
+  *bucket_count > size/max_load_factor*.  
++ `c.reserve(n)` - reorganize so that _c_ can hold _n_ elements without
+  _rehash_.  
+
+<!-- }}} -->
+### Requirements on Key Type for Unordered Containers <!-- {{{ -->
+By default unordered containers use `==` operator and `hash<key_type>`.
+The library supplies versions of the `hash` template for the built-in
+types, including pointers, strings, smart pointers.  
+
+However, we cannot directly define an unordered container that uses a
+our own class types for its key type. We must supply our own version of
+the `hash` template.
+
+To use `Sales_data` as the key, we'll need to supply functions to
+replace both the `==` operator and to calculate a hash code:
+```cpp
+size_t hasher(const Sales_data &sd) {
+    return hash<string>()(sd.isbn());
+}
+bool eqOp(const Sales_data &lhs, const Sales_data &rhs) {
+    return lhs.isbn() == rhs.isbn();
+}
+```
+
+Now we can use these functions to define an `unordered_multiset` as
+follows:
+```cpp
+using SD_multiset = unordered_multiset<Sales_data,
+                    decltype(hasher)*, decltype(eqOp)*>;
+// arguments are the bucket size and pointers to the hash function and equality operator
+SD_multiset bookstore(42, hasher, eqOp);
+```
+
+If our class has its own `==` operator we can override just the hash
+function:
+```cpp
+// use FooHash to generate the hash code; Foo must have an == operator
+unordered_set<Foo, decltype(FooHash)*> fooSet(10, FooHash);
+```
+
+
+
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+# Dynamic Memory <!-- {{{ -->
+
++ `static` objects are allocated before they are used, and they are
+  destroyed when the program ends  
++ `stack` objects exist only while the block in which they are defined
+  is executing  
+
+In addition to static or stack memory, every program also has a pool of
+memory that it can use. This memory is referred to as the **free store**
+or `heap`. Programs use the heap for objects that they dynamically
+allocate. The program controls the lifetype of dynamic objects; our code
+must explicitly destroy such objects when they are no longer needed.  
+
+## Dynamic Memory and Smart Pointers <!-- {{{ -->
+Dynamic memory is managed through a pair of operators:  
+
++ `new` - allocates and optionally initializes an object in dynamic
+  memory and returns pointer to that object;  
++ `delete` - which takes a pointer to a dynamic object destroys that
+  object and frees the associated memory.  
+
+To make using dynamic memory easier (and safer), the new library
+provides two smart pointer types:  
+
++ `shared_ptr` - allows multiple pointers to refer to the same object.  
++ `unique_ptr` - which "owns" the object to which it points.  
++ `weak_ptr` - weak reference t o an object managed by a `share_ptr`.  
+
+### The `shared_ptr` Class <!-- {{{ -->
+Smart pointers are templates. Therefore, when we create one, we must
+supply additional information - type to which the pointer can point.
+```cpp
+shared_ptr<string> p1;      // shared_ptr that can point to a string
+shared_ptr<list<int>> p2;   // shared_ptr that can point to a list of ints
+```
+A default initialized smart pointer holds a null pointer.  
+
+Dereferencing a smart pointer returns the object to which the pointer
+points. When we use a smart pointer in a condition, the effect is to
+test whether the pointer is null:
+```cpp
+// if p1 is not null, check whether it's the empty string
+if (p1 && p1->empty())
+    *p1 = "hi"; // if so, dereference p1 to assign a new value to that string
+```
+
+**Operations Common to** `shared_ptr` **and** `unique_ptr`:  
+
++ `shared_ptr<T> sp`, `unique_ptr<T> up`- null smart pointer that can
+  point to objects of type `T`.  
++ `p` - use _p_ as a condition; _true_ if _p_ points to an object.  
++ `*p` - dereference _p_ to get the object to which _p_ points.  
++ `p->mem` - synonym for `(*p).mem`  
++ `p.get()` - returns the pointer in _p_. Use with caution; the object
+  to which the returned pointer points will disappear when the smart
+  pointer deletes it.  
++ `swap(p,q)`, `p.swap(q)` - swaps the pointers in _p_ and _q_.  
+
+**Operations Specific to** `shared_ptr`:  
+
++ `make_shared<T>(args)` - returns a `shared_ptr` pointing to a
+  dynamically allocated object of type `T`. Uses _args_ to initialize
+  that object.  
++ `share_ptr<T> p(q)` - _p_ is a copy of the `shared_ptr q`; increments
+  the count in _q_ the pointer in _q_ must be convertible to `T*`  
++ `p = q` - _p_ and _q_ are `shared_ptr`s holding pointers that can be
+  converted to one another. Decrements _p_'s reference count and
+  increments _q_'s count; deletes _p_'s existing memory if _p_'s count
+  goes to 0.  
++ `p.unique()` - returns _true_ if `p.use_count()` is one;  
++ `p.use_count()` - returns the number of objects sharing with _p_; may
+  be a slow operation, intended primarily for debugging purposes.  
+
+#### Copying and Assigning `shared_ptr`s <!-- {{{ -->
+Key point is that the class keeps track of how many `shared_ptr`s point
+to the same object and automatically frees that object when appropriate.  
+
+One way that `shared_ptr`s might stay around after you need them is if
+you put `shared_ptr`s in a container and subsequently reorder the
+container so that you don't need all the elements. You should be sure to
+`erase` `shared_ptr` elements once you no longer need those elements.  
+<!-- }}} -->
+#### Classes with Resources That Have Dynamic Lifetime <!-- {{{ -->
+
+1. They don't know how many objects they'll need  
+2. They don't know the precise type of the objects they need  
+3. They want to share data between several objects  
+
+So far, the classes we've use allocate resources that exist only as long
+as the corresponging objects. For example, each `vector` "owns" its own
+elements
+```cpp
+vector<string v1;   // empty vector
+{ // new scope
+    vector<string> v2 = {"a", "an", "the"};
+} // v2 is destroyed, which destroys the elements in v2
+  // v1 has three elements, which are copies of the ones originally in v2
+```
+
+Some classes allocate resources with a lifetime that is independent of
+the original object. AS an example, assume we want to define a class
+named _Blob_ that will hold a collection of elements. Unlike the
+containers, we want _Blob_ objects that are copies of one another to
+share the same elements. That is, when we copy a _Blob_, the original
+and the copy should refer to the same underlying elements.  
+In general, when two objects share the same underlying data, we can't
+unilaterally destroy the data when an objects of that type goes away:
+```cpp
+Blob<string> b1;    // empty Blob
+{ // new scope
+    Blob<string> b2 = {"a", "an", "the"};
+    b1 = b2;    // b1 and b2 share the same elements
+} // b2 is destroyed, but the elements in b2 must not be destroyed
+  // b1 points to the elements originally created in b2
+```
+
+
+<!-- }}} -->
+#### Defining the `StrBlob` Class <!-- {{{ -->
+We can't store the `vector` directly in a Blob object. To ensure that
+the elements continue to exist, we'll store the `vector` in synamic
+memory. To implement the sharing we want, we'll give each `StrBlob` a
+`shared_ptr` to a dynamicaly allocated `vector`.  
+
+We still need to decide what operations our class will provide.
+Operations that access elements will throw an exception if a user
+attempts to access an element that doesn't exist.  
+
+```cpp
+class StrBlob {
+public:
+    typedef std::vector<std::string>::size_type size_type;
+    StrBlob();
+    StrBlob(std::initializer_list<std::string> il);
+    size_type size() const { return data->size(); }
+    bool empty() const { return data->empty(); }
+    // add and remove elements
+    void push_back(const std::string &t) { data->push_back(t); }
+    void pop_back();
+    // element access
+    std::string& front();
+    std::string& back();
+private:
+    std::shared_ptr<std::vector<std::string>> data;
+    // throws msg if data[i] isn't valid
+    void check(size_type i, const std::string &msg) const;
+}
+```
+
+**Constructors**  
+```cpp
+StrBlob::StrBlob(): data(make_shared<vector<string>>()) { }
+StrBlob::StrBlob(initializer_list<string> il):
+            data(make_shared<vector<string>>(il)) { }
+```
+
+**Element Access Members**  
+```cpp
+void StrBlob::check(size_type i, const string &msg) const {
+    if (i >= data->size())
+        throw out_of_range(msg);
+}
+```
+
+
+
+<!-- }}} -->
+
+<!-- }}} -->
+### Managing Memory Directly <!-- {{{ -->
 <!-- TODO: stopped here -->
 <!-- }}} -->
 <!-- }}} -->
