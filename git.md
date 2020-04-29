@@ -2817,6 +2817,239 @@ our references
 
 <!-- }}} -->
 ## Credential Storage <!-- {{{ -->
+Instead of typing username and password everytime< Git has a few options
+provided in the box:  
+
++ The default is not to cache at all  
++ The "cache" mode keeps credentials in memory for a certain period of
+  time. None of the passwords are ever stored on disk, and they are
+  purged from the cache after 15 minutes.  
+    - accepts the `--timeout <seconds>` option - changes the amount of
+  time its daemon is kept running (default "900" or 15 min.)  
++ The "store" mode saves the credentials to a plain-text file on disk,
+  and they never expire. You will never have to enter you password.  
+    - accepts the `--file <path>` argument, which customizes where the
+  plain-text file is saved (default - _~/.git-credentials_)  
++ Mac and Windows has their own mechanism that help with this task.  
+
+To choose one of these methods:
+```shell
+$ git config --global credential.helper cache
+$ git config --global credential.helper 'store --file ~/.my-credentials'
+```
+
+Git can even choose possible solution. For example if you have a
+credentials file on a thumb drive, but wanted to use thein-memory cache
+to save some typing if the drive isn't plugged in:
+```txt
+[credential]
+    helper = store --file /mnt/thumbdrive/.git-credentials
+    helper = cache --timeout 30000
+```
+
+### Under the Hood <!-- {{{ -->
+Root command is `git credential`, you give it all available info and it
+prints what it's know about it. If it doesn't, it asks you to fill
+fields by yourself.  
+
+Then the credential system is actually invoking a program that's
+separate from Git itself; which one and how depends on the
+`credential.helper` configuration value. There are several forms it can
+take (**configuration value** - **behavior**):  
+
++ `foo` - runs `git-credential-foo`  
++ `foo -a --opt=bcd` - runs `git-credential-foo -a --opt=bcd`  
++ `/absolute/path/foo -xyz`- runs `/absolute/path/foo -xyz`  
++ `!f() { echo "password=s3cre7"; }; f` - code after `!` evaluated in
+  shell  
+
+So the helpers are actually named `git-credential-cache`,
+`git-credential-store`. They are take commands:  
+
++ `get` - is a request for a username/password pair  
++ `store` - is a request to save a set of credentials in this helper's
+  memory  
++ `erase` - purge the credentials for the given properties from this
+  helper's memory
+
+```shell
+$ git credential-store --file ~/git.store store
+protocol=https
+host=mygithost
+username=bob
+password=s3cre7
+$ git credential-store --file ~/git.store get
+protocol=https
+host=mygithost
+
+username=bob
+password=s3cre7
+```
+
+Here's what the `~/git.store` file looks
+```txt
+https://bob:s3cre7@mygithost
+```
+
+
+<!-- }}} -->
+### A Custom Credential Cache <!-- {{{ -->
+Covered helpers proveded by Git cover many common use cases, but not
+all. For example we need helper for team credentials that are shared
+with the entire team, and they're changed often.  
+
+There are sever key concepts:  
+
+1. The only action we need to pay attention to is `get`; `store` and
+   `erase` are write operations, so we'll just exit cleanly when they're
+   received.  
+2. The file format of the shared-credential file is the same as that
+   used by `git-credential-store`  
+3. The location of that file is fairly standard, but we should allow the
+   user to pass a custom path just in case.  
+<!-- }}} -->
+
+<!-- }}} -->
+<!-- }}} -->
+# Customizing Git <!-- {{{ -->
+
++ introduce several important configuration settings  
++ hooks system  
+
+## Git Configuration <!-- {{{ -->
+### Basic Client Configuration <!-- {{{ -->
+All git configuration options fall into two categories: cliend-side and
+server-side. You can list all available options:
+```shell
+$ man git-config
+```
+
+`core.editor`  
+By default, Git uses variables `VISUAL` or `EDITOR`, or else falls back
+to the `vi` editor.  
+```shell
+$ git config --global core.editor emacs
+```
+Now, no matter what is set as your default shell editor, Git will fire
+up Emacs to edit messages  
+
+`commit.template`  
+If you set this to the path of a file on your system, Git will use that
+file as the fdefault initial message when you commit. The purse of this
+file is to remind yourself (or others) of the proper format and style
+when creating a commit message.  
+For instance, consider a template file at `~/.gitmessage.txt` that looks
+like this:
+```txt
+Subject line (try to keep under 50 characters)
+
+Multi-line description of commit,
+feel free to be detailed.
+
+[Ticket: X]
+```
+
+`core.pager`  
+This setting determines which pages is used when Git pages output such
+as `log` and `diff`. You can turn it off by setting it to a blank
+string:
+```shell
+$ git config --global core.pager ''
+```
+
+`user.signingkey`
+If you're making signed annotated tags, setting your GPG signing key as
+a configuration setting makes things easier.
+```shell
+$ git config --global user.signingkey <gpg-key-id>
+```
+Now, you can sign tags without having to specify your key every time
+with the `git tag` command:
+```shell
+$ git tag -s <tag-name>
+```
+
+`core.excludesfile`  
+Global filename patterns to ignore. For example `.DS_Store`
+on Max, or `~` or `.swp`when developing in Emacs or in Vim.  
+If you Create `~/.gitignore_global` file with these contents:
+```txt
+*~
+.*.swp
+.DS_Store
+```
+and you run `git config --global core.excludesfile ~/.gitignore_global`,
+Git will never again bother you about those files  
+
+`help.autocorrect`  
+If you mistype a command, it shows you something like this:
+```shell
+$ git chekcout master
+git: 'chekcout' is not a git command. See 'git --help'.
+
+Did you mean this?
+    checkout
+```
+If you set `help.autocorrect` to 1 (it's actually tenths of a seconds
+for timeout before running corrected command), Git will
+actually run this command for you:
+```shell
+$ git chekcout master
+WARNING: You called a Git command named 'chekcout', which does not exist
+Continuing under the assumption thatyou meant 'checkout'
+in 0.1 seconds automatically...
+```
+
+
+
+<!-- }}} -->
+### Colors in Git <!-- {{{ -->
+A number of options can help you set the coloring you your preference:  
+
+```txt
+color.ui
+```
+To turn off all Git's colored terminal output, do this:
+```shell
+$ git config --global color.ui false
+```
+The default setting is `auto` - volotd output when it's going straight
+to a terminal, but omits the color-control codes when the output is
+redirected to a pipe or a file.  
+
+`always` setting will ignore the difference between terminals and pipes.
+You'll rarely want this; in most scenarios it's better to pass `--color`
+flag to the Git command to force it to use color codes.  
+
+```txt
+color.*
+```
+If you want to be more specific about which commands are colored and
+how, Git provides verb-specific coloring settings. Each of these can be
+set to `true`, `false`, or `always`:
+```txt
+color.branch
+color.diff
+color.interactive
+color.status
+```
+If addition, each of these has subsettings you can use to set specific
+colors for parts of the ouput. For example, to set the meta information
+in your diff output to blue foreground, black background, and bold text,
+you can run:
+```shell
+$ git config --global color.diff.meta "blue black bold"
+```
+
+Possible color values: `normal`, `black`, `red`, `green`, `yellow`,
+`blue`, `magenta`, `cyan`, or `white`. Decorate attribute can be set to:
+`bold`, `dim`, `ul` (underline), `blink`, and `reverse` (swap foreground
+and background).  
+
+<!-- }}} -->
+### External Merge and Diff Tools <!-- {{{ -->
 <!-- TODO: stopped here -->
+<!-- }}} -->
+
 <!-- }}} -->
 <!-- }}} -->
