@@ -3048,8 +3048,232 @@ and background).
 
 <!-- }}} -->
 ### External Merge and Diff Tools <!-- {{{ -->
-<!-- TODO: stopped here -->
-<!-- }}} -->
+We'll demonstrate setting up the Perforce Visual Merge Tool (P4Merge) to
+do your diffs and merge resolutions.  
 
+1. Download P4Merge  
+2. Set up external wrapper scripts to run your commands.  
+```shell
+$ cat /usr/local/bin/extMerge
+#!/bin/sh
+/Applications/p4merge.app/Contents/MacOS/p4merge $*
+```
+The diff wrapper checks to make sure seven arguments are provided and
+passes two of them (`old-file`, `new-file`) to your merge script. By default, Git passes the
+following arguments to the diff program:
+```shell
+path old-file old-hex old-mode new-file new-hex new-mode
+```
+Use the wrapper script to pass the ones you need:
+```shell
+$ cat /usr/local/bin/extDiff
+#!/bin/sh
+[ $# -eq 7 ] && /usr/local/bin/extMerge "$2" "$5"
+```
+Make sure these tools are executable.  
+
+Now you can set up your config file. This takes a number of custom
+settings:  
+
++ `merge.tool` to tell Git what strategy to use.  
++ `mergetool.<tool>.cmd` to specify how to run the command  
++ `mergetool.<tool>.trustExitCode` to tell Git if the exit code of that
+  program indicates a successful merge resolution or not  
++ `diff.external` to tell Git what command to run for diffs.  
+
+```shell
+$ git config --global merge.tool extMerge
+$ git config --global mergetool.extMerge.cmd \
+    'extMerge "$BASE" "$LOCAL" "$REMOTE" "$MERGED"'
+$ git config --global mergetool.extMerge.trustExitCode false
+$ git config --global diff.external extDiff
+```
+or edit your config file:
+```shell
+[merge]
+    tool = extMerge
+[mergetool]
+    cmd = extMerge "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
+    trustExitCode = false
+[diff]
+    external = extDiff
+```
+
+Now you can run `git diff` or `git mergetool` as usual. Git will open
+external tool instead of writing all in terminal.  
+
+<!-- }}} -->
+### Formatting and Whitespace <!-- {{{ -->
+`core.autocrlf`  
+If you're programming on Windows many editors will silently replace line
+endings from LF-style to CRLF or insert both.  
+Git can handle this by auto-converting CRLF line endings into LF when
+you add a file to the index.  
+
++ `git config --global core.autocrlf true`  
++ `git config --global core.autocrlf input` convert only on commit or
+checkout.  
++ `git config --global core.autocrlf false` if you're Windows only
+developer  
+
+`core.whitespace`  
+Git comes preset to detect and fix six primary whitespace issues:  
+
++ `blank-at-eol` - looks for spaces at the end of a line  
++ `blank-at-eof` - notices blank lines at the end of a file  
++ `space-before-tab` - which looks for spaces before tabs at the
+  beginning of line  
++ `indent-with-non-tab` - looks for lines that begin with spaces instead
+  of tabs. This is controlled by the `tabwidth` option  
++ `tab-indent` which watches for tabs in the indentation portion of a
+  line  
++ `cr-at-eol` - tells Git that carriage returns at the end of lines are
+  OK  
+
+You can tell Git which of these you want enabled by setting
+`core.whitespace` to the values you want on or off, separated by commas.
+You can disable anoption by prepending a `-` in front of its name, or
+use the default value by leaving it out of the setting string entirely.  
+```shell
+$ git config --global core.whitespace \
+    trailing-space,-space-before-tab,indent-with-non-tab,tab-in-indent,cr-at-eol
+```
+
+When you're applying patches, you can ask Git to warn you if it's
+applying patches with the specified whitespace issues:
+```shell
+$ git apply --whitespace=warn <patch>
+```
+or you can have Git try to automatically fix the issue before applying
+the patch:
+```shell
+$ git apply --whitespace=fix <patch>
+```
+
+These options apply to the `git rebase` command as well. If you've
+committed whitespace issues but haven't yet pushed upstream, you can run
+`git rebase --whitespace=fix` to have Git automatically fix whitespace
+issues as it's rewriting the patches.  
+
+<!-- }}} -->
+### Server Configuration <!-- {{{ -->
+`receive.fsckObjects`  
+If you want Git to check object consistency on every push, you can force
+it to do so by setting `receive.fsckObjects` to true:
+```shell
+$ git config --system receive.fsckObjects true
+```
+
+`receive.denyNonFastForwards`  
+If you rebase commits that you've already pushed and then try to push
+again, or otherwise try to push a commit to a remote branch that doesn't
+contain the commit that the remote branch currently points to, you'll be
+denied. You can do force-update the remote branch with a `-f` flag to
+your push command.  
+To tell Git to refuse force-pushes, set `receive.denyNonFastForwards`
+```shell
+$ git config --system receive.denyNonFastForwards true
+```
+
+`receive.denyDeletes`  
+One of the workarou nds to the `denyNonFastForwards` policy is for the
+user to delete the branch and then push it back up with the new
+reference.
+```shell
+$ git config --system receive.denyDeletes true
+```
+this denies any deletion of branches or tags - no user can do it. TO
+remove remote branches, you must remove the ref files from the server
+manually.  
+
+
+<!-- }}} -->
+<!-- }}} -->
+## Git Attributes <!-- {{{ -->
+
+Some of these settings can also be specified for a path, so that Git
+applies those settings only for a subdirectory or subset of files. These
+path-specific settings are called _Git attributes_ and are set either in
+a `.gitattributes` file in one of your directories (normally the root of
+your project) or in the `.git/info/attributes` file if you don't want
+the attributes file committed with your project.  
+
+Using attributes you're able to:  
+
++ specify separate merge strategies for individual files or directories  
++ tell Git how to diff non-text files  
++ have Git filter content before you check it into or out of Git.  
+
+### Binary Files <!-- {{{ -->
+#### Identifying Binary Files <!-- {{{ -->
+For example Xcode project on macOS contain a file that ends in `.pbxproj`,
+which is basically a JSON dataset. Although it's tenchnically a text file,
+you don't want to treat it as such because it's really a lightweight
+database - you can't merge the contents if two people change it. The
+file is meant to be consumed by a machine.  
+
+To tell Git to treat all `.pbxproj` files as binary data, add the
+following line to your `.gitattributes` file:
+```txt
+*.pbxproj binary
+```
+Now, Git won't try to convert or fix CRLF issues; nor will it try to
+compute or print a diff for changes in this file when you run `git show`
+or `git diff` on your project.  
+
+<!-- }}} -->
+#### Diffing Binary Files <!-- {{{ -->
+You do this by telling Git how to convert your binary data to a text
+format that can be compared via the normal diff.  
+
+Microsoft Word version control<!-- {{{ -->
+==============================
+First, you'll use this technique to solve version-controlling Microsoft
+Word documents. You can't directly compare two versions unless you check
+them out and scan them manually. Put the following line in your
+`.gitattributes` file:
+```txt
+*.docx diff=word
+```
+This tells Git that any file that matches this pattern should use the
+"word" filter when you try to view a diff that contains changes. You
+have to set word filter up. Here you'll configure Git to use the
+`docx2txt` program to convert Word documents into readable text files.  
+
+1. Install `docx2txt`  
+2. Write a wrapper script to convert output to thee format Git expects.
+   Create  a file `docx2txt` and add these contents:
+   ```bash
+   #!/bin/bash
+   docx2txt.pl "$1" -
+   ```
+   Don't forget to `chmod a+x`  
+3. Configure Git to use this script
+    ```shell
+    $ git config diff.word.textconv docx2txt
+    ```
+<!-- }}} -->
+Diffing image files<!-- {{{ -->
+===================
+One way to do this is to run image files through a filter that extracts
+their EXIF information - metadata that is recorded with most image
+formats.  
+
+1. download and install the `exiftool`  
+2. put the following line in your `.gitattributes` file:
+```txt
+*.png diff=exif
+```
+3. configure Git to use this tool:
+```shell
+$ git config diff.exif.textconv exiftool
+```
+
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+### Keyword Expansion <!-- {{{ -->
+
+<!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
