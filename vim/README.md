@@ -484,6 +484,385 @@ this will execute operation on whole header (including equal signs)
 
 <!-- }}} -->
 # Status Lines <!-- {{{ -->
-<!-- TODO: stopped here -->
+Vim allows you to customize the text in the status line at the bottom
+through the `statusline` option:
+```vim
+:set shtatusline=%f
+```
+you can use `+=` to build up the option one piece at a time:
+```vim
+:set statusline=%f
+:set statusline+=\ -\ 
+:set statusline+=FileType:\ 
+:set statusline+=%y
+```
+
+## Width and Padding <!-- {{{ -->
+You can change how the information is displayed:
+```vim
+set statusline=[%4l]
+```
+Now the line number in the status line will be preceded by enough spaces
+to make it at lest four characters wide. By default the padding spaces
+are added on the left side of the value:
+```vim
+:set statusline=Current:\ %4l\ Total:\ %4L
+```
+You can use `-` to place padding on the right instead of the left:
+```vim
+:set statusline=Current:\ %-4l\ Total:\ %-4L
+```
+You can tell Vim to pad with zeros instead of spaces:
+```vim
+:set statusline=%04l
+```
+You can also set a maximum width of a code's output:
+```vim
+:set statusline=%.20F
+```
+
+
+
+
+<!-- }}} -->
+## General Format <!-- {{{ -->
+```txt
+%-0{minwid}.{maxwid}{item}
+```
+Everything except the `%` and the item is optional.  
+
+`:help statusline`
+<!-- }}} -->
+## Splitting <!-- {{{ -->
+The `%=` code tells Vim that everything coming after that should be
+aligned (as a whole) to the right instead of the left:
+```vim
+:set statusline=%f
+:set statusline+=%=
+:set statusline+=%l
+:set statusline+=\ 
+:set statusline+=%L
+```
+
 <!-- }}} -->
 
+<!-- }}} -->
+# Responsible Coding <!-- {{{ -->
+## Commenting <!-- {{{ -->
+Be defensive when writing anything that takes more than a few lines of
+Vimscript. Add a comment explaining what it does, and if there is a
+relevant help topic, mention it in the comment!  
+<!-- }}} -->
+## Grouping <!-- {{{ -->
+Use folding and autgroups  
+
++ `:help foldlevelstart` Vim may fold everything automatically  
+<!-- }}} -->
+## Short Names <!-- {{{ -->
+Vim allows you to use abbreviated names for most commands and options.
+For example, both of these commands do exactly the same thing:
+```vim
+:setlocal wrap
+:setl wrap
+```
+Vimscript is terse and cryptic enough to begin with; shortening things
+further is only going to make it even harder to read.  
+Abbreviated forms are _great_ for running commands manually in the
+middle of coding.  
+<!-- }}} -->
+<!-- }}} -->
+# Variables <!-- {{{ -->
+You can create them by running:
+```vim
+:let foo = "bar"
+:echo foo
+```
+Vim will display `bar`. Now run these commands:
+```vim
+:let foo = 42
+:echo foo
+```
+
+## Options as Variables <!-- {{{ -->
+You can read and set options as variables by using an ampersand in front
+of a name:
+```vim
+:set textwidth=80
+:echo &textwidth
+```
+You can also set options as variables:
+```vim
+:let &textwidth = 100
+:set textwidth?
+```
+
+<!-- }}} -->
+## Local Options <!-- {{{ -->
+If you want to set the local value of an option as a varialbe, you need
+to prefix the variable name:
+```vim
+:let &l:number = 1
+```
+
+<!-- }}} -->
+## Registers as Variables <!-- {{{ -->
+You can also read and set registers as variables:
+```vim
+:let @a = "hello!"
+```
+Now put your cursor somewhere in your text and type `"ap`. This command
+tells vim to "paste the contents of register `a` here". We just set the
+contents of that register, so Vim pastes `hello!` into your text.  
+
+Registers can also be read. Run the following command:
+```vim
+:echo @a
+```
+
+Display content from an unnamed register (that is location is where text
+you yank without specifying a destination):
+```vim
+:echo @"
+```
+
+Search register (register containing text that you recently searched):
+```vim
+:echo @/
+```
+
++ `:help registers` to look over the list of registers you can read and
+  write  
+
+<!-- }}} -->
+<!-- }}} -->
+# Variable Scoping <!-- {{{ -->
+Consider following code:
+```vim
+:let b:hello = "world"
+:echo b:hello
+```
+In current buffer Vim displays `world`. But if you switch buffer,
+nothing happend. When you precede variable name with `b:` Vim make
+variale local to the current buffer.  
+
++ `:help internal-variables` - list of scopes  
+
+<!-- }}} -->
+# Conditionals <!-- {{{ -->
+## Multiple-Line Statements <!-- {{{ -->
+You can separate each line with a pipe character (`|`). As ion the
+following command:
+```vim
+:echom "foo" | echom "bar"
+```
+
+<!-- }}} -->
+## Basic `if` <!-- {{{ -->
+example syntax is:
+```vim
+:if condition
+:   statements
+:endif
+```
+
+Several informed conclusions about Vimscript:  
+
++ Vim will try to coerce variables (and literals) when necessary. When
+  `10 + "20foo"` is evauated Vim will convert "20foo" to an integer
+  (which result in 20) and then add it to 10  
++ String that start with a number are coerced to that number, otherwise
+  they're coerced to 0.  
++ Vim will execute the body of an `if` statement when its condition
+  evaluates to a non-zero integer, _after_ all coercion takes place.  
+
+<!-- }}} -->
+## Else and Elseif <!-- {{{ -->
+Example is the following commands:
+```vim
+:if 0
+:   echom "if"
+:elseif "nope!"
+:   echom "elseif"
+:else
+:   echom "finlly!"
+:endif
+```
+Vim echoes `finally!`.  
+<!-- }}} -->
+<!-- }}} -->
+# Comparisons <!-- {{{ -->
+## Case Sensitivity <!-- {{{ -->
+Consider following code:
+```vim
+:set ignorecase
+:if "foo" == "FOO"
+:   echom "no, it couldn't be"
+:elseif "foo" == "foo"
+:   echom "this must be the one"
+:endif
+```
+
+**The behavior of == depends on a user's settings**  
+
+<!-- }}} -->
+## Code Defensively <!-- {{{ -->
+
++ `==?` is the "case-insensitive no matter what the use has set"
+  comparison
++ `==#` is the "case-sensitive no matter what the use has set"
+  comparison
+
+You should _always_ use explicit case sensitive or insensitive
+comparisons.  
+
+Using `==#` and `==?` with integers will work just fine.  
+
++ `:help ignorecase` to see why someone might set that option  
++ `:help expr4` to see all available comparison operators  
+<!-- }}} -->
+<!-- }}} -->
+# Functions <!-- {{{ -->
+**Vimscript functions _must_ start with a capital letter if they are
+unscoped!** Even if you do add a scope to a function you may as well
+capitalize the first letter of function names anyway. Most Vimscript
+coders seem to do it.  
+
+Let's define a function:
+```vim
+:function Meow()
+:   echom "Meow!"
+:endfunction
+```
+Let's try running it:
+```vim
+:call Meow()
+```
+Vim will display `Meow!` as expected.  
+
+Let's try returning a value. Run the following commands:
+```vim
+:function GetMeow()
+:   return "Meow String!"
+:endfunction
+```
+Now try it out by running this command:
+```vim
+:echom GetMeow()
+```
+
+## Calling Functions <!-- {{{ -->
+You can directly call a function, like here:
+```vim
+:call Meow()
+:call GetMeow()
+```
+in second call return value is thrown away and nothing happend.  
+
+The second way to call functions is in expressions:
+```vim
+:echom GetMeow()
+```
+
+<!-- }}} -->
+## Implicit Returning <!-- {{{ -->
+If Vimscript function doesn't a value, it implicitly returns 0.  
+<!-- }}} -->
+
++ `:help :call` - how many arguments can you pass to a funciton  
++ `:help E124` - what character you're allowed to use in function names.  
++ `:help return` - look up for short form of return  
+
+<!-- }}} -->
+# Function Arguments <!-- {{{ -->
+Run the following commands:
+```vim
+:function DisplayName(name)
+:   echom "Hello! My name is:"
+:   echom a:name
+:endfunction
+```
+Run the function:
+```vim
+:call DisplayName("Your Name")
+```
+
+When you write a Vimscript function that takes arguments you _always_
+need to prefix those arguments with `a:` when you use them to tell Vim
+that they're in the argument scope.  
+
+## Varargs <!-- {{{ -->
+Vimscript functions can optionally take variable-length argument lists.  
+
+```vim
+:function Varg(foo, ...)
+:   echom a:foo
+:   echom a:0
+:   echom a:1
+:   echo a:000
+:endfunction
+```
+
++ `...` indicates that function can take variable-length argument list  
++ `a:<name>` is filled with appropriate variable argument  
++ `a:<index>` is filled with the rest of the variables  
++ `a:0` contains number of extra arguments  
++ `a:000` list containing all extra arguments that were passed (it's
+  list, so we cannot display it with `echom`)  
+
+<!-- }}} -->
+## Assignment <!-- {{{ -->
+Consider following commands:
+```vim
+:function Assign(foo)
+:   let a:foo = "Nope"
+:   echom a:foo
+:endfunction
+```
+```vim
+:call Assign("test")
+```
+Vim will throw an error, because you can't reassign argument variables.  
+
+<!-- }}} -->
+
++ `:help function-argument`  
+    - you can't change the function arguments. If the function argument
+  is list, you can change it's content (python lol). To prevent
+  this behavior use `:lockvar`  
++ `:help local-variables`  
+
+<!-- }}} -->
+# Numbers <!-- {{{ -->
+Vimscript has two types of numeric variables: Numbers and Floats.  
+
+## Number Formats <!-- {{{ -->
+
++ specify hex notation by prefixing with `0x` or `0X`  
++ specify ocal notation by prefixing with `0`
+<!-- }}} -->
+## Float Formats <!-- {{{ -->
+
++ `:echo 100.1`  
++ `:echo 5.45e+3` - sign in front of power of ten is optional (by
+  default it's positive)  
++ `:echo 15.45e-2`  
+<!-- }}} -->
+## Coercion <!-- {{{ -->
+When you combine a Number and a Float through arithmetic, comparison, or
+any other operation Vim will cast the Number to a Float, resulting in a
+Float.  
+<!-- }}} -->
+## Division <!-- {{{ -->
+When dividing Numbers, the remainder is dropped.  
+
+If you want Vim to perform floating point division one of thenumbers
+needs to be a Float  
+<!-- }}} -->
+
++ `:help Float` when might floating point number not work in Vimscript  
++ `:help floating-point-precision` what you need to remember about
+  floating point numbers when write Vim plugin  
+<!-- }}} -->
+# Strings <!-- {{{ -->
+<!-- TODO: stopped here -->
+<!-- }}} -->
