@@ -3273,7 +3273,271 @@ $ git config diff.exif.textconv exiftool
 <!-- }}} -->
 <!-- }}} -->
 ### Keyword Expansion <!-- {{{ -->
+You can inject the SHA-1 checksum of a blob into an `$Id$` field in the
+file automaticall. Put the following line in your `.gitattributes` file:
+```txt
+*.txt ident
+```
+Add an `$Id$` reference to a test file:
+```shell
+$ echo '$Id$' > test.txt
+```
+The next time you check out this file, Git injects the SHA-1 of the
+blob:
+```shell
+$ rm test.txt
+$ git checkout -- test.txt
+$ cat test.txt
+$Id: 42812b7653c7b8893.... $
+```
+
+You can write youw own filters for doing substitutions in files on
+commit/checkout. These are called "clean" and "smudge" filters. In
+the `.gitattributes` file, you can set a filter for particular
+paths and then set up scripts that will process files just before
+they're checked out ("smudge") and just before they're
+staged ("clean")  
+
+You can set it up by setting the filter attribute in your
+`.gitattributes` file to filter `*.c` files with the "indent" filter:
+```txt
+*.c filter=indent
+```
+Then, tell Git what the "indent" filter does on smudge and clean:
+```shell
+$ git config --global filter.indent.clean indent
+$ git config --global filter.indent.smudge cat
+```
+The `cat` program does essentially nothing.  
+
+ANother interesting example gets `$Date$` keyword expansion. Here is a
+small Ruby script:
+```ruby
+#!/usr/bin/env ruby
+data = STDIN.read
+last_data = `git log --pretty=format:"%ad" -1`
+puts data.gsub('$Date$', '$Date: ' + last_date.to_s + '$')
+```
+You can name this file `expand_date` and put it in your path. Now you
+need to set up a filter in Git (call it `dater`) and tell it to use your
+`expand_date` filter to smudge the files on checkout. You'll use a Perl
+expression to clean that up on commit:
+```shell
+$ git config filter.dater.smudge expand_date
+$ git config filter.dater.clean 'perl -pe "s/\\\$Date[^\\\$]*\\\$Date\\\$/"'
+```
+`.gitattributes` file:
+```txt
+date*.txt filter=dater
+```
+In shell:
+```shell
+$ echo '# $Date$' > date_test.txt
+```
+
+
+
+
 
 <!-- }}} -->
+### Exporting Your Repository <!-- {{{ -->
+
+`export-ignore`  
+You can tell Git not to export certain files or directories when
+generating an archive (but you do want them to be checked into your
+project)  
+For example, say you have some test files in a `test/` subdirectory, and
+it doesn't make sense to include them in the tarball export of your
+project. You can add the following line to your Git attributes file:
+```txt
+test/ export-ignore
+```
+Now, when you run `git archive` to create a tarball of your project,
+that directory won't be included in the archive.  
+
+`export-subst`  
+When exporting files for deployment you can apply `git log`'s formatting
+and keyword-expansion processing to selected portions of files marked
+with the `export-subst` attribute.  
+For instance you want to have a such file named `LAST_COMMIT` containing
+metadata about last commit. Write in `.gitattributes`:
+```txt
+LAST_COMMIT export-subst
+```
+Then:
+```shell
+$ echo 'Last commit data: $Format:%cd by %aN$' > LAST_COMMIT
+$ git add LAST_COMMIT .gitattributes
+$ git commit -am 'adding LAST_COMMIT file for archives'
+```
+When you run `git archive`, the ocntents of the archived file will look
+like this:
+```shell
+$ git archive HEAD | tar xCf ../deployment-testing -
+$ cat ../deployment-testing/LAST_COMMIT
+Last commit data: Tue Apr 21 08:38:48 2009 -0700 by Scott Chacon
+```
+The substitution can include for example the commit message and any `git
+notes`, and `git log` can do simple word wrapping.  
+
+
+
+
+<!-- }}} -->
+### Merge Strategies <!-- {{{ -->
+You can also use Git attributes to tell Git to use different merge
+stategies for specific files in your project. One very useful option is
+to tell Git to not try to merge specific files when they have conflicts,
+but rather to use your side of the merge over someone else's  
+
+```
+database.xml merge=ours
+```
+Then define a dummy `ours` merge strategy with:
+```shell
+$ git config --global merge.ours.driver true
+```
+If you merge in the other branch, instead of having merge conflicts with
+the `database.xml` file, you see something like this:
+```shell
+$ git merge topic
+Auto-merging database.xml
+Merge made by recursive.
+```
+In this case, `database.xml` stays at whatever version you originally
+had.  
+
+
+<!-- }}} -->
+<!-- }}} -->
+## Git Hooks <!-- {{{ -->
+Git has a way to fire off custom scripts when certain important action
+occur. There are two groups of these hooks:  
+
++ _client-side_ are triggered by operations such as committing and
+  merging  
++ _server-side_ are triggered by operations such as receiving pushed
+  commits.  
+
+### Installing a Hook <!-- {{{ -->
+The hooks are all stored in the `hooksj subdirectory of the Git
+directory` (for most projects that is `.git/hooks`).  
+To enable a hook script, ut a file in the `.git/hooks` subdirectory that
+is named appropriately (without any extension) and is executable.  
+<!-- }}} -->
+### Client-Side Hooks <!-- {{{ -->
+Client-side hooks are **not** copied when you clone a repository. If
+your intent with these scripts is to enforce a policy, you'll probably
+want to do that on the server side. (or create symlink to folder in
+project in my opinion)  
+
+#### Committing-Workflow Hooks <!-- {{{ -->
+`pre-commit` hook activated before you even type in a commit message.  
+
++ you've forgotten something  
++ run tests  
++ examine whatever you need to inspect in the code.  
++ check for code style  
++ check for trailing whitespace  
++ check for appropriate documentation on new methods  
+
+Exiting non-zero from this hook aborts the commit, although you can
+bypass it with `git commit --no-verify`.  
+
+`prepare-commit-msg` hook is run before the commit message editor is
+fired up but after the default message is created. It lets you edit the
+default message before the commit author sees it. This hook takes a few
+parameters:  
+
+1. Path to the file that holds the commit message so far  
+2. The type of commit  
+3. Commit SHA-1 if this is an amended commit  
+
+
+`commit-msg` hook take one parameter, which again is the path to a
+temporary file that contains the commit message written by the
+developer. If this script exits non-zero, Git aborts the commit process.  
+
+After the entire commit process is completed, the `post-commit` hook
+runs. It doesn't take any parameters. Generally, this script is used for
+notification of something similar.  
+<!-- }}} -->
+#### Email Workflow Hooks <!-- {{{ -->
+They're all invoked by the `git am` command. If you're taking patches
+over email prepared by `git format-patch`, then some of these may be
+helpful to you.  
+
+`applypatch-msg`. It takes a single artument: the name of the temporary
+file that contains the proposed commit message. Git aborts the patch if
+this script exits non-zero.  
+
+`pre-applypatch`. It is run _after_ the patch is applied but before a
+commit is made, so you can use it to inspect the snapshot before making
+the commit. Application area is similar to the `pre-commit`'s one.
+Exiting non-zero aborts the `git am` script without committing the
+patch.  
+
+`post-applypatch`. It is run after the commit is made. You can use it to
+notify someone.  
+<!-- }}} -->
+#### Other Client Hooks <!-- {{{ -->
+`pre-rebase` hook runs before you rebase anything and can halt the
+process by exiting non-zero. You can use this hook to disallow rebasing
+any commits that have already been pushed.  
+
+`post-rewrite` hook is run by commands that replace commits, such as
+`git commit --amend` and `git rebase` (though not by `git filter-branch`). Its single argument is which command triggered the rewrite, and it receives a list of rewrites on stdin.  
+
+`post-checkout` runs after a successful `git checkout`. You can use it
+to set up your working directory properly for your project environment.
+This may mean moving in large binary files that you don't want source
+controlled, auto-generating documentation, or something along those
+lines.  
+
+`post-merge` hook runs after a successful `merge` command. You can use
+it to restore data in the working tree that Git can't track, such as
+permissions data.  
+
+`pre-push` hook runs during `git push`, after the remote refs have been
+updated but before any objects have been transferred. It receives the
+name and location of the remote as parameters, and a list of
+to-be-updated refs through `stdin`. You can use it to validate a set of
+ref updates before a push occurs (a non-zero exit code will abort a
+push)  
+
+Git occasionally does garbage collection as part of its normal
+operation, by invoking `git gc --auto`. The `pre-auto-gc` hook is
+invoked jsut before the garbage collection takes place, and can be used
+to notify you that this is happening, or to abort the collection if now
+isn't a good time.  
+<!-- }}} -->
+#### Server-Side Hooks <!-- {{{ -->
+The pre hooks can exit non-zero at any time to reject the push as well
+as print an error message back to the client.  
+
+`pre-receive`. The first script to run when handling a push from a
+client. It takes a list of references that are being pushed from stdin.
+You can use this hook to do things like make sure none of the updated
+references are non-fast-forwards, or to do access control for all the
+refs and files they're modifying with the push.  
+
+`update`. Similar to the `pre-receive` script, except that it's run once
+for each branch the pusher is trying to update. Takes three arguments:  
+
+1. The name of the reference (branch)  
+2. The SHA-1 that reference pointed to before the push  
+3. The SHA-1 the user is trying to push.  
+
+
+`post-receive` hook runs after the entire process is completed and can
+be used to update other service or notify users. It takes the same stdin
+data as the `pre-receive` hook. This script can't stop the push process,
+but the client doesn't disconnect until it has completed, so be careful
+if you try to do anything that may take a long time.  
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+## An Example Git-Enforce Policy <!-- {{{ -->
+<!-- TODO: stopped here -->
 <!-- }}} -->
 <!-- }}} -->
