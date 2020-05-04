@@ -2320,7 +2320,7 @@ provides two smart pointer types:
 
 + `shared_ptr` - allows multiple pointers to refer to the same object.  
 + `unique_ptr` - which "owns" the object to which it points.  
-+ `weak_ptr` - weak reference t o an object managed by a `share_ptr`.  
++ `weak_ptr` - weak reference to an object managed by a `share_ptr`.  
 
 ### The `shared_ptr` Class <!-- {{{ -->
 Smart pointers are templates. Therefore, when we create one, we must
@@ -2357,7 +2357,7 @@ if (p1 && p1->empty())
 + `make_shared<T>(args)` - returns a `shared_ptr` pointing to a
   dynamically allocated object of type `T`. Uses _args_ to initialize
   that object.  
-+ `share_ptr<T> p(q)` - _p_ is a copy of the `shared_ptr q`; increments
++ `shared_ptr<T> p(q)` - _p_ is a copy of the `shared_ptr q`; increments
   the count in _q_ the pointer in _q_ must be convertible to `T*`  
 + `p = q` - _p_ and _q_ are `shared_ptr`s holding pointers that can be
   converted to one another. Decrements _p_'s reference count and
@@ -2464,6 +2464,307 @@ void StrBlob::check(size_type i, const string &msg) const {
 
 <!-- }}} -->
 ### Managing Memory Directly <!-- {{{ -->
+
++ `new` operator allocates memory  
++ `delete` frees memory allocated by `new`  
+
+#### Using `new` to Dynamically Allocate and Initialize Objects <!-- {{{ -->
+`new` returns a pointer to the object it allocates:
+```cpp
+int *pi = new int;  // pi points to a dynamically allocated,
+                    // unnamed, default initialized int
+```
+This new expression constructs an object of type `int` on the free store
+and returns a pointer to that object.  
+
+we can initialize a dynamically allocated object using direct
+initialization:
+```cpp
+int *pi = new int(1024);
+string *ps = new string(10, '9');
+vector<int> *pv = new vector<int>{0,1,2,3,4,5,6,7,8,9};
+```
+
+We can also value initialize a dynamically allocated object by following
+the type name with a pair of empty parentheses:
+```cpp
+string *ps1 = new string;   // default initialized to the empty string
+string *ps = new string();  // value initialized to the empty string
+int *pi1 = new int;         // default initialized; *pi1 is undefined
+int *pi2 = new int();       // value initialized to 0; *pi2 is 0
+```
+
+If you want to use auto:
+```cpp
+auto p1 = new auto(obj);    // p points to an object of the type of obj
+                            // that object is initalized from obj
+auto p2 = new auto{a,b,c};  // error: must use parentheses for the initializer
+```
+
+
+<!-- }}} -->
+#### Dynamically Allocated `const` Objects <!-- {{{ -->
+It is legal to use `new` to allocate `const` objects:
+```cpp
+// allocate and initialize a const int
+const int *pci = new const int(1024);
+// allocate a default-initialized const empty string
+const string *pcs = new const string;
+```
+
+<!-- }}} -->
+#### Memory Exhaustion <!-- {{{ -->
+Once a program was used all of its available memoryh, `new` expressions
+will fail, and `bad_alloc` exception will be thrown. We can preven `new`
+from throwing an exception by using a different form of `new`:
+```cpp
+// if allocation fails, new returns a null pointer
+int *p1 = new int;  // if allocation fails, new throws `std::bad_alloc`
+int *p2 = new (nothrow) int;    // if allocation fails, new returns a null pointer
+```
+
+<!-- }}} -->
+#### Freeing Dynamic Memory <!-- {{{ -->
+We return memory through a `delete` expression. It takes a pointer to
+the object we want to free:
+```cpp
+delete p;   // p must point to a dynamically allocated object or be null
+```
+It destroys th eojbect to which its given pointer points, and it frees
+the correspoinding memory.  
+
+<!-- }}} -->
+#### Pointer Values and `delete` <!-- {{{ -->
+Directly deleting `int` object will generate error. But deleting pointer
+or reference to dynamically allocated pointer is silently skipped.  
+<!-- }}} -->
+#### Dynamically Allocated Objects Exist until They Are Freed <!-- {{{ -->
+Functions that return pointers (rather than smart pointers) to dynamic
+memory put a burden on their callers - the caller must remember to
+delete the memory.  
+<!-- }}} -->
+#### Resetting the Value of a Pointer after a `delete` <!-- {{{ -->
+Consider following code:
+```cpp
+int *p(new int(42));
+auto q = p;
+delete p;
+p = nullptr;
+```
+_q_ is now invalid pointer. Be sure to not write it in your code.  
+
+<!-- }}} -->
+<!-- }}} -->
+### Using `shared_ptr`s with `new` <!-- {{{ -->
+We can also initialize a smart pointer from a pointer returned by `new`:
+```cpp
+shared_ptr<double> p1;  // shared_ptr that can point at a double
+shared_ptr<int> p2(new int(42));    // p2 points to an int with value 42
+```
+
+Other ways to define and change `shared_ptr`s:  
+
++ `shared_ptr<T> p(q)` - _p_ manages the object to which the built-in
+  pointer _q_ points; _q_ must point to memory allocated by `new` and
+  must be convertible to `T*`  
++ `shared_ptr<T> p(u)` - _p_ assumes ownership from the `unique_ptr u`;
+  makes _u_ null.  
++ `shared_ptr<T> p(q, d)` - _p_ assumes ownership from the object to
+  which the built-in pointer _q_ points. _q_ must be convertible to
+  `T*`. _p_ will use the callable object _d_ in place of `delete` to
+  free _q_.  
++ `shared_ptr<T> p(p2, d)` - _p_ is a copy of the `shared_ptr p2`. _p_
+  uses callable object _d_ in place of `delete`  
++ `p.reset()`, `p.reset(q)`, `p.reset(q,d)` - if _p_ is the only
+  `shared_ptr` pointing at its object, `reset` free _p_'s existing
+  object. If the optional built-in pointer _q_ is passed, makes _p_
+  point to _q_, otherwise makes _p_ null. If _d_ is supplied, will call
+  _d_ to free _q_ otherwise uses `delete` to free _q_.  
+
+The smart pointer constructors that take pointers are `explicit`. Hence
+we must use the direct form of initialization:
+```cpp
+shared_ptr<int> p1 = new int(1024); // error: must use direct initialization
+shared_ptr<int> p2(new int(1024));  // ok: uses direct initialization
+```
+For the same reason, a function that returns a `shared_ptr` cannot
+implicitly convert a plain pointer in its return statement:
+```cpp
+shared_ptr<int> clone(int p) {
+    return new int(p);  // error: implicit conversion to `shared_ptr<int>`
+}
+```
+Correct:
+```cpp
+shared_ptr<int> clone(int p) {
+    // ok: explicitly create a shared_ptr<int> from int*
+    return shared_ptr<int>(new int(p));
+}
+```
+
+#### Don't Mix Ordinary Pointers and Smart Pointers <!-- {{{ -->
+```cpp
+int *x(new int(1024));  // dangerous: x is a plain pointer, not a smart pointer
+process(x); // error: cannot convert int* to shared_ptr<int>
+process(shared_ptr<int>(x));    // legal, but the memory will be deleted!
+int j = *x; // undefined: x is a dangling pointer!
+```
+
+Another example:
+```cpp
+shared_ptr<int> p(new int(42)); // reference count is 1
+int *q = p.get();   // ok: but don't use q in any way that might delete its pointer
+{ // new block
+// undefined:two independent shared_ptrs point to the same memory
+shared_ptr<int>(q);
+} // block ends, q is destroyed, and the memory to which q points is freed
+int foo = *p; // undefined; the memory to which p points was freed
+```
+
+
+<!-- }}} -->
+
+<!-- }}} -->
+### Smart Pointers and Exceptions <!-- {{{ -->
+Smart pointers are automatically destroy elements well they're leaving
+their's scope. In other side, built-in pointers can't do that if
+exception is not handled:
+```cpp
+void f()
+{
+    int *ip = new int(42);  // dynamically allocate a new object
+    // code that throws an exception that is not caught inside f
+    delete ip;  // free the memory before exiting
+}
+```
+
+#### Smart Pointers and Dumb Classes <!-- {{{ -->
+Classes that allocate resources and that do not define destructors to
+free those resources - can be subject to the same kind of errors that
+arise when we use dynamic memory. It is easy to forget to release the
+resource. Similarly, if an exception happens between when the resource
+is allocated and when it is freed, the program will leak that resource.  
+<!-- }}} -->
+#### Using Our Own Deletion Code <!-- {{{ -->
+To use a `shared_ptr` to manage a `connection`, we must first define a
+function to use in place of `delete`. In this case, our deleter must
+take a single argument of type `connection*`:
+```cpp
+void end_connection(connection *p) {disconnect(*p); }
+```
+When we create a `shared_ptr`, we can pass an optional argument that
+points to a deleter function:
+```cpp
+void f(destination &d /* other parameters */)
+{
+    connection c = connect(&d);
+    shared_ptr<connection> p(&c, end_connection);
+    // use the connection
+    // when f exits, even if by an exception, the connection will be properly closed
+}
+```
+
+<!-- }}} -->
+
+<!-- }}} -->
+### `unique_ptr` <!-- {{{ -->
+Unlike `shared_ptr`, only one `unique_ptr` at a time can point to a
+given object.  
+
+`unique_ptr` Operations:  
+
++ `unique_ptr<T> u1`, `unique_ptr<T,D> u2` - null `unique_ptr` that can point to objects of
+  type `T`. _u1_ will use `delete` to free its pointer; _u2_ will use a
+  callable object of type _D_ to free its pointer.  
++ `unique_ptr<T,D> u(d)` - null `unique_ptr` that point to objects of
+  type `T` that uses _d_, which must be an object of type `D` in place
+  of `delete`.  
++ `u = nullptr` - deletes the object to which _u_ points; makes _u_
+  null.  
++ `u.release()` - relinquishes control of the pointer _u_ had held;
+  returns the pointer _u_ had held and makes _u_ null.  
++ `u.reset()`, `u.reset(q)`, `u.reset(nullptr)` - deletes the object to
+  which _u_ points; if the built-in pointer _q_ is supplied, makes _u_
+  point to that object. Otherwise makes _u_ null.  
+
+Unlike `shared_ptr`, there is no library function comparable to
+`make_shared`. Instead, when we define a `unique_ptr`, we bind it to a
+pointer returned by `new`. As with `shared_ptr`s, we must use the direct
+form of initialization  
+
+Because a `unique_ptr` owns the object to which it points, `unique_ptr`
+does not support ordinary copy or assignment:
+```cpp
+unique_ptr<string> p1(new string("Stegosaurus"));
+unique_ptr<string> p2(p1);  // error: no copy for `unique_ptr`
+unique_ptr<string> p3;
+p3 = p2;                    // error: no assign for unique_ptr
+```
+
+Although we can't copy or assign a `unique_ptr`, we can transfer
+ownership from one (nonconst) `unique_ptr` to another by calling
+`release` or `reset`:
+```cpp
+// transfers ownership from p1 (which points to the string "Stegosaurus") to p2
+unique_ptr<string> p2(p1.release());    // release make p1 null
+unique_ptr<string> p3(new string("Trex"));
+// transfers ownership from p3 to p2
+p2.reset(p3.release()); // reset deletes the memory to which p2 had pointed
+```
+
+Calling `release` breaks the ocnnection between a `unique_ptr` and the
+object it had been managing.
+```cpp
+p2.release();   // WRONG: p2 won't free the memory and we've lost the pointer
+auto p = p2.release();  // ok, but we must remember to delete(p)
+```
+
+#### Passing and Returning `unique_ptr`s <!-- {{{ -->
+There is one exception to the rule that we cannot copy a `unique_ptr`:
+We can copy or assign a `unique_ptr` that is about to be destroyed:
+```cpp
+unique_ptr<int> clone(int p) {
+    // ok: explicitly create a unique_ptr<int> from int*
+    return unique_ptr<int(new int(p))
+}
+```
+Alternatively, we can also return a copy of a local object:
+```cpp
+unique_ptr<int> clone(int p) {
+    unique_ptr<int> ret(new int(p));
+    // . . .
+    return ret;
+}
+```
+In both cases, the compiler knows that the object being returned is
+about to be destroyed. In such cases the compiler does a special kind of
+"copy".  
+
+
+<!-- }}} -->
+#### Passing a Deleter to `unique_ptr` <!-- {{{ -->
+Overridding the deleter in a `unique_ptr` affects the `unique_ptr` type
+as well as how we construct (or `reset`) objects of that type. Thus we
+must supply the deleter type inside the angle brackets along with the
+type to which the `unique_ptr` can point.  
+
+As a example, we'll rewrite our connection program to use a `unique_ptr`
+in place of a `shared_ptr`:
+```cpp
+void f(destination &d /* other needed parameters */) {
+    connection c = connect(&d); // open the connection
+    /// when p is destroyed, the connection will be closed
+    unique_ptr<connection, decltype(end_connection)*>
+        p(&c, end_connection);
+    // use the connection
+    // when f exits, even if by an exception, the connection will be properly closed
+}
+```
+
+<!-- }}} -->
+
+<!-- }}} -->
+### `weak_ptr` <!-- {{{ -->
 <!-- TODO: stopped here -->
 <!-- }}} -->
 <!-- }}} -->
