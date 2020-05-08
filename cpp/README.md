@@ -2765,6 +2765,291 @@ void f(destination &d /* other needed parameters */) {
 
 <!-- }}} -->
 ### `weak_ptr` <!-- {{{ -->
+A `weak_ptr` is a smart pointer that does not control the lifetime of
+the object to which it points. Instead, a `weak_ptr` points to an object
+that is managed by a `shared_ptr` (binding to a `shared_ptr` does not
+change the reference count of last).  
+
++ `weak_ptr<T> w` - null `weak_ptr` that can point at objects of type `T`  
++ `weak_ptr<T> w(sp)` - `weak_ptr` that points to the same object as the
+  `shared_ptr` _sp_. `T` must be convertible to the type to which _sp_
+  points.  
++ `w = p`- _p_ can be a `shared_ptr` or a `weak_ptr`. After the
+  assignment _w_ shares  ownership with _p_.  
++ `w.reset()` - makes _w_ null.  
++ `w.use_count()` - the number of `shared_ptr`s that share ownership
+  with _w_.  
++ `w.expired()` - returns `true` if `w.use_count()` is zero, `false`
+  otherwise.  
++ `w.lock()` - if `expired` is `true`, returns a null `shared_ptr`;
+  otherwise returns a `shared_ptr` to the object to which _w_ points.  
+
+When we create a `weak_ptr`, we initialize it from a `shared_ptr`:
+```cpp
+auto p = make_shared<int>(42);
+weak_ptr<int> wp(p);    // wp weakly shares with p; use count in p is unchanged
+```
+We cannot use a `weak_ptr` to access its object directly:
+```cpp
+if (shared_ptr<int> np = wp.lock()) { // true if np is not null
+    // inside the if, np shares its objects with p
+}
+```
+
+#### Checked Pointer Class <!-- {{{ -->
+Check was vector been destoyed:
+```cpp
+std::shared_ptr<std::vector<std::string>>
+StrBlobPtr::check(std::size_t i, const std::string &msg) const
+{
+    auto ret = wptr.lock(); // is the vector still around?
+    if (!ret)
+        throw std::runtime_error("unbound StrBlobPtr");
+    if (i >= ret->size())
+        throw std::out_of_range(msg);
+    return ret; // otherwise, return a `shared_ptr` to the `vector`
+}
+```
+
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+## Dynamic Arrays <!-- {{{ -->
+### `new` and Arrays <!-- {{{ -->
+We ask `new` to allocate an array of objects by specifying the number of
+objects to allocate in pair of square brackets after a type name. In
+this case, `new` allocates requested number of objects and (assuming the
+allocation succeeds) returns a pointer to the first one:
+```cpp
+// call get_size to determine how many ints to allocate
+int *pia = new int[get_size()]; // pia points to the first of these ints
+```
+We can also allocate an array by using a type alias to represent an
+array type:
+```cpp
+typedef int arrT[42];   // arrT names the type array of 42 ints
+int *p = new arrT;  // allocates an array of 42 ints; p points to the first one
+```
+
+#### Initializing an Array of Dynamically Allocated Objects <!-- {{{ -->
+```cpp
+int *pia = new int[10]; // block of ten unitialized ints
+int *pia2 = new int[10]();  // block of ten ints value initialized to 0
+string *psa = new string[10];   // block of ten empty strings
+string *psa2 = new string[10];  // block of ten empty strings
+```
+
+Under **c++11** standard, we can also provide a braced list of element
+initializers:
+```cpp
+// block of ten ints each initialized from the corresponding initializer
+int *pia3 = new int[10]{0,1,2,3,4,5,6,7,8,9};
+// block of ten strings; the first four are initialized from the given initializers
+// remaining elements are value initialized
+string *psa3 = new string[10]{"a","an","the",string(3,'x')};
+```
+
+If there are more initializers than the given size, then the `new`
+expression fails and no storage is allocated. In this case, `new` thows
+an exception of type `bad_array_new_length`.  
+
+Under **c++11** standart **it is legal to dynamically allocate an empty
+array**  
+
+<!-- }}} -->
+#### Freeing Dynamic Arrays <!-- {{{ -->
+```cpp
+delete p;       // p must point to a dynamically allocated object or be null
+delete [] pa;   // pa must point to a dynamically allocated array or be null
+```
+
+<!-- }}} -->
+#### Smart Pointers and Dynamic Arrays <!-- {{{ -->
+The library provides a version of `unique_ptr` that can manage arrays
+allocated by `new`. To use a `unique_ptr` to manage a dynamic array, we
+must include a pair of empty brackets after the object type:
+```cpp
+// up points to an array of ten unitialized ints
+unique_ptr<int[]> up(new int[10]);
+up.release();   // automatically uses delete[] to destroy its pointer
+```
+
+`unique_ptr`s to Arrays:  
+
++ `unique_ptr<T[]> u` - _u_ can point to a dynamically allocated array
+  of type `T`  
++ `uniqut_ptr<T[]> u(p)` - _u_ points to the dynamically allocated array
+  to which the built-in pointer _p_ points. _p_ must be convertible to `T*`  
++ `u[i]` - returns the object at position _i_ in the array that _u_
+  owns. _u_ must point to an array.  
+
+Unlike `unique_ptr`, `shared_ptr`s provide no direct support for
+managing a dynamic array:
+```cpp
+// to use a shared_ptr we must supply a deleter
+shared_ptr<int> sp(new int[10], [](int *p) {delete[] p; });
+sp.reset(); // uses the lambda we supplied that uses delete[] to free the array
+```
+The fact that `shared_ptr`does not directly support managing arrays
+affects how we access the elements in the array:
+```cpp
+// shared_ptrs don't have subscript operator and don't support pointer
+arithmetic
+for (size_t i = 0; i != 10; ++i)
+    *(sp.get() + i) = i;    // use get to get a built-in pointer
+```
+
+<!-- }}} -->
+<!-- }}} -->
+### The `allocator` Class <!-- {{{ -->
+When we allocate a block of memory, we often plan to construct objects
+in that memory as needed. In this case, we'd like to decouple memory
+allocation from object construction.  
+
+#### The `allocator` Class <!-- {{{ -->
+Standard `allocator` Class and Customized Algorithms:  
+
++ `allocator<T> a`- defines an `allocator` object named _a_ that can
+  allocate memory for objects of type `T`.  
++ `a.allocate(n)` - allocates raw, unconstructed memory to hold _n_
+  objects of type `T`.  
++ `a.deallocate(p, n)` - deallocates memory that held _n_ objects of
+  type `T` starting at the addres in the `T*` pointer _p_; _p_ must be a
+  pointer previously returned by `allocate`, and _n_ must be the size
+  requested when _p_ was created. The user must run `destroy` on any
+  object that were constructed in this memory before calling
+  `deallocate`.  
++ `a.construct(p, args)` - _p_ must be a pointer to type `T` that points
+  to raw memory; _args_ are passed to a constructor for type `T`, which
+  is used to construct an object in the memory pointed to by _p_.  
++ `a.destroy(p)` - runs the destructor on the object pointed to by the
+  `T*` pointer _p_  
+
+```cpp
+allocator<string> alloc;    // object that can allocate strings
+auto const p = alloc.allocate(n);   // allocate n unconstructed strings
+```
+
+Constructing:
+```cpp
+auto q = p; /// q will point to one past the last constructed element
+alloc.construct(q++);   // *q is the empty string
+alloc.construct(q++, 10, 'c');  // *q is ccccccccccc
+alloc.construct(q++, "hi"); // *q is hi!
+```
+
+It is an error to use raw memory in which an object has not been
+constructed.  
+
+When we're finished using the objects, we must destroy the elements we
+constructed:
+```cpp
+while (q != p)
+    alloc.destroy(--q); // free the strings we actually allocated
+```
+
+Once the elements have been destroyed, we can either reuse the memory to
+hold other `string`s or return the memory to system:
+```cpp
+alloc.deallocate(p, n);
+```
+
+As a companion to the `allocator` class, the library also defined two
+algorithms that can construct objects in unitialized memory:  
+
++ `uninitialized_copy(b, e, b2)` - copies elements from the input ranger
+  denoted by iterators _b_ and _e_ into unconstructed, raw memory
+  denoted by the iterator _b2_. The memory denoted by _b2_ must be large
+  enough to hold a copy of the elements in the input range  
++ `uninitialized_copy_n(b,n,b2)` - copies _n_ elements starting from the
+  iterator _b_ into raw memory starting at _b2_.  
++ `unitialized_fill(b, e, t)` - constructs objects in the range of raw
+  memory denoted by iterators _b_ and _e_ as a copy of _t_.  
++ `unitialized_fill_n(b, n, t)`  
+
+```cpp
+// allocate twice as many elements as vi holds
+auto p = alloc.allocate(vi.size() * 2);
+// construct elements starting at p as copies of elements in vi
+auto q = uninitialized_copy(vi.begin(), vi.end(), p);
+// initialize the remaining elements to 42
+uninitialized_fill_n(q, vi.size(), 42);
+```
+
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+## Using the Library: A Text-Query Program <!-- {{{ -->
+We'll implement a simple text-query program. Our program will let a user
+search a given file for words that might occur in it. The result of a
+query will be the number of times the word occurs and a list of lines on
+which that word appears.  
+
+### Design of the Query Program <!-- {{{ -->
+A good way to start the design of a program is to list the program's
+operations:  
+
++ When it reads the input, the program must remember the line(s) in
+  which each word appears. Hence, the program will need to read the
+  input a line at a time and break up the lines from the input file into
+  its separate words  
++ When it generates output:  
+    - The program must be aple to fetch the line numbers associated with
+  a given word  
+    - The line numbers must appear in ascending order with no
+  duplicates  
+    - The program must be aple to print the text appearing in the input
+  file at a given line number.  
+
+These requirements can be met quite neatly by using various library
+facilities:  
+
++ We'll use a `vector<string>` t ostore a copy of the entire input file.
+  Each line in the input file will be an element in this `vector`.
+  When we want to print a line, we can fetch the line using its
+  line number as the index.  
++ We'll use an `istringstream` to break each line into words.  
++ We'll use a `set` to hold the line numbers on which each word in the
+  input appears. Using a `set` guarantees that each line will appear
+  only once and that the line numbers will be stored in ascending order.  
++ We'll use a `map` to associate each word with the `set` of line
+  numbers on which the word appears. Using a `map` will let us fetch the
+  `set` for any given word.  
++ We'll use a `shared_ptr` so returned data structure may have valid
+  pointer to containers in main class  
+
+
+#### Data Structures <!-- {{{ -->
+We must return number of occurances as well as line number for each of
+occurences. The easiest way to return all the data is define asecond
+clas, which we'll name `QueryResult`.  
+<!-- }}} -->
+#### Using the `TextQuery` Class <!-- {{{ -->
+When we design a class, it can be helpful to write programs using the
+class before actually implementing the members. That way, we can see
+whether the class has the operations we need.  
+For instance this function takes an `ifstream` that points to the file
+we want to process, and interacts with a user, printing the results for
+the given words:
+```cpp
+void runQueries(ifstream &infile) {
+    // infile is an ifstream that is the ifle we want to query
+    TextQuery tq(infile);   // store the file and build the query map
+    // iterate with the user: prompt for a word to find and print results
+    while (true) {
+        cout << "enter word to look for, or q to quit: ";
+        string s;
+        // stop if we hit end-of-file on the input or if a 'q' is entered
+        if (!(cin >> s) || s == "q") break;
+        // run the query and print the results
+        print(cout, tq.query(s)) << endl;
+    }
+}
+```
+
+<!-- }}} -->
+<!-- }}} -->
+### Defining the Query Program Classes <!-- {{{ -->
 <!-- TODO: stopped here -->
 <!-- }}} -->
 <!-- }}} -->
