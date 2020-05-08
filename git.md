@@ -3511,7 +3511,8 @@ invoked jsut before the garbage collection takes place, and can be used
 to notify you that this is happening, or to abort the collection if now
 isn't a good time.  
 <!-- }}} -->
-#### Server-Side Hooks <!-- {{{ -->
+<!-- }}} -->
+### Server-Side Hooks <!-- {{{ -->
 The pre hooks can exit non-zero at any time to reject the push as well
 as print an error message back to the client.  
 
@@ -3536,8 +3537,639 @@ but the client doesn't disconnect until it has completed, so be careful
 if you try to do anything that may take a long time.  
 <!-- }}} -->
 <!-- }}} -->
-<!-- }}} -->
 ## An Example Git-Enforce Policy <!-- {{{ -->
-<!-- TODO: stopped here -->
+
++ check for a custom commit message format  
++ allow only certain users to modify certain subdirectories in a
+  project.  
++ client scripts that help the developer know if their push will be
+  rejected  
++ server scripts that actually enforce the policies  
+
+### Server-Side Hook <!-- {{{ -->
+All the server-side work will go into the `update` file in your `hooks`
+directory. Script takes three arguments:  
+
++ the name of the reference being pushed to  
++ the old revision where that branch was  
++ the new revision being pushed  
+
+You also have ac cess to the user doing the pushing if the push is being
+run over SSH. If you've allowed everyone to connect with a single user
+(like "git") via public-key authentication, you may have to give that
+user a shell wrapper that determines which user is connecting based on
+the public key, and set an environment variable accordingly. Here we'll
+assume the connecting user is in the `$USER` env. variable:
+```ruby
+#!/usr/bin/env ruby
+
+$refname = ARGV[0]
+$oldrev  = ARGV[1]
+$newrev  = ARGV[2]
+$user    = ENV['USER']
+
+puts "Enforcing Policies..."
+puts "(#{$refname}) (#{$oldrev[0,6]}) (#{$newrev[0,6]})"
+```
+
+#### Enforcing a Specific Commit-Message Format <!-- {{{ -->
+You may want to look for string like "ref: 1234" because you want each
+commit to link to a work item in your ticketing system.  
+
+You can get a list of SHA-1 values of all the commits. For example:
+```shell
+$ git rev-list 538c33..d14fc7
+```
+Afterwards, you can grab each SHA-1s, extract message for it, and check.
+To see what is lying under SHA-1 (for example):
+```shell
+$ git cat-file commit ca82a6
+tree ...
+parent ...
+author ...
+committer ...
+
+<message>
+```
+A simple way to get the commit message is using of `sed` command on Unix
+systems:
+```shell
+$ git cat-file commit ca82a6 | sed '1,/^$/d'
+```
+The regex for "ref: 1234" you are looking for is:
+```ruby
+$regex = /\[ref: (\d+)\]/
+```
+
+<!-- }}} -->
+#### Enforcing a User-Based ACL System <!-- {{{ -->
+Suppose you want to add a mechanism that uses an access control list
+(ACL) that specifies which users are allowed to push changes to which
+parts of your projects.  
+To enforce this, you'll write those rules to a file named `acl` that
+lives in your bare Git repository on the server. You'll have the `update` hook look at those rules, see what files are being introduced for all the commits being pushed, and determine whether the user doing the push has access to update all those files.  
+
+In this case, you have a couple of administrators, some documentation
+writers with access to the `doc` directory, and one developer who only
+has access to the `lib` and `tests` directories, and your ACL file looks
+like this:
+```txt
+avail|nickh,pjhyett,defunkt,tpw
+avail|usinclair,cdickens,ebronte|doc
+avail|schacon|lib
+avail|schacon|tests
+```
+where first field - `avail` or `unavail`, the next field is a
+comma-delimited list of the users to which the rule applies, and the
+last field is the path to which the rule applies (blank meaning open
+access).  
+
+It's easy to write code that converts ACL file to some structure. Now
+you need to determine what paths the commits being pushed have
+modified. You can pretty easily see what files have been modified in a
+single commit with the `--name-only` option to the `git log` command:
+```shell
+$ git log -1 --name-only --pretty=format:'' 9f585d
+
+README
+lib/test.rb
+```
+
+
+<!-- }}} -->
+#### Testing It Out <!-- {{{ -->
+If you run `chmod u+x .git/hooks/update` and then try to push a commit
+with a non-compliant message, you get something like this:
+```shell
+$ git push -f origin master
+<bla bla bla>
+
+[POLICY] Your message is not formatted correctly
+error: hooks/update exited with error code 1
+error: hook declined to update refs/heads/master
+
+<bla bla bla>
+```
+
+Remember, anything your script echoes to `stdout` will be transferred to
+the client.  
+
+<!-- }}} -->
+
+<!-- }}} -->
+### Client-Side Hooks <!-- {{{ -->
+One downside is users have to edit their history to suit the policy,
+which isn't always for the faint of heart.  
+The solution is to provide client-side hooks that users can run to
+notify them when they're doing something that the server is likely to
+reject.  
+
+The first thing to do is checking your commit message just before each
+commit is recorded (`commit-msg` hook should help), so you know the
+server won't reject your changes due to badly formatted commit messages:
+```ruby
+#!/usr/bin/env ruby
+message_file = ARGV[0]
+message = File.read(message_file)
+
+$regex = /\[ref: (\d+)\]/
+
+if !$regex.match(message)
+    puts "[POLICY] Your message is not formatted correctly"
+    exit 1
+end
+```
+
+Next, you want to make sure you aren't modifying files that are outside
+your ACL scope. If your project's `.git` directory contains a copy of
+the ACL file you used previously, then the following `pre-commit` script
+will enforce those contraints for you:
+```ruby
+#!/usr/bin/env ruby
+
+$user   = ENV['USER']
+
+# [ insert acl_access_data method from above ]
+# only allows certain users to modify certain subdirectories in a project
+def check_directory_perms
+    access = get_acl_access_data('.git/acl')
+
+    files_modified = `git diff-index --cached --name-only HEAD`.split("\n")
+    files_modified.each do |path|
+        next if path.size == 0
+        has_file_access = false
+        access[$user].each do |access_path|
+        if !access_path || (path.index(access_path) == 0)
+            has_file_access = true
+        end
+        if !has_file_access
+            puts "[POLICY] You do not have access to push to #{path}"
+            exit 1
+        end
+    end
+end
+
+check_directory_perms
+```
+
+The last part is to deny rebase if specified commits already on remote
+server. The script gets a list of all the commits you're about to
+rewrite and checks whether they exist in any of your remote references.
+If it sees one that is reachable from one of your remote reference, it
+aborts the rebase:
+```ruby
+#!/usr/bin/env ruby
+
+base_branch = ARGV[0]
+if ARGV[1]
+    topic_branch = ARGV[1]
+else
+    topic_branch = "HEAD"
+end
+
+target_shas = `git rev-list #{base_branch}..#{topic_branch}`.split("\n")
+remote_refs = `git branch -r`.split("\n").map { |r| r.strip }
+
+target_shas.each do |sha|
+    remote_refs.each do |remote_ref|
+        shas_pushed = `git rev-list ^#{sha}^@ refs/remotes/#{remote_ref}`
+        if shas_pushed.split("\n").include?(sha)
+            puts "[POLICY] Comimt #{sha} has already been pushed to #{remote_ref}"
+            exit 1
+        end
+    end
+end
+```
+
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+# Git Internals <!-- {{{ -->
+## Plumbing and Porcelain <!-- {{{ -->
+
++ low-level Git commands are "plumbing" commands  
++ user-friendly commands are "porcelain" commands  
+
+Here's what a newly-initialized `.git` directory typically looks like:
+```shell
+$ ls -F1
+config
+description
+HEAD
+hooks/
+info/
+objects/
+refs/
+```
+
++ `description` file is used only by the GitWeb program  
++ `config` file contains your project-specific configuration options  
++ `info` directory keeps a global exclude file for ignored patters that
+  you don't want to track in a `.gitignore` file  
++ `hooks` directory contains your client- or server-side hook scripts  
++ `objects` directory stores all the content for your database  
++ `refs` directory stores pointers into commit objects in that data  
++ `HEAD` file points to the branch you currently have checked out  
++ `index` file is where Git store you staging area information  
+
+<!-- }}} -->
+## Git Objects <!-- {{{ -->
+Git is a content-addressable filesystem. What does that mean? It means
+that at the core of Git is a simple key-value data store.  
+
+Simplest way of storing data in Git is using `git hash-object` command:
+```shell
+$ echo 'test content' | git hash-object -w --stdin
+d670460b4...
+```
+`-w` tells Git to actually store content, `--stdin` tells to read
+content from stdin (without option Git expects filename as last argument)  
+
+Now you can inspect new created object:
+```shell
+$ gind .git/objects -type f
+.git/objects/d6/70460b4...
+```
+
+You could use it for version control, but remembering the SHA-1 key for
+each version of file isn't practical; plus, you aren't storing the
+filename in your system - just the content. This object type is called a
+_blob_.  
+You can have Git tell you the object type of any object in Git, given
+its SHA-1 key:
+```shell
+$ git cat-file -t 1f7a7a472abf3dd...
+blob
+```
+
+### Tree Objects <!-- {{{ -->
+All the content is stored either as tree or blob object, with trees
+corresponding to UNIX directory entries and blobs corresponding more or
+less to inodes or file contents. A single tree object contains entries,
+each of which is the SHA-1 hash of a blob or subree with its associated
+mode, type, and filename. FOr example, the most recent tree in a project
+may look something like this:
+```shell
+$ git cat-file -p master^{tree}
+100644 blob a906cb2...  README
+100644 blob 8f94139...  Rakefile
+040000 tree 99f1a6d...  lib
+```
+The `master^{tree}` syntax specifies the tree object that is pointed to
+by the last commit on your `master` branch. Notice the `lib`
+subdirectory isn't a blob but a pointer to another tree:
+```shell
+$ git cat-file -p 99f1a6d12cb...
+100644 blob 47c6340d6459...     simplegit.rb
+```
+
+To create a tree object, you first have to set up an index by staging
+some files. To create an index with a single entry - the first version
+of your `test.txt` file - you can use the plumbing command `git
+update-index`. You must pass it the `--add` option because the file
+doesn't yet exist in your staging area and `--cacheinfo` because the
+file you're adding isn't in your dire ctory but is in your database.
+Then you specify the mode, SHA-1, and filename:
+```shell
+$ git update-index --add --cacheinfo 100644 \
+    83baae61804e... test.txt
+```
+
+Mode options:  
+
++ `100644` - normal file  
++ `100755` - executable file  
++ `120000` - symbolic link  
+
+Now you can use `git write-tree` to write the staging area out to a tree
+object. Calling this command automatically creates a tree object from
+the state of the index if that tree doesn't yet exist:
+```shell
+$ git write-tree
+d8329fc1cc...
+$ git cat-file -p d8329fc1cc...
+100644 blob 83baae61804...      test.txt
+```
+You can also verify that this is a tree object:
+```shell
+$ git cat-file -t d8329fc1cc...
+tree
+```
+
+You can read trees into your staging area by calling `git read-tree`. In
+this case, you can read an existing tree into your staging area as a
+subtree by using the `--prefix` option with this command:
+```shell
+$ git read-tree --prefix=bak d8329fc1cc....
+$ git write-tree
+3c4e9cd789d88...
+$ git cat-file -p 3c4e9cd789...
+040000 tree d8329fc1cc...   bak
+100644 blob fa49b07797...   new.txt
+100644 blob 1f7a7a472a...   test.txt
+```
+
+
+
+<!-- }}} -->
+### Commit Objects <!-- {{{ -->
+To create a commit object, you call `commit-tree` and specify a single
+tree SHA-1 and which commit objects, if any, directly preceded it. Start
+with the first tree you wrote:
+```shell
+$ echo 'first commit' | git commit-tree d8329f
+fdf4fc3344e67ab...
+```
+
+Now you can look at your new commit object:
+```shell
+$ git cat-file -p fdf4fc3
+tree d9329fc1cc...
+author ...
+committer ...
+
+first commit
+```
+
+Next, you'll write hte other two commit objects, each referencing the
+commit that came directly before it:
+```shell
+$ echo 'second commit' | git commit-tree 0155eb -p fdf4fc3
+cac0cab538b970...
+$ echo 'third commit' | git commit-tree 3c4e9c -p cac0cab
+1a410efbd13591...
+```
+Oddly enough, you have a real Git history now that you can view with the
+`git log` command  
+
+<!-- }}} -->
+### Object Storage <!-- {{{ -->
+We mentioned earlier that there is a header stored with every object you
+commit to your Git object database. Let's take a minute to see how git
+stores its objects.  
+
+Start interactive Ruby mode with the `irb` command:  
+```ruby
+$ irb
+>> content = "what is up, doc?"
+=> "what is up, doc?"
+>> header = "blob #{content.length}\0"
+=> "blob 16\u0000"
+```
+
++ Identifier of the type of object - in this case, a blob  
++ space, followe3d by the size in bytes of the ocntent  
++ final null byte  
+
+Git concatenates the header and the original content and then calculates
+the SHA-1 checksum of that new content.  
+Then Git compresses the new content with `zlib`.  
+
+All Git objects are stored the same way, just with different types -
+instead of the string `blob`, the header will begin with `commit` or
+`tree`. Also, although the blob content can be nearly anything, the
+commit and tree content are very specifically formatted.  
+
+<!-- }}} -->
+
+<!-- }}} -->
+## Git References <!-- {{{ -->
+To remember simple shortcuts for commit's SHA-1 git uses "references" or
+"refs". You can find the files that ocntain those SHA-1 values in the
+`.git/refs` directory. It has the following structure:
+```shell
+$ find .git/refs
+.git/refs
+.git/refs/heads
+.git/refs/tags
+$ gind .git/refs -type f
+```
+
+To create a new reference that will help you remember where your latest
+commit is, you can technically do something as simple as this:
+```shell
+$ echo 1a410efbd13591... > .git/refs/heads/master
+```
+
+Now, you can use the head reference you just created instead of the
+SHA-1 value in your Git commands:
+```shell
+$ git log --pretty=online master
+1a410efb... third commit
+cac0cab5... second commit
+fdf4fc33... first commit
+```
+
+Git provides the safer command `git update-ref` to do this if you want
+to u pdate a reference:
+```shell
+$ git update-ref refs/heads/master 1a410efbd...
+```
+
+That's basically what a branch in Git is: a simple pointer or reference
+to the head of a line or work. To create a branch back at the second
+commit, you can do this:
+```shell
+$ git update-ref refs/heads/test cac0ca
+```
+Your branch will contain only work from that commit down:
+```shell
+$ git log --pretty=oneline test
+cac0cab538b...  second commit
+fdf4fc3344e...  first commit
+```
+
+### The HEAD <!-- {{{ -->
+Usually the HEAD file is a symbolic reference to the branch you're
+currently on.  
+However in some rare cases the HEAD file may contain the SHA-1 value of
+a git object. This happens when you checkout a tag, commit, or remote
+branch, which puts your repository in "detached HEAD" state.  
+
+If you look at the file, you'll normally see something like this:
+```shell
+$ cat .git/HEAD
+ref: refs/heads/master
+```
+If you run `git checkout test`, Git updates the file to look like this:
+```shell
+$ cat .git/HEAD
+ref: refs/heads/test
+```
+
+You can also manually edit this file, but again a safer command exists
+to do so: `git symbolic-ref`. You can read the value of your HEAD via
+this command:
+```shell
+$ git symbolic-ref HEAD
+refs/heads/master
+```
+You can also set the value of HEAD using the same command:
+```shell
+$ git symbolic-ref HEAD refs/heads/test
+$ cat .git/HEAD
+ref: refs/heads/test
+```
+
+<!-- }}} -->
+### Tags <!-- {{{ -->
+Tag is like a branch reference, but it never moves - it always points to
+the same commit but gives it a friendlier name.  
+
+As discussed earlier, there are two types of tags: annotated and
+lightweight. You can make lightweight tag by running something like
+this:
+```shell
+$ git update-ref refs/tags/v1.0 cac0cab538...
+```
+
+If you create annoted tag, Git creates a tag object and then writes a
+reference to point to it rather than directly to the commit. You can see
+this by creating an annotated tag (using the `-a` option):
+```shell
+$ git tag -a v1.1 1a410efbd1359... -m 'test tag'
+```
+Here's the object SHA-1 value it created:
+```shell
+$ cat .git/refs/tags/v1.1
+9585191f37f...
+```
+Now, run `git cat-file -p` on that SHA-1 value:
+```shell
+$ git cat-file -p 9585191f37...
+object 1a410efdb135...
+type commit
+tag v1.1
+tagger Scott Chacon <schacon@gmail.com> Sat May 23 ...
+
+test tag
+```
+
+<!-- }}} -->
+### Remotes <!-- {{{ -->
+If you add a remote and push to it, Git stores the value you last pushed
+to that remote for each branch in the `refs/remotes` directory. For
+instance, you can add a remote called `origin` and push your `master`
+branch to it:
+```shell
+$ git remote add origin git@github.com:schacon/simplegit-progit.git
+$ git push origin master
+```
+
+Then, you can see what the `master` branch on the `origin` remote was
+the last time you communicated with the server, by checking the
+`refs/remotes/origin/master` file:
+```shell
+$ cat .git/refs/remotes/origin/master
+ca82a6dff817ec66f...
+```
+
+Remote references differ from branches (`refs/heads` references) mainly
+in that they're considered read-only. You can `git checkout` to one, but
+Git won't point HEAD at one, so you'll never update it with a `commit`
+command. Git manages them as bookmarks to the last known state of where
+those branches were on those servers.  
+
+<!-- }}} -->
+<!-- }}} -->
+## Packfiles <!-- {{{ -->
+Git compresses the contents of files in `.git/objects` with zlib. Now
+you'll add some more sizable content to the repository to demostrate an
+interesting feature of Git:
+```shell
+$ curl https://raw.githubusercontent.com/mojombo/grit/master/lib/grit/repo.rb > repo.rb
+$ git checkout mastet
+$ git add repo.rb
+$ git commit -m 'added repo.rb'
+```
+SHA-1 value was calculated for your new `repo.rb` blob object:
+```shell
+$ git cat-file -p master^{tree}
+100644 blob fa49b0779.. new.txt
+100644 blob 033b4468... repo.rb
+100644 blob e3f094..... test.txt
+```
+
+You can then use `git cat-file` to see how large that object is:
+```shell
+$ git cat-file -s 033b4468fa6b...
+22044
+```
+At this point, modify that file a little, and see what happens:
+```shell
+$ echo '# testing' >> repo.rb
+$ git commit -am 'modified repo.rb a bit'
+```
+Check the tree created by that last commit, and you see something
+interesting:
+```shell
+$ git cat-file -p master^{tree}
+...
+100644 blob b042a60ef7dff...    repo.rb
+...
+```
+The blob is now a different blob, which means that although you added
+only a single like to the end of a 400-line file, Git stored that new
+content as a completely new object:
+```shell
+$ git cat-file -s b042a60ef7dff...
+22054
+```
+
+You have two nearly identical 22K objects on your disk. Wouldn't it be
+nice if Git could store one of them in full but then the second object
+only as the delta between it and the first?  
+
+The initial format in which Git saves objects on disk is called a _loose_
+object format. However, occasionally Git packs up several of these
+objects into a single binary file called a _packfile_ in order to save
+space and be more efficient. Git does this if you have too many loose
+objects around, if you run the `git gc` command manually, or if you push
+to a remote server.
+```shell
+$ git gc
+Counting objects: 18, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (14/14), done.
+Writing objects: 100% (18/18), done.
+Total 18 (delta 3), reused 0 (delta 0)
+```
+
+If you look in your `objects` directory, you'll find that most of your
+objects are gone, and a new pair of files has appeared:
+```shell
+$ find .git/objects -type f
+.git/objects/bd/9dbf5aae1a38...
+.git/objects/d6/70460b4b4ae...
+.git/objects/info/packs
+.git/objects/pack/pack-978e03944f5c58....idx
+.git/objects/pack/pack-978e03944f5c58....pack
+```
+The objects that remain are the blobs that aren't pointed to by any
+commit.  
+The packfile is a single file containing the contents of all the objects
+that were removed from your filesystem.  
+The index is a file that contains offsets into that packfile so you can
+quickly seek to a specific object.  
+
+How does Git do this? WHen Git packs objects, it looks for files that
+are named and sized similarly, and stored just the deltas from one
+version of the file to the next. You can look into the packfile and see
+what Git did to save space. The `git verify-pack` plumbing command
+allows you to see what was packed up.
+```shell
+$ git verify-pack -v .git/objects/pack/pack-978e03944f5c58....idx
+```
+
+
+
+
+
+
+
+
+<!-- }}} -->
+## The Refspec <!-- {{{ -->
+
 <!-- }}} -->
 <!-- }}} -->
