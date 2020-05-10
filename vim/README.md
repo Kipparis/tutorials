@@ -4,16 +4,15 @@ Learn Vimscript the Hard Way by Steve Losh
 # Interesting options <!-- {{{ -->
 
 + `numberwidth` - how wide the column containing line numbers  
-+ `help lh<TAB>` - various vim highlighting groups
++ `help lh<TAB>` - various vim highlighting groups  
 
 <!-- }}} -->
-
 # Creating a Vimrc File <!-- {{{ -->
 A `~/.vimrc` file is a file that contains some Vimscript code. Vim will
 automatically run the code inside this file every time you open Vim.  
 
 To easily find the location of the file, run `:echo $MYVIMRC` in Vim.  
-}}}
+<!-- }}} -->
 # Echoing Messages <!-- {{{ -->
 You can use either `:echo` or `:echom`  
 ## Persisntent Echoing <!-- {{{ -->
@@ -864,5 +863,342 @@ needs to be a Float
   floating point numbers when write Vim plugin  
 <!-- }}} -->
 # Strings <!-- {{{ -->
-<!-- TODO: stopped here -->
+## Concatenation <!-- {{{ -->
+```vim
+:echom "Hello, " . "world"
+```
+But notice:
+```vim
+:echom 10 . "foo"
+```
+Vim will display "10foo".
+```vim
+:echom 10.1 . "foo"
+```
+This time Vim throws an error, saying we're using a Float as String.
+
+<!-- }}} -->
+## Special Characters <!-- {{{ -->
+Like most programming languages, Vimscript lets you use escape sequences
+in strings to represent hard-to-type characters.  
+Some of the usage:
+```vim
+:echom "foo \"bar\""
+:echom "foo\\bar"
+:echo "foo\nbar"
+```
+
+But if you run this command:
+```vim
+:echom "foo\nbar"
+```
+Vim will display something like `foo^@bar`. When you use `echom` instead
+of `echo` with a String Vim will echo the _exact_ characters of the
+string (`^@` is Vim's way of saying "newline character")  
+
+<!-- }}} -->
+## Literal Strings <!-- {{{ -->
+Using single quotes tells Vim that you want the string `exactly` as-is,
+with no escape sequences. The one exception is that two single quotes in
+a row will produce one single quote:
+```vim
+:echom 'That''s enough.'
+```
+Vim will display "That's enough."
+
+<!-- }}} -->
+
++ `:help expr-quote` - list of escape sequences you can use in a normal
+  Vim string  
++ `:help i_CTRL-V`  
++ `:help literal-string`  
+<!-- }}} -->
+# String Functions <!-- {{{ -->
+## Length <!-- {{{ -->
+Get length of strings:
+```vim
+:echom strlen("foo")
+:echom len("foo")
+```
+When used with Strings `len` and `strlen` have identical effects.  
+<!-- }}} -->
+## Splitting <!-- {{{ -->
+The `split` function splits a String into a List.
+```vim
+:echo split("one two three")
+```
+You can also tell Vim to use a separator other than "whitespace" for
+splitting:
+```vim
+:echo split("one,two,three", ",")
+```
+In both cases Vim display `['one', 'two', 'three']`  
+
++ `:help split()`
+
+<!-- }}} -->
+## Joining <!-- {{{ -->
+```vim
+:echo join(["foo", "bar"], "...")
+```
+Vim will display "foo...bar". `split` and `join` can be paired to great
+effect:
+```vim
+:echo join(split("foo bar"), ";")
+```
+
++ `:help join()`  
+
+<!-- }}} -->
+## Lower and Upper Case <!-- {{{ -->
+Vim has two functions to change the case of Strings:
+```vim
+:echom tolower("Foo")
+:echom toupper("Foo")
+```
+Vim displays `foo` and `FOO`.  
+<!-- }}} -->
+
++ `:help functions` - list of built-in functions  
+<!-- }}} -->
+# Execute <!-- {{{ -->
+The execute command is used to evaluate a string as if it were a
+Vimscript command.  
+
+## Basic Execution <!-- {{{ -->
+Execute is a very powerfull tool because it lets you build commands out
+of arbitrary strings.  
+
+For instance, following code will open previous buffer in vertical
+split:
+```vim
+:execute "rightbelow vsplit " . bufname("#")
+```
+<!-- }}} -->
+## Is Execute Dangerous? <!-- {{{ -->
+
+1. Vim is a unique environment where the normal security concerns simply
+   aren't common.  
+2. It let's you collapse many lines into a single one.  
+<!-- }}} -->
+
++ `:help execute`  
++ `:help leftabove`, `:help rightbelow`, `:help :split`, `:help :vsplit`  
+
+<!-- }}} -->
+# Normal <!-- {{{ -->
+The `normal` command simply takes a sequence of keys and pretends they
+were typed in normal mode.  
+
+## Avoiding Mappings <!-- {{{ -->
+Vim has a `normal!` command that does not take into account user
+mappings.  
+<!-- }}} -->
+## Special Characters <!-- {{{ -->
+`normal!` doesn't parse special character sequences. For instance
+following command won't work as expected:
+```vim
+:normal! /foo<cr>
+```
+
+<!-- }}} -->
+
++ `:help normal`  
++ `:help helpgrep`  
+<!-- }}} -->
+# Execute Normal! <!-- {{{ -->
+`execute` ltes you build commands programmatically, so you can use Vim's
+normal string escape sequences to generate the non-printing characters
+you need.
+```vim
+:execute "normal! mqA;\<esc>`q"
+```
+will append `;` to the current line.  
+
+<!-- }}} -->
+# Basic Regular Expressions <!-- {{{ -->
+## Highlighting <!-- {{{ -->
+Before we start lets turn on some of the highlighting features:
+```vim
+:set hlsearch incsearch
+```
+`hlsearch` tells Vim to highlight all matches in a file when you perform
+a search, and `incsearch` tells Vim to highlight the _next_ match while
+you're still typing out your seach pattern.  
+
+<!-- }}} -->
+## Seaching <!-- {{{ -->
+
+```vim
+:execute "normal! gg/print\<cr>"
+```
+Searches for word "print" from top of the file and places you cursor on
+first occurence.
+```vim
+:execute "normal! gg/print\<cr>n"
+```
+Same as above but places your cursor on second occurence.
+```vim
+:execute "normal! G?print\<cr>"
+```
+Searches backward from bottom
+
+
+<!-- }}} -->
+## Magic <!-- {{{ -->
+Command
+```vim
+:execute "normal! gg/for .+ in .+:\<cr>"
+```
+won't work because Vim thinks you search for literal `+`. To make it
+mean "1 or more of the preceding character" you should place a backslash
+before the `+` character.  
+So resulting command is:
+```vim
+:execute "normal! gg/for .\\+ in .\\+:\<cr>"
+```
+(remember about special characters for execute)  
+
+<!-- }}} -->
+## Literal Strings <!-- {{{ -->
+If you don't want to place double slashes everywhere, you use literal
+strings:
+```vim
+:execute "normal! gg" . '/for .\+ in .\+:' . "\<cr>"
+```
+
+<!-- }}} -->
+## Very Magic <!-- {{{ -->
+`\v` tells Vim to use its "very magic" regex parsing mode, which is
+pretty mush the same as you're used to in any other programming
+language:
+```vim
+:execute "normal! gg" . '/\vfor .+ in .+:' . "\<cr>"
+```
+
+<!-- }}} -->
+
++ `:help magic` - how characters are interpreted in patterns  
++ `:help pattern-overview` - kinds of things Vim regexes support  
++ `:help match` - define a pattern to highlight in the current window.  
+<!-- }}} -->
+# Case Study: Grep Operator, Part One <!-- {{{ -->
+## Grep <!-- {{{ -->
+
+Our example is going to make `:grep` easier to invoke by adding a "grep
+operator" you can use with any of Vim's built-in (or custom!) motions to
+select the text you want to search for.  
+
+<!-- }}} -->
+## Usage <!-- {{{ -->
+The first thing you should think about when creating any non-trivial
+piece of Vimscript is: "how will this functionaliry be used?".  
+
+Some examples of how you might end up using it:  
+
++ `<leader>giw` - grep for the word under the cursor  
++ `<leader>giW` - grep for the WORD under the cursor  
++ `<leader>gi'` - grep for the contents of the single-quated string
+  you're currently in.  
++ `viwe<leader>g` - visually select a word, extend the selection to the
+  end of the word after it, then grep for the selected text.  
+<!-- }}} -->
+## A Preliminary Sketch <!-- {{{ -->
+Let's simplify our goal to: "create a mapping to search for the word
+under the cursor". This is useful but should be easier, so we can get
+something running much faster.
+```vim
+:nnoremap <leader>g :grep -R something .<cr>
+```
+
+<!-- }}} -->
+## The Search Term <!-- {{{ -->
+First we need to search for the word under the cursor, not the string
+something. Run the command:
+```vim
+:nnoremap <leader>g :grep -R <cword> .<cr>
+```
+Vim will replace `<cword>` with the word under the cursor before running
+the command.  
+
+You can use `<cWORD>` to get a WORD instead of a word.
+```vim
+:nnoremap <leader>g :grep -R <cWORD> .<cr>
+```
+
+There is a problem with our search term: if there are any special shell
+characters in it Vim will happily pass them along to the external grep
+command, which will explode ("foo;ls" will break it).  
+
+To try to fix this we'll quote the argument in the grep call:
+```vim
+:nnoremap <leader>g :grep -R '<cWORD>' .<cr>
+```
+
+<!-- }}} -->
+## Escaping Shell Command Arguments <!-- {{{ -->
+There appears another problem, if we try the mapping on the word
+`that's` single quote inside the word will interfere with the
+quotes in the grep command!  
+
+To get around this we can use Vim's `shellescape` function. Because
+`shellscape()` works on Vim strings, we'll need to dynamically build the
+command with `execute`. First run the following command to transform the
+`:grep` mapping into `:execute "..."`:
+```vim
+:nnoremap <leader>g :execute "grep -R '<cWORD>' ."<cr>
+```
+
+Then use `shellescape` to fix the search term:
+```vim
+:nnoremap <leader>g :execute "grep -R " . shellescape(<cWORD>) . " ."<cr>
+```
+
+You'll see one problem if you run:
+```vim
+:echom shellescape("<cWORD>")
+```
+Vim will output `'<cWORD>'`. To fix this we'll use the `expand()`
+function to force the expansion of `<cWORD>`.
+
+Now that we know how to get a fully escaped version of the word under
+the cursor, it's time to concatenate it into our mapping:
+```vim
+:nnoremap <leader>g :exe "grep -R " . shellescape(expand("<cWORD>")) . " ."\
+<cr>
+```
+
+
++ `:help escape()`  
++ `:help shellescape()`  
+<!-- }}} -->
+## Cleanup <!-- {{{ -->
+First, we said that we don't want to go to the first result
+automatically, and we can use `grep!` instead of plain `grep` to do
+that.  
+
+Afterwards we open quickfix window with `:copen`  
+
+Then we'll remove all the grep output Vim displays while searching with
+`silent`  
+
+The final command:
+```vim
+:nnoremap <leader>g :silent execute "grep! -R " . shellescape(expand("<cWOR\
+D>")) . " ."<cr>:copen<cr>
+```
+
+<!-- }}} -->
+
++ `:help :grep`  
++ `:help :make`  
++ `:help quickfix-window`  
++ `:help cnext`, `:help cprevious`  
++ `:help expand`  
++ `:help copen`  
++ `:help silent`  
+<!-- }}} -->
+
+# Case Study: Grep Operator, Part Two <!-- {{{ -->
+
 <!-- }}} -->
