@@ -4170,6 +4170,432 @@ $ git verify-pack -v .git/objects/pack/pack-978e03944f5c58....idx
 
 <!-- }}} -->
 ## The Refspec <!-- {{{ -->
+After running following command:
+```shell
+$ git remote add origin https://github.com/schacon/simplegit-progit
+```
+A new section to your repository's `.git/config` file will be added,
+specifying the name of the remote (`origin`), the URL of the remote
+repository, and the _refspec_ to be used for fetching:
+```txt
+[remote "origin"]
+    url = https://github.com/shacon/simplegit-progit
+    fetch = +refs/heads/*:refs/remotes/origin/*
+```
 
++ `+` tells Git to update the reference even if it isn't a fast-forward.  
++ `<src>:<dst>` where:  
+    - `<src>` - is the pattern for references on the remote side  
+    - `<dst>` - is where those references will be tracked locally  
+
+So, if there is a `master` branch on the server, you can access the log
+of that branch locally via any of the following:
+```shell
+$ git log origin/master
+$ git log remotes/origin/master
+$ git log refs/remotes/origin/master
+```
+
+If you want to fetch only `master` branch, you can change the fetch line
+to refer to that branch only:
+```txt
+fetch = +refs/heads/master:refs/remotes/origin/master
+```
+You can also specify multiple refspecs for fetching (just duplicate the
+line)  
+
+If you want to do a one-time only fetch, you can specify the specific
+refspec on the command line. To pull the `master` branch on the remote
+down to `origin/master` locally, you can run:
+```shell
+$ git fetch origin master:refs/remotes/origin/mymaster
+```
+
+You can also specify multiple refspecs:
+```shell
+$ git fetch origin master:refs/remotes/origin/mymaster \
+    topic:refs/remotes/origin/topic
+```
+
+You **can't** use the partial globas in the pattern. So this would be **invalid**
+```txt
+fetch = +refs/heads/qa*:refs/remotes/origin/qa*
+```
+However, you can use namespaces (or directories) to accomplish
+something like that:
+```txt
+[remote "origin"]
+    url = https://github.com/schacon/simplegit-progit
+    fetch = +refs/heads/master:refs/remotes/origin/master
+    fetch = +refs/heads/qa/*:refs/remotes/origin/qa/*
+```
+
+### Pushing Refspecs <!-- {{{ -->
+If the QA team wants to push their `master` branch to `qa/master` on the
+remote server, they can run:
+```shell
+$ git push origin master:refs/heads/qa/master
+```
+
+If they want Git to do that automatically:
+```shell
+[remote "origin"]
+    url = https://github.com/schacon/simplegit-progit
+    fetch = +refs/heads/*:refs/remote/origin/*
+    push = refs/heads/master:refs/heads/qa/master
+```
+
+<!-- }}} -->
+### Deleting References <!-- {{{ -->
+```shell
+$ git push origin :topic
+```
+by leaving off the `<src>` part, this basically says to make the `topic`
+branch on the remote nothing, which deletes it.  
+
+Or you can use the newer syntax:
+```shell
+$ git push origin --delete topic
+```
+
+
+<!-- }}} -->
+
+<!-- }}} -->
+## Transfer Protocols <!-- {{{ -->
+### The Dump Protocol <!-- {{{ -->
+Dumb protocol is likely what you get you you set up repository
+as read-only over HTTP. The fetch process is a series of HTTP `GET`
+requests.  
+<!-- }}} -->
+### The Smart Protocol <!-- {{{ -->
+There are two sets of processes for transferring data: a pair for
+uploading data and a pair for downloading data.  
+
+#### Uploading Data <!-- {{{ -->
+The `send-pack` process runs on the client and connects to a
+`receive-pack` process on the remote side.  
+<!-- }}} -->
+#### SSH <!-- {{{ -->
+Pushing looks like:
+```shell
+$ ssh -x git@server "git-receive-pack 'simplegit-progit.git'"
+```
+The `git-receive-pack` command immediately responds with one line for
+each reference it currently has. Now that we know the server's state,
+`send-pack` process determines what commits it has that the server
+doesn't.  
+
+<!-- }}} -->
+#### HTTP(S) <!-- {{{ -->
+Same as SSH but using `GET` and `POST` to fetch and send data.  
+<!-- }}} -->
+#### Downloading Data <!-- {{{ -->
+The client initiates a `fetch-pack` process that connects to an
+`upload-pack` process on the remote side to negotiate what data will be
+transferred down.  
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+## Maintenance and Data Recovery <!-- {{{ -->
+
++ Make a repository more compact  
++ Clean up an imported repository  
++ recover lost work  
+
+### Maintenance <!-- {{{ -->
+When there are too many packfile or too many loose objects (objects not
+in packfile), Git launches a full-fledged `git gc` command (garbage
+collect).  
+
+You can run auto gc manually as follows:
+```shell
+$ git gc --auto
+```
+
+This generally does nothing (you must have around 7,000 loose objects or
+more than 50 packfiles). You can modify these limits with the `gc.auto`
+and `gc.autopacklimit` config settings, respectively.  
+
+Suppose your repository contains the following branches and tags:
+```shell
+$ find .git/refs -type f
+.git/refs/heads/experiment
+.git/refs/heads/master
+.git/refs/tags/v1.0
+.git/refs/tags/v1.1
+```
+If you run `git gc` Git will move them for the sake of efficiency into
+the file named `.git/packed-refs` that looks like this:
+```shell
+# pack-refs with: peeled fully-peeled
+cac0cab538...   refs/heads/experiment
+ab1afef80f...   refs/heads/master
+cac0cab538...   refs/tags/v1.0
+9585191f37...   refs/tags/v1.1
+^1a410efbd1359...
+```
+Last line means the tag directly above is an annotated tag and that line
+is the commit that the annotated tag points to.  
+
+
+<!-- }}} -->
+### Data Recovery <!-- {{{ -->
+
+At some point in your Git journey, you may accidentally lose a commit:  
+
++ Force-delete a branch that had work on it  
++ Hard-reset a branch, thus abandoning commits that you wanted something
+  from.  
+
+Assuming this happends, how can you get your commits back?  
+
+Let's review where your repository is at this point:
+```shell
+$ git log --pretty=oneline
+ab1afe... modified repo a bit
+484a59... added repo.rb
+1a410e... third commit
+cac0ca... second commit
+fdf4fc... first commit
+```
+Now, move the `master` branch back to the middle commit:
+```shell
+$ git reset --hard 1a41oefbd1...
+HEAD is now at 1a410ef third commit
+$ git log --pretty=oneline
+1a410e... third commit
+cac0ca... second commit
+fdf4fc... first commit
+```
+You need to find the latest commit SHA-1 and then add a branch that
+points to it. Often the quickest way is to use a tool called `git reflog`. As you're working, Git silently records what your HEAD is every time you change it:
+```shell
+$ git reflog
+1a410ef HEAD@{0}: reset: moving to 10a410ef
+ab1afef HEAD@{1}: commit: modified repo.rb a bit
+484a592 HEAD@{2}: commit: added repo.rb
+```
+or you can use `git log -g` which will give you a normal log output for
+your reflog. Now you can create branch and commits are reachable.  
+
+Next, suppose your loss was for some reason not in the reflog. Now the
+first two commits aren't reachable by anything:
+```shell
+$ git branch -D recover-branch
+$ rm -Rf .git/logs/
+```
+One way is to use the `git fsck` utility, which checks your database for
+integrity. If you run it with the `--full` option, it shows you all
+objects that aren't pointed to by another object.  
+
+<!-- }}} -->
+### Removing Objects <!-- {{{ -->
+If single huge file exists in the history, the file will be downloaded
+with every clone.  
+
+Here is how you can find and remove large objects. (**be warned: this
+technique is destructive to your commit history**)  
+
+Add a large object to your history:
+```shell
+$ curl https://www.kernel.org/pub/software/scm/git/git-2.1.0.tar.gz > git.tgz
+$ git add git.tgz
+$ git commit -m "add git tarball"
+```
+Better get rid of it:
+```shell
+$ git rm git.tgz
+$ git commit -m "oops - removed large tarball"
+```
+Now `gc` your database:
+```shell
+$ git gc
+```
+And see how much space you're using:
+```shell
+$ git count-objects -v
+count: 7
+size: 32
+in-pack: 17
+packs: 1
+size-pack: 4868
+prune-packable: 0
+garbage: 0
+size-garbage: 0
+```
+Firstly you need to find large file. Git offers `git verify-pack`
+plumbing command:
+```shell
+$ git verify-pack -v .git/objects/pack/pack-29...69.idx \
+    | sort -k 3 -n \
+    | tail -3
+dadf82...   commit 229 159 12
+033b44...   blob   22044 5792 4977595
+82c99a...   blob   4975916 4976258 1438
+```
+Now you can use `rev-list` command to find your blob's name:
+```shell
+$ git rev-list --objects --all | grep 82c99a3
+```
+Now, you need to remove this file from all trees in your past:
+```shell
+$  git log --oneline --branches -- git.tgz
+```
+You must rewrite all the commits downstream from `7b30847` to fully
+remove this file from your Git history. To do so, you use `filter-branch`:
+```shell
+$ git filter-branch --index-filter \
+    'git rm --ignore-unmatch --cached git.tgz' -- 7b30847^..
+```
+
+Your history no longer contains a reference to that file. However, your
+reflog and a new set of refs that Git added when you did the
+`filter-branch` under `.git/refs/original` still do, so you have to
+remove them and then repack the database. You need to get rid of
+anything that has a pointer to those old commits before you repack:
+```shell
+$ rm -Rf .git/refs/originl
+$ rm -Rf .git/logs/
+$ git gc
+```
+Now object still exist on your local copy but won't be transferred on a
+push or subsequent clone.  
+If you really want to remove object, you could remove the ojbect
+completely by running `git prune --expire now`
+
+<!-- }}} -->
+
+<!-- }}} -->
+## Environment Variables <!-- {{{ -->
+### Global Behavior <!-- {{{ -->
+
++ `GIT_EXEC_PATH` - determines where Git looks for its sub-programs
+  (`git-commit`, `git-diff`,...). You can check the current setting by
+  running `git --exec-path`  
++ `HOME` - it's where Git looks for the global configuration file  
++ `PREFIX` - it's where Git looks for system-wide configuration. Git
+  looks for this file at `$PREFIX/etc/gitconfig`  
++ `GIT_CONFIG_NOSYSTEM` - if set, disables the use of the system-wide
+  configuration file  
++ `GIT_PAGER` - controls the program used to display multi-page output
+  on the command line. If this is unset, `PAGER` will be used as a
+  fallback.  
++ `GIT_EDITOR` is the editor Git will launch when the use needs to edit
+  some text. if unset, `EDITOR` will be used.  
+<!-- }}} -->
+### Repository Locations <!-- {{{ -->
+
++ `GIT_DIR` - is the location of the `.git` folder. If this isn't
+  specified, Git walks up the directory tree until it gets to `~`, or `/`, looking for a `.git` directory at every step  
++ `GIT_CEILING_DIRECTORIES` - controls the behavior of searching for a `.git`
+  directory. (if you access directories that are slow to load)  
++ `GIT_WORK_TREE` - is the location of the root of the working directory
+  for a non-bare repository.  
++ `GIT_INDEX_FILE` - is the path to the index file  
++ `GIT_OBJECT_DIRECTORY` - can be used to specify the location of the
+  directory that usually resides at `.git/objects`  
++ `GIT_ALTERNATE_OBJECT_DIRECTORIES` is a color-separated list, which
+  tells git where to check for objects if they aren't in
+  `GIT_OBJECT_DIRECTORY`. If you happen to have a lot of projects with
+  large files that have the exact same contents, this can be used to
+  avoid storing too many copies of them.  
+
+<!-- }}} -->
+### Pathspecs <!-- {{{ -->
+
+A "pathspec" refers to how you specify paths to things in Git, including
+the use of wildcards.  
+
++ `GIT_GLOB_PATHSPECS` and `GIT_NOGLOB_PATHSPECS` control the default
+  behavior of wildcards in pathspecs. You can override this in
+  individual cases by starting the pathspec with `:(glob)` or
+  `:(literal)` as in `:(glob)*.c`  
++ `GIT_LITERAL_PATHSPECS` - dispables both of the above behaviors; no
+  wildcard characters will work, and the override prefixes are disabled
+  as well  
++ `GIT_ICASE_PATHSPECS` - sets all pathspecs to work in a
+  case-insensitive manner.  
+<!-- }}} -->
+### Committing <!-- {{{ -->
+
++ `GIT_AUTHOR_NAME` - is a human-readable name in the "author field"  
++ `GIT_AUTHOR_EMAIL` - is the email for the "author" field.  
++ `GIT_AUTHOR_DATE` - is the timestamp used for the "author" field.  
++ `GIT_COMMITTER_NAME`  
++ `GIT_COMMITTER_EMAIL`  
++ `GIT_COMMITTER_DATE`  
+
+<!-- }}} -->
+### Networking <!-- {{{ -->
+
++ `GIT_CURL_VERBOSE` tells Git to emit all the messages generated by that
+library.  
++ `GIT_SSL_NO_VERIFY` tells Git not to verify SSL certificates.  
++ If the data rate of an HTTP operation is lower than
+  `GIT_HTTP_LOW_SPEED_LIMIT` bytes per second for longer than
+  `GIT_HTTPS_LOW_SPEED_TIME` seconds, Git will abort that operation.
+  These values override the `http.lowSpeedLimit` and `http.lowSpeedTime`  
++ `GIT_HTTP_USER_AGENT` sets the user-agent string used by Git when
+  communicating over HTTP. The default is value like `git/2.0.0`
+<!-- }}} -->
+### Diffing and Merging <!-- {{{ -->
+
++ `GIT_DIFF_OPTS` - the only valid values are `-u<n>` or
+  `--unified=<n>`, which controls the number of context lines shown in a
+  `git diff` command.  
++ `GIT_EXTERNAL_DIFF` - override for the `diff.external`. If it's set,
+  Git will invoke this program when `git diff` is invoked.  
++ `GIT_DIFF_PATH_COUNTER`, `GIT_DIFF_PATH_TOTAL` are useful from inside
+  the program specified by `GIT_EXTERNAL_DIFF`  
++ `GIT_MERGE_VERBOSITY` controls the output for the recursive merge
+  strategy:  
+    - `0` outputs nothing, except possibly a single error message  
+    - `1` shows only conflicts  
+    - `2` also shows file changes  
+    - `3` shows when files are skipped because they haven't changed  
+    - `4`shows all paths as they are processed  
+    - `5` and above show detailed debugging information
+    - default value is `2`  
+
+<!-- }}} -->
+### Debugging <!-- {{{ -->
+
+The possible values of these variables are as follows:  
+
++ `true`, `1`, or `2` - the trace category is written to stderr  
++ an absolute path starting with `/` - the trace output will be written
+  to that file.  
+
++ `GIT_TRACE` controls general traces (expansion of aliases, and
+  delegation to other sub-programs)  
++ `GIT_TRACE_PACK_ACCESS` - controls tracing of packfile access.  
++ `GIT_TRACE_PACKET` - enables packet-level tracing for network
+  operations  
++ `GIT_TRACE_PERFORMANCE` - controls logging of performance data. The
+  output shows how long each particular `git` invocation takes  
++ `GIT_TRACE_SETUP` - shows information about what Git is discovering
+  about the repository and environment it's interacting with.  
+
+<!-- }}} -->
+### Miscellaneous <!-- {{{ -->
+
++ `GIT_SSH` is the program that is invoked instead of `ssh`.  
++ `GIT_ASKPASS` is the program invoked whenever Git needs to ask the
+  user for credentials.  
++ `GIT_NAMESPACE` - controls access to namespaced refs, and is
+  equivalend to the `--namespace` flag.  
++ `GIT_FLUSH` can be used to force Git to use non-buffered I/O when
+  writing incrementally to stdout.  
++ `GIT_REFLOG_ACTION` lets you specify the descriptive text written to
+  the reflog:
+```shell
+$ GIT_REFLOG_ACTION="my action" git commit --allow-empty -m 'my message'
+[master 9e3d55a] my message
+$ git reflog -1
+9e3d55a HEAD@{0}: my action: my message
+```
+
+<!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
