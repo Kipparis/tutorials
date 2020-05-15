@@ -3050,7 +3050,484 @@ void runQueries(ifstream &infile) {
 <!-- }}} -->
 <!-- }}} -->
 ### Defining the Query Program Classes <!-- {{{ -->
-<!-- TODO: stopped here -->
+```cpp
+class QueryResult;  // declaration needed for return type in the query function
+class TextQuery {
+public:
+    using line_no = std::vector<std::string>::size_type;
+    TextQuery(std::ifstream&);
+    QueryResult query(const std::string&) const;
+private:
+    std::shared_ptr<std::vector<std::string>> file; // input file
+    // map of each word to the set of the line in which that word appears
+    std::map<std::string,
+             std::stared_ptr<std::set<line_no>>> wm;
+}
+```
+
+#### The `TextQuery` Constructor <!-- {{{ -->
+
+```cpp
+// read the input file and build the map of line to line numbers
+TextQuery::TextQuery(ifstream &is): file(new vector<string>) {
+    string text;
+    while (getline(is, text)) {     // for each line in the file
+        file->push_back(text);      // remember this line of text
+        int n = file->size() - 1;   // the current line number
+        istringstream line(text);   // separate the line into words
+        string word;
+        while (line >> word) {      // for each word in that line
+            // if word isn't already in wm, subsripting adds a new entry
+            auto &lines = wm[word]; // lines is a shared_ptr
+            if (!lines) // that pointer is null the first time we see word
+                lines.reset(new set<line_no>);  // allocate a new set
+            lines->insert(n);   // insert this line number
+        }
+    }
+}
+```
+
+<!-- }}} -->
+#### The `QueryResult` Class <!-- {{{ -->
+
+```cpp
+class QueryResult {
+friend std::ostream& print(std::ostream&, const QueryResult&);
+public:
+    QueryResult(std::string s,
+                std::shared_ptr<std::set<line_no>> p,
+                std::shared_ptr<std::vector<std::string>> f):
+        sought(s), lines(p), file(f) { }
+private:
+    std::string sought; // word this query represents
+    std::shared_ptr<std::set<line_no>> lines;   // lines it's on
+    std::shared_ptr<std::vector<std::string>> file; // input file
+}
+```
+
+<!-- }}} -->
+#### The `query` Function <!-- {{{ -->
+The only question is: What should we return if the given `string` is not
+found? We'll solve this problem by defining a local `static` object that
+is a `shared_ptr` to an empty `set` of line numbers. When the word is
+not found, we'll return a copy of this `shared_ptr`:
+```cpp
+QueryResult
+TextQuery::query(const string &sought) const {
+    // we'll return a pointer to this set if we don't find sought
+    static shared_ptr<set<line_no>> nodata(new set<line_no>);
+    // use find and not a subscript to avoid adding words to wm!
+    auto loc = wm.find(sought);
+    if (loc == wm.end())
+        return QeryResult(sought, nodata, file);    // not found
+    else
+        return QueryResult(sought, loc->second, file);
+}
+```
+
+<!-- }}} -->
+#### Printing the Results <!-- {{{ -->
+```cpp
+ostream &print(ostream &os, const QueryResult &qr) {
+    // if the word was found, print the count and all occurences
+    os << qr.sought << " occurs " << qr.lines->size() << " "
+        << make_plural(qr.lines->size(), "time", "s") << endl;
+    // print each line in which the word appeared
+    for (auto num : *qr.lines) // for every element in the set
+        // don't confound the user with text lines starting at 0
+        os << "\t(line " << num + 1 << ") "
+            << *(qr.file->begin() + num) << endl;
+    return os;
+}
+```
+
+<!-- }}} -->
+
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+# Copy Control <!-- {{{ -->
+Class defines five special member functions:  
+
++ **copy contstructor**  
++ **move constructor**  
++ **copy-assignment operator**  
++ **move-assignment operator**  
++ **destructor**  
+
++ Copy/move constructors define what happens when an obje ct is
+initialized from another object of the same type.  
++ Copy-/move-assignment operators define what happens when we assign an
+object of a class type to another object of that same class type.  
++ The destructor defines what happens when an object of the type ceases to
+exist.  
+
+## Copy, Assign, and Destroy <!-- {{{ -->
+### The Copy Constructor <!-- {{{ -->
+A constructor is the _copy constructor_ if its first parameter is a
+reference to the class type and any additional parameters have default
+values:
+```cpp
+class Foo {
+public:
+    Foo();              // default constructor
+    Foo(const Foo&);    // copy constructor
+    // ...
+}
+```
+Copy constructor usually should not be `explicit`. Also we can define
+the copy constructor to take a reference to non`const`.  
+
+#### The Sunthesized Copy Constructor <!-- {{{ -->
+When we do not define a copy constructor for a class, the compiler
+synthesizes one for us. THe compiler copies each non`static` member in
+turn from the given object into the one being created.  
+
+The type of each member determines how that member is copied:  
+
++ members of class type are copied by the copy constructor for that
+  class;  
++ members of built-in type are copied directly  
++ although we cannot directly copy an array, the synthesized copy
+  constructor copies members of array type by copying each element.  
+<!-- }}} -->
+#### Copy Initialization <!-- {{{ -->
+
+```cpp
+string dots(10, '.');               // direct initialization
+string s(dots);                     // direct initialization
+string s2 = dots;                   // copy initialization
+string null_book = "9-999-99999-9"; // copy initialization
+string nines = string(100, '9');    // copy initialization
+```
+
+When we use direct initialization, we are asking the compiler to use
+ordinary function matching to select the constructor that best matches
+the arguments we provide. When we use copy initialization, we are asking
+the compiler to copy the right-hand operand into the object being
+created, converting that operand if necessary.  
+
+Copy initialization happens not only when we define variables using an `=`, but also when we:  
+
++ pass an object as an argument to a parameter of nonreference type  
++ return an object from a function that has a nonreference return type  
++ brace initialize the elements in an array or the members of an
+  aggregate class  
+
+<!-- }}} -->
+#### Constraints on Copy Initialization <!-- {{{ -->
+```cpp
+vector<int> v1(10); // ok: direct initialization
+vector<int> v2 = 10;    // error: constructor that takes a size is explicit
+void f(vector<int>);    // f's parameter is copy initialized
+f(10);  // error: can't use an explicit constructor to copy an argument
+f(vector<int>(10)); // ok: directly construct a temporary vector from an int
+```
+
+<!-- }}} -->
+<!-- }}} -->
+### The Copy-Assignment Operator <!-- {{{ -->
+```cpp
+Sales_data trans, accum;
+trans = accum;  // uses the Sales_data copy-assignment operator
+```
+
+#### Introducing Overloaded Assignment <!-- {{{ -->
+Assignment operator is a function named `operator=`. Like any other
+function, an operator function has the return type and a parameter list.  
+
+When operator is a member function, the left-hand operand is bound to
+the implicit `this` parameter. The right-hand operand in a binary
+operator, such as assignment, is passed as an explicit parameter.  
+
+```cpp
+class Foo {
+public:
+    Foo& operator=(const Foo&); // assignment operator
+}
+```
+
+<!-- }}} -->
+#### The Synthesized Copy-Assignment Operator <!-- {{{ -->
+```cpp
+// equivalent to the synthesized copy-assignment operator
+Sales_data& Sales_data::operator=(const Sales_data &rhs) {
+    bookNo = rhs.bookNo     // calls the string::operator=
+    units_sold = rhs.units_sold;    // uses built-in int assignment
+    revenue = rhs.revenue;  // uses the built-in double assignment
+    return *this;           // return a reference to this object
+}
+```
+
+<!-- }}} -->
+
+<!-- }}} -->
+### The Destructor <!-- {{{ -->
+Destructors do whatever work is needed to free the resources used by an
+object and destroy the non`static` data members of the object. The
+destructor is a member function with the name of the class prefixed by a
+tilde (`~`). It has no return value and takes no parameters:
+```cpp
+class Foo {
+public:
+    ~Foo();     // destructor
+}
+```
+
+#### What a Destructor Does <!-- {{{ -->
+Members are destroyed in reverse order from the order in which they were
+initialized.  
+<!-- }}} -->
+#### The Synthesized Destructor <!-- {{{ -->
+```cpp
+class Sales_data {
+public:
+    // no work to do other than destroying the members, which happens automatically
+    ~Sales_data() { }
+}
+```
+It is important to realize that the destructor body does not directly
+destroy the members themselves. Members are destroyes as part of the
+implicit destruction phase that follows the destructor body.  
+
+<!-- }}} -->
+
+<!-- }}} -->
+### The Rule of Three/Five <!-- {{{ -->
+Classes That Need Destructors Need Copy and Assignment  
+Classes That Need Copy Need Assignment, and Vice Versa  
+
+<!-- }}} -->
+### Using `= default` <!-- {{{ -->
+We can explicitly ask the compiler to generate the synthesized versions
+of the copy-control members by defining them as `= default`.  
+
+```cpp
+class Sales_data {
+public:
+    // copy control; use defaults
+    Sales_data() = default;
+    // synthesized function is inline
+    Sales_data(const Sales_data&) = default;
+    Sales_data& operator = (const Sales_data&);
+    ~Sales_data() = default;
+};
+// synthesized function is not inline
+Sales_data& Sales_data::operator=(const Sales_data&) = default;
+```
+
+When we specify `= default` on the declaration of the member inside the
+class body, the synthesized function is implicitly inline. If we do not
+want the synthesized member to be an inline function, we can specify `=
+default` on the member's definition, as we do in the definition of the
+copy-assignment operator.  
+
+<!-- }}} -->
+### Preventing Copies <!-- {{{ -->
+#### Define a Function as Deleted <!-- {{{ -->
+We indicate that we want to define a function as deleted by following
+its parameter list with `= delete`:
+```cpp
+struct NoCopy {
+    NoCopy() = default;     // use the synthesized default constructor
+    NoCopy(const NoCopy&) = delete;                 // no copy
+    NoCopy& operator = (const Nocopy&) = delete;    // no assignment
+    ~NoCopy() = default;    // use the synthesized destructor
+}
+```
+
+<!-- }}} -->
+#### The Destructor Should Not be a Deleted Member <!-- {{{ -->
+The compiler will not let us define variables or create temporaries of a
+type that has a deleted destructor. Although we cann define variables or
+members of such types, we can dynamically allocate objects with a
+deleted destructor. However, we cannot free them:
+```cpp
+struct NoDtor {
+    NoDtor() = default;
+    ~noDtor() = delete; // we can't destroy objects of type NoDtor
+};
+NoDtor nd;  // error: NoDtor destructor is deleted
+NoDtor *p = new Nodtor();   // ok: but we can't delete p
+delete p;   // error: NoDtor destructor is deleted
+```
+
+<!-- }}} -->
+#### The Copy-Control Members May Be Synthesized as Deleted <!-- {{{ -->
+For some classes, the compiler defines these synthesized members as
+deleted functions:  
+
++ The synthesized destructor is defined as deleted if the class has a
+  member whose own destructor is deleted or is inaccessible.  
++ The synthesized copy constructor is defined as deleted if the class
+  has a member whose own copy constructor is deleted or inaccessible. It
+  is also deleted if the class has a member with a deleted or
+  inaccessible destructor.  
++ The synthesized copy-assignment operator is defined as deleted if a
+  member has a deleted or inaccessible copy-assignment operator, or if
+  the class has a `const` or reference member.  
++ The synthesized default constructor is defined as deleted if the class
+  has a member with a deleted or inaccessible destructor; or has a
+  reference member that does not have an in-class initializer; or has a
+  `const` member whose type does not explicitly define a default
+  constructor and that member does not have an in-class initializer.  
+
+<!-- }}} -->
+#### `private` Copy Control <!-- {{{ -->
+Prior to the new standard, classes prevented copies by declaring their
+copy constructor and copy-assignment operator as `private`:
+```cpp
+class PrivateCopy {
+    // no control is private and so is inaccessible to ordinary user code
+    // friends and members of the class can still make copies
+    PrivateCopy(const PrivateCopy&);
+    PrivateCopy &operator=(const PrivateCopy&);
+public:
+    PrivateCopy() = default;    // use the synthesized default constructor
+    ~PrivateCopy(); // users can define objects of this type but not copy them
+};
+```
+
+
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+## Copy Control and Resource Management <!-- {{{ -->
+To illustrate two approaches (value-/pointer-like), we'll define the
+copy-control members for the HasPtr class used in the exercises. First,
+we'll make the class act like a value; then we'll reimplement the class
+making it behave like a pointer.  
+
+### Classes That Act Like Values <!-- {{{ -->
+
+To implement valuelike behavior HasPtr needs:  
+
++ A copy constructor that copies the `string`, not just the pointer  
++ A destructor to free the `string`  
++ A copy-assignment operator to free the object's existing `string` and
+  copy the `string` from its right-hand operand.  
+
+```cpp
+class HasPtr {
+public:
+    HasPtr(const std::string &s = std::string()):
+        ps(new std::string(s)), i(0) { }
+    // each HasPtr has its own copy of the new string to which ps points
+    HasPtr(const HasPtr& p):
+        ps(new std::string(*p.ps)), i(p.i) { }
+    HasPtr& operator=(const HasPtr&);
+    ~HasPtr() { delete ps; }
+private:
+    std::string *ps;
+    int i;
+}
+```
+
+#### Valuelike Copy-Assignment Operator <!-- {{{ -->
+Assignment operators typically combine the actions of the destructor and
+the copy constructor.  
+
+```cpp
+HasPtr& HasPtr&::operator = (const HasPtr &rhs) {
+    auto newp = new string(*rhs.ps);    // copy the underlying string
+    delete ps;      // free the old memory
+    ps = newp;      // copy data from rhs into this object
+    i = rhs.i;
+    return *this;   // return this object
+}
+```
+
+There are two points to keep in mind when you write an assignment
+operator:  
+
++ assignment operators must work correctly if an object is assigned to
+  itself.  
++ most assignment operators share work with the destructor and copy
+  constructor.  
+
+A good pattern to use when you write an assignment operator is to first
+copy the right-hand operand into a local temporary. After the copy is
+done, it is safe to destroy and replace the existing members of the left-hand
+operand.  
+
+<!-- }}} -->
+
+
+<!-- }}} -->
+### Defining Classes That Act Like Pointers <!-- {{{ -->
+The easiest way to make a class act like a pointer is to use `shared_ptr`s.
+However, sometimes we want to manage a resource directly. In such cases,
+it can be useful to use a _reference count_.  
+
+#### Reference Counts <!-- {{{ -->
+
++ on initialization we initialize the counter to 1  
++ copy constructor does not allocate a new counter; instead, it shares
+  it with the one who get copied and sums 1.  
++ destructor decrements the counter  
++ copy-assignment operator increments the right-hand operand's counter
+  and decrements the ocunter of the left-hand operand. If the counter
+  for the left-hand operand goes to zero, there are no more users. In
+  this case, the copy-assignment operator must destroy the state of the
+  left-hand operand.  
+
+<!-- }}} -->
+#### Defining a Reference-Counted Class <!-- {{{ -->
+Using a dynamic reference count, we can write the pointerlike version of
+HasPtr as follows:
+```cpp
+class HasPtr {
+public:
+    // constructor allocates a new string and a new counter, which it sets to 1
+    HasPtr(const std::string &s = std::string()):
+        ps(new std::string(s)), i(0), use(new std::size_t(1)) { }
+    // copy constructor copies all three data members and increments the counter
+    HasPtr(const HasPtr &p):
+        ps(p.ps), i(p.i), use(p.use) { ++*use; }
+    HasPtr& operator=(const HasPtr&);
+    ~HasPtr();
+private:
+    std::string *ps;
+    int i;
+    std::size_t *use;   // member to keep track of how many objects share *ps
+}
+```
+
+<!-- }}} -->
+#### Pointerlike Copy Members "Fiddle" the Reference Count <!-- {{{ -->
+
+The destructor cannot unconditionally delete ps:
+
+```cpp
+Hasptr::~HasPtr() {
+    if (--*use == 0) {  // if the reference count goes to 0
+        delete ps;      // delete the string
+        delete use;     // and the counter
+    }
+}
+```
+
+Also, as usual, the assign operator must handle self-assignment:
+
+```cpp
+HasPtr& HasPtr::operator=(const HasPtr &rhs) {
+    ++*rhs.use; // increment the use ocunt of the right-hand operand
+    if (--*use == 0) {  // then decrement this object's counter
+        delete ps;      // if no other users
+        delete use;     // free this object's allocated members
+    }
+    ps = rhs.ps;        // copy data from rhs into this object
+    i = rhs.i;
+    use = rhs.use;
+    return *this;       // return this object
+}
+```
+
+<!-- }}} -->
+<!-- }}} -->
+<!-- }}} -->
+## Swap <!-- {{{ -->
+
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
