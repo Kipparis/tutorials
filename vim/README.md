@@ -1198,7 +1198,306 @@ D>")) . " ."<cr>:copen<cr>
 + `:help copen`  
 + `:help silent`  
 <!-- }}} -->
-
 # Case Study: Grep Operator, Part Two <!-- {{{ -->
+## Create a File <!-- {{{ -->
+Create separate file named `grep-operator.vim` and place it in
+`~/.vim/plugin` directory. We'll type the command there instead of in
+command line.  
+<!-- }}} -->
+## SKeleton <!-- {{{ -->
+To create a new Vim operator you'll start with two components: a
+function and a mapping:
+```vim
+nnoremap <leader>g :set operatorfunc=GrepOperator<cr>g@
 
+function! GrepOperator(type)
+    echom "Test"
+endfunction
+```
+
+Source and run this mapping. Vim will echo `Test` after accepting any
+motion, which means we've laid out the skeleton.  
+
+That mapp ing is a bit more complicated. First we set the `operatorfunc`
+option to our function, and then we run `g@` which calls this function
+as an operator.  
+
+<!-- }}} -->
+## Visual Mode <!-- {{{ -->
+We've added the operator to normal mode, but we'll want to be able to
+use it from visual mode as well. Add another mapping below the first:
+```vim
+vnoremap <leader>g :<c-u>call GrepOperator(visualmode())<cr>
+```
+
+The `<c-u>` removes ranges that Vim automatically inserts.
+`visualmode()` is a built-in VIm function that returns a one-character
+string representing the last type of visual mode used: "v" for
+characterwise, "V" for linewise, and a `Ctrl-v` character for blockwise.  
+
+<!-- }}} -->
+## Motion Types <!-- {{{ -->
+Change function body:
+```cpp
+function! GrepOperator(type)
+    echom a:type
+endfunction
+```
+
+Source the file, then go agead and try it our in a variety of ways. Some
+examples of the output you get are:  
+
++ `viw<leader>g` - echoes `v`  
++ `Vjj<leader>g` - echoes `V`  
++ `<leader>giw` - echoes `char`  
++ `<leader>gG` - echoes `line`  
+<!-- }}} -->
+## Copying the Text <!-- {{{ -->
+Our function is going to need to somehow get access to the text the user
+wants to search for, and the easiest way to do that is to simply copy
+it. Edit hte function to look like this:
+```vim
+nnoremap <leader>g :set operatorfunc=GrepOperator<cr>g@
+vnoremap <leader>g :<c-u>call GrepOperator(visualmode())<cr>
+
+function! GrepOperator(type)
+    " echom a:type
+    if a:type ==# 'v'
+        execute "normal! `<v`>y"
+    elseif a:type ==# 'char'
+        execute "normal! `[v`]y"
+    else
+        return
+    endif
+
+    echom @@
+endfunction
+```
+
+Each time Vim will echo the text that the motion covers.  
+
+<!-- }}} -->
+## Escping the Search Term <!-- {{{ -->
+Now that we've got the text we need in a Vim string we can escape it
+like we did in the previous chapter. Modify the `echom` command so it
+looks like this:
+
+```vim
+function! GrepOperator(type)
+    " echom a:type
+    if a:type ==# 'v'
+        execute "normal! `<v`>y"
+    elseif a:type ==# 'char'
+        execute "normal! `[v`]y"
+    else
+        return
+    endif
+
+    echom shellescape(@@)
+endfunction
+```
+
+<!-- }}} -->
+## Running Grep <!-- {{{ -->
+We're finally ready to add the `grep!` command that will perform the
+actual search:
+```vim
+nnoremap <leader>g :set operatorfunc=GrepOperator<cr>g@
+vnoremap <leader>g :<c-u>call GrepOperator(visualmode())<cr>
+
+function! GrepOperator(type)
+    if a:type ==# 'v'
+        execute "normal! `<v`>y"
+    elseif a:type ==# 'char'
+        execute "normal! `[v`]y"
+    else
+        return
+    endif
+
+    silent execute "grep! -R " . shellescape(@@) . " ."
+    copen
+endfunction
+```
+
+Now the command is wrote.  
+
+<!-- }}} -->
+
++ `:help visualmode()`  
++ `:help c_ctrl-u`  
++ `:help operatorfunc`  
++ `:help map-operator`  
+
+<!-- }}} -->
+# Case Study: Grep Operator, Part Three <!-- {{{ -->
+Part of writing Vimscript is being considerate and making your users'
+lives easier.  
+
+## Saving Registers <!-- {{{ -->
+By yanking the text into the unnamed register we destroy anything that
+was previously in there. Let's save the contents of that register before
+we yank and restore it after we've done:
+
+```vim
+function! GrepOperator(type)
+    let saved_unnamed_refister = @@
+
+    if a:type ==# 'v'
+        execute "normal! `<v`>y"
+    elseif a:type ==# 'char'
+        execute "normal! `[v`]y"
+    else
+        return
+    endif
+
+    silent execute "grep! -R " . shellescape(@@) . " ."
+    copen
+
+    let @@ = saved_unnamed_register
+endfunction
+```
+
+<!-- }}} -->
+## Namespacing <!-- {{{ -->
+Our script created a function named `GrepOperator` in the global
+namespace. This probably isn't a big deal, but when you're writing
+Vimscript it's far better to be safe than sorry.  
+
+We can avoid polluting the global namespace by tweaking a couple of line
+in our code:
+```vim
+nnoremap <leader>g :set operatorfunc=<SID>GrepOperator<cr>g@
+vnoremap <leader>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
+
+function! s:GrepOperator(type)
+```
+
+FIrst, we modified the function name to start with `s:` which places it
+in the current script's namespace. We also prepended the `GrepOperator`
+function name with `<SID>` so they could find the function.  
+
+<!-- }}} -->
+
++ `:help <SID>`  
+<!-- }}} -->
+# Lists <!-- {{{ -->
+Vimscript lists are ordered, heterogeneous collections of elements.
+```vim
+:ehco ['foo', 3, 'bar']
+```
+
+Vim displays the list. Lists can of course be nested.
+```vim
+:echo ['foo', [3, 'bar']]
+```
+
+## Indexing <!-- {{{ -->
+Vimscript lists are zero-indexed, you can get at the elements in the
+usual way as well as in reverse order.
+```vim
+" displays [1,2]
+:echo [0, [1,2]][1]
+" displays 0
+:echo [0, [1,2]][-2]
+```
+<!-- }}} -->
+## Slicing <!-- {{{ -->
+This will look familiar to Python programmers, but it does not always
+act the same way!
+```vim
+:echo ['a', 'b', 'c', 'd', 'e'][0:2]
+```
+Vim displays `['a','b','c']`. You can safely exceed the upper bound as
+well.
+```vim
+:echo ['a','b','c','d','e'][0:100000]
+```
+Vim simply displays the entire list. Slice indexes can be negative.
+```vim
+:echo ['a','b','c','d','e'][-2:-1]
+```
+Vim displays `['d','e']`. When slicing lists you can leave off the first
+index to mean "the beginning" and/or the last index to mean "the end".
+```vim
+:echo ['a','b','c','d','e'][:1]
+:echo ['a','b','c','d','e'][3:]
+```
+Vim displays `['a','b']` and `['d','e']`  
+
+Like Python, Vimscript allows you to index and slice string too.
+```vim
+:echo "abcd"[0:2]
+```
+Vim displays `abc`.  
+
+However! You can't use negative bare indices with strings. You can use
+negative indices when slicing string though!
+```vim
+"            v - not ok;  v - ok
+:echo "abcd"[-1] . "abcd"[-2:]
+```
+
+<!-- }}} -->
+## Concatenation <!-- {{{ -->
+You can combine Vim lists with `+`.
+```vim
+:echo ['a', 'b'] + ['c']
+```
+Vim displays `['a','b','c']`.  
+
+<!-- }}} -->
+## List Functions <!-- {{{ -->
+Append `b`:
+```vim
+:let foo = ['a']
+:call add(foo, 'b')
+:echo foo
+```
+Vim mutates the list `foo` in-place to append 'b' and displays `['a','b']`.
+Get length of list:
+```vim
+:echo len(foo)
+```
+Vim displays 2. Get the item at the given index from the given list, or
+return the given default value if the index is out of range in the list:
+```vim
+:echo get(foo, 0, 'default')
+:echo get(foo, 100, 'default')
+```
+Vim displays `a` and `default`. Return the first index of the given item
+in the given list, or -1 if the item is not in the list:
+```vim
+:echo index(foo, 'b')
+:echo index(foo, 'nope')
+```
+Vim displays 1 and -1. `join` will join the items in the given list
+together into a string separated by the given separator string (or a
+space if none is given), coercing each item to a string if
+necessary/possible.
+```vim
+:echo join(foo)
+:echo join(foo, '---')
+:echo join([1,2,3], '')
+" Vim displays a b, a---b, and 123
+```
+`reverse` reverses the given list in place:
+```vim
+:call reverse(foo)
+:echo foo
+:call reverse(foo)
+:echo foo
+" Vim displays ['b','a'] and then ['a','b']
+```
+
+
+<!-- }}} -->
+
++ `:help List`  
++ `:help add()`  
++ `:help len()`  
++ `:help get()`  
++ `:help index()`  
++ `:help join()`  
++ `:help reverse()`  
++ `:help functions`
 <!-- }}} -->
