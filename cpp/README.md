@@ -3527,6 +3527,221 @@ HasPtr& HasPtr::operator=(const HasPtr &rhs) {
 <!-- }}} -->
 <!-- }}} -->
 ## Swap <!-- {{{ -->
+If a class defines its own `swap`, then the algorithm uses that
+class-specific version. Otherwise, it uses the `swap`function defined by
+the library.  
+
+Simple swap we can do:
+```cpp
+string* temp = v1.ps;   // make a temporary copy of the pointer in v1.ps
+v1.ps = v2.ps;          // assign the pointer in v2.ps to v1.ps
+v2.ps = temp;           // assign the saved pointer in v1.ps to v2.ps
+```
+
+### Writing Our Own `swap` Function <!-- {{{ -->
+The typical implementation of swap is:
+```cpp
+class HasPtr {
+    friend void swap(HasPtr&, HasPtr&);
+};
+void swap(HasPtr &lhs, HasPtr &rhs) {
+    using std::swap;
+    swap(lhs.ps, rhs.ps);   // swap the pointers, not the string data
+    swap(lhs.i, rhs.i);     // swap the int members
+}
+```
+
+<!-- }}} -->
+### `swap` Functions Should Call `swap`, Not `std::swap` <!-- {{{ -->
+If you write:
+```cpp
+void swap(Foo& lhs, Foo& rhs) {
+    //  WRONG: this function uses the library vesion of swap, not the HasPtr version
+    std::swap(lhs.h, rhs.h);
+}
+```
+The right way to write this `swap` function is:
+```cpp
+void swap(Foo& lhs, Foo& rhs) {
+    using std::swap;
+    swap(lhs.h, rhs.h); // uses the HasPtr version of swap
+}
+```
+If there is a type-specific version of `swap`, that version will be a
+better match than the one defined in `std`.  
+
+
+
+<!-- }}} -->
+### Using `swap` in Assignment Operators <!-- {{{ -->
+These operators use a technique known as **copy and swap**. This
+technique _swaps the left-hand operand with a copy of the right-hand
+operand_:
+```cpp
+// note rhs is passed by value, which means the HasPtr copy constructor
+// copies the string in the right-hand operand into rhs
+HasPtr& HasPtr::operator=(HasPtr rhs) {
+    // swap the ocntents of the left-hand operand with the local variable rhs
+    swap(*this, rhs);   // rhs now points to the memory this object had used
+    return *this;       // rhs is destroyed, which deletes the pointer in rhs
+
+}
+```
+
+<!-- }}} -->
+
+<!-- }}} -->
+## A Copy-Control Example <!-- {{{ -->
+Some classes have bookkeeping or other actions that the copy-control
+members must perform.  
+As an example we'll sketch out two classes that might be used in a
+mail-handling application. These classes, `Message` and `Folder`,
+represent, respectively, email messages and directories in which a
+message might appear. Each `Message` can appear in multiple `Folders`.
+However, there will be only one copy of the ocntents of any given
+`Message` (if the contents of `Message` are changed, those changes will
+appear when we view that `Message` from any of its `Folders`)  
+To keep track of which `Messages` are in which `Folders`, each `Message`
+will store a set of pointers to the `Folders` in which it appears, and
+vica verse.  
+
+Our `Message` class will provide `save` and `remove` operations. To
+create a new `Message`, we will specify the contents of the message. To
+put a `Message` in a particular `Folder`, we must call `save`.  
+
+> The copy-assignment operator often does the same work as is needed in
+> the copy constructor and destructor. In such cases, the common work
+> should be put in `private` utility functions.  
+
+Assume `Folder`class has members named `addMsg` and `remMsg` that do
+whatever work is need to add or remove this `Message`, respectively,
+from the set of messages in the given `Folder`.  
+
+### The `Message` Class <!-- {{{ -->
+
+```cpp
+class Message {
+    friend class Folder;
+public:
+    // folders is implicitly initialized to the empty set
+    explicit Message(const std::string &str = ""):
+        contents(str) { }
+    // copy control to manage pointers to this message
+    Message(const Message&);            // copy constructor
+    Message& operator=(const Message&); // copy assignment
+    ~Message();                         // destructor
+    // add/remove this Message from the specified Folder's set of messages
+    void save(Folder&);
+    void remove(Folder&);
+private:
+    std::string contents;               // actual message text
+    std::set<Folder*> folders;          // Folders that have this Message
+    // utility functions used by copy constructor, assignment, and destructor
+    // add this Message to the folders that point to the parameter
+    void add_to_Folders(const Message&);
+    // remove this Message from every Folder in folders
+    void remove_from_Folders();
+}
+```
+
+
+<!-- }}} -->
+### The `save` and `remove` Members <!-- {{{ -->
+
+```cpp
+void Message::save(Folder &f) {
+    foldrs.insert(&f);  // add the given Folder to our list of Folders
+    f.addMsg(this);     // add this Message to f's set of Messages
+}
+void Message::remove(Folder &f) {
+    foldrs.erase(&f);   // take the given Folder out of our list of Folders
+    f.addMsg(this);     // remove this Message to f's set of Messages
+}
+```
+
+<!-- }}} -->
+### Copy Control for the `Message` Class <!-- {{{ -->
+```cpp
+// add this Message to Folders that point to m
+void Message::add_to_FOlders(const Message &m) {
+    for (auto f : m.folders) // for each Folder that holds m
+        f->addMsg(this); // add a pointer to this Message to that Folder
+}
+```
+
+The `Message` copy constructor copies the data members of the given
+object:
+```cpp
+Message::Message(const Message &m):
+    contents(m.contents), folders(m.folders) {
+    add_to_Folders(*this);  // add this Message to the Folders that point to m
+}
+```
+
+
+
+<!-- }}} -->
+### The `Message` Destructor <!-- {{{ -->
+```cpp
+// remove this Message from the corresponding Folders
+void Message::remove_from_Folders() {
+    for (auto f : folders)  // for each pointer in folders
+        f->remMsg(this);    // remove this Message from that Folder
+}
+```
+Given the `remove_from_Folders` function, writing the destructor is
+trivial:
+```cpp
+Message::~Message() {
+    remove_from_Folders();
+}
+```
+
+
+<!-- }}} -->
+### `Message` Copy-Assignment Operator <!-- {{{ -->
+To protect against self-assignment you remove pointers to this `Message`
+from the _folders_ of the left-hand operand before inserting pointers in
+the _folders_ in the right-hand operand:
+```cpp
+Message& Message::operator=(const Message &rhs) {
+    // handle self-assignment by removing pointers before inserting them
+    remove_from_Folders();      // update existing Folders
+    contents = rhs.contents;    // copy message contents from rhs
+    folders = rhs.folders;      // copy FOlder pointers from rhs
+    add_to_Folders(rhs);        // add this Message to those Folders
+    return *this;
+}
+```
+
+<!-- }}} -->
+### A `swap` Function for `Message` <!-- {{{ -->
+Our `swap` function must also manage the `Folder` pointers that point to
+the swapped `Messages`. After a call such as `swap(m1, m2)`, the
+`Folder`s that had pointed to _m1_ must now point to _m2_, and vice
+versa.  
+```cpp
+void swap(Message &lhs, Message &rhs) {
+    using std::swap;    // not strictly needed in this case, but good habit
+    // remove pointers to each Message from their (original respective Folders)
+    for (auto f: lhs.folders)
+        f->remMsg(&lhs);
+    for (auto f: rhs.folders)
+        f->remMsg(&rhs);
+    // swap the contents and Folder pointer sets
+    swap(lhs.folders, rhs.folders);     // uses swap(set&, set&)
+    swap(lhs.contents, rhs.contents);   // swap(string&, string&)
+    // add pointers to each Message to their (new) respective Folders
+    for (auto f: lhs.folders)
+        f->addMsg(&lhs);
+    for (auto f: rhs.folders)
+        f->addMsg(&rhs);
+}
+```
+
+<!-- }}} -->
+<!-- }}} -->
+## Classes That Manage Dynamic Memory <!-- {{{ -->
 
 <!-- }}} -->
 <!-- }}} -->
