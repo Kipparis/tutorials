@@ -3742,7 +3742,498 @@ void swap(Message &lhs, Message &rhs) {
 <!-- }}} -->
 <!-- }}} -->
 ## Classes That Manage Dynamic Memory <!-- {{{ -->
+Usually classes that use dynamic memory should use a library container
+to hold their data. However, some classes need to do their own
+allocation.  
+
+As an example, we'll implement a simplification of the library `vector`
+class.  
+
+### `StrVec` Class Design <!-- {{{ -->
+We'll use an `allocoator` to obtain raw memory. Because the memory an
+allocator allocates is unconstructed, we'll use the allocator's
+`construct` member to create objects in that space when we need to add
+an element. Similarly, when we remove an element, we'll use the `destroy`
+member to destroy the element.  
+
+Each `StrVec` will have three pointers:  
+
++ `elements` - points to the first element in the allocated memory  
++ `first_free` - points just after the last actual element  
++ `cap` - points just past the end of the allocated memory  
+
+In addition to these pointers, `StrVec` will have a member named `alloc`
+that is an `allocator<string>`. Our class will also have four utility
+functions:  
+
++ `alloc_n_copy` will allocate space and copy a given range of elements  
++ `free` will destroy the constructed elements and deallocate the space.
++ `chk_n_alloc` will ensure that there is room to add at least one more
+  element. If there isn't room for another element, the function will
+  call `reallocate` to get more space.  
++ `reallocate` will reallocate the `StrVec` when it runs out of space  
+
+<!-- }}} -->
+### `StrVec` Class Definition <!-- {{{ -->
+
+```cpp
+// simplified implementation of the memory allocation strategy for a vector-like class
+class StrVec {
+public:
+    StrVec():   // the allocator member is default initialized
+        elements(nullptr), first_free(nullptr), cap(nullptr) { }
+    StrVec(const StrVec&);  // copy constructor
+    StrVec& operator = (const StrVec&); // copy assignment
+    ~StrVec();  // destructor
+    void push_back(const std::string&); // copy the element
+    size_t size() const { return first_free - elements; }
+    size_t capacity() const { return cap - elements; }
+    std::string* begin() const { return elements; }
+    std::string* end() const { return first_free; }
+    // ...
+private:
+    std::allocator<std::string> alloc;  // allocates the elements
+    // used by the functions that add elements to the StrVec
+    void chk_n_alloc() { if (size() == capacity()) reallocate(); }
+    // utilities used by the copy constructor, assignment operator, and destructor
+    std::pair<std::string*, std::string*> alloc_n_copy
+        (const std::string*, const std::string*);
+    void free();        // destroy the elements and free the space
+    void reallocate();  // get more space and copy the existing elements
+    std::string* elements;      // pointer to the first element in the array
+    std::string* first_free;    // pointer to the first free element in the array
+    std::string* cap;           // pointer to one past the end of the array
+};
+```
+
+
+<!-- }}} -->
+### Using `construct` <!-- {{{ -->
+```cpp
+void StrVec::push_back(const string& s) {
+    chk_n_alloc();  // ensure that there is room for anothe element
+    // construct a copy of s in the element to which first_free points
+    alloc.construct(first_free++, s);
+}
+```
+
+<!-- }}} -->
+### The `alloc_n_copy` Member <!-- {{{ -->
+The `alloc_n_copy` member will allocate enough storage to hold its given
+range of elements and will copy those elements into the newly allocated
+space.
+```cpp
+pair<string*, string*>
+StrVec::alloc_n_copy(const string* b, const string* e) {
+    // allocate space to hold as many elements as are in the range
+    auto data = alloc.allocate(e - b);
+    // initialize and return a pair constructed from data and
+    // the value returned by unitialized_copy
+    return {data, uninitialized_copy(b, e, data)};
+}
+```
+
+<!-- }}} -->
+### The `free` Member <!-- {{{ -->
+```cpp
+void StrVec::free() {
+    // may not pass deallocate a 0 pointer; if elements is 0, there's no work to do
+    if (elements) {
+        // destroy the old elements in reverse order
+        for (auto p = first_free; p != elements; /* empty */)
+            alloc.destroy(--p);
+        alloc.deallocate(elements, cap - elements);
+    }
+}
+```
+
+<!-- }}} -->
+### Copy-Control Members <!-- {{{ -->
+```cpp
+StrVec::StrVec(const StrVec& s) {
+    // calll alloc_n_copy to allocate exactly as many elements as in s
+    auto newdata = alloc_n_copy(s.begin(), s.end());
+    elements = newdata.first;
+    first_free = cap = newdata.second;
+}
+
+StrVec::~StrVec() { free(); }
+
+StrVec& StrVec::operator = (const StrVec& rhs) {
+    // call alloc_n_copy to allocate exactly as many elements as in rhs
+    auto data = alloc_n_copy(rhs.begin(), rhs.end());
+    free();
+    elements = data.first;
+    first_free = cap = data.second;
+    return *this;
+}
+```
+
+<!-- }}} -->
+### Moving, Not Copying, Elements during Reallocation <!-- {{{ -->
+This function must:  
+
++ Allocate memory for a new, larger array of `string`s  
++ Construct the first part of that space to hold the existing elements  
++ Destroy the elements in the existing memory and deallocate that memory  
+
+<!-- }}} -->
+### Move Constructors and `std::move` <!-- {{{ -->
+```cpp
+void StrVec::reallocate() {
+    // we'll allocate space for twice as many elements as the current size
+    auto newcapacity = size() ? 2 * size() : 1;
+    // allocate new memory
+    auto newdata = alloc. allocate(newcapacity);
+    // move the data from the old memory to the new
+    auto dest = newdata;    // points to the next free position in the new array
+    auto elem = elements;   // points to the next element in the old array
+    for (size_t i = 0; i != size(); ++i)
+        alloc.construct(dest++, std::move(*elem++));
+    free(); // free the old space once we've moved the elements
+    // update our data structure to point to the new elements
+    elements = newdata;
+    first_free = dest;
+    cap = elements + newcapacity;
+}
+```
 
 <!-- }}} -->
 <!-- }}} -->
+## Moving Objects <!-- {{{ -->
+### Rvalue References <!-- {{{ -->
+An rvalue reference is a reference that must be bound to an rvalue. An
+rvalue reference is obtained by using `&&` rather thatn `&`. As we'll
+see, rvalue references have the important property that they may be
+bound only to an object that is about to be destroyed. As a result, we
+are free to "move" resources from an rvalue reference to another object.  
+
+```cpp
+int i         = 42; // ok: r refers to i
+int &r        = i; // ok: r refers to i
+int &&rr      = i;   // error: cannot bind an rvalue reference to an lvalue
+int &r2       = i * 42;   // error: i*42 is an rvalue
+const int &r3 = i * 42; // ok: we can bind a reference to const to an rvalue
+int &&rr2     = i * 42; // ok: bind rr2 to the result of the multiplication
+```
+
+Functions that return lvalue references, along with the assignment,
+subscript, dereference, and prefix increment/decrement operators, are
+all examples of expressions that return lvalues. We can bind an lvalue
+reference to the result of any these expressions.  
+
+Functions that return a nonreference type, along with the arithmetic,
+relational, bitwise, and postfix increment/decrement operators, all
+yield rvalues. We cannot bind an lvalue reference to these expressions,
+but we can bind either an lvalue reference to a `const` or an rvalue
+reference to such expressions.  
+
+#### Lvalues Persist; Rvalues Are Ephemeral <!-- {{{ -->
+Because rvalue references can only be bound to temporaries, we know
+that:  
+
++ the refrerred-to object is about to be destroyed  
++ There can be no other users of that object  
+
+These facts together mean that ocde that uses an rvalue reference is
+free to take over resources from the object to which the reference
+refers.  
+<!-- }}} -->
+#### The Library `move` Function <!-- {{{ -->
+The `move` function returns an rvalue reference to its given object:
+```cpp
+int &&rr3 = std::move(rr1); // ok
+```
+
+We can destroy a moved-from object and can assign a new value to it, but
+we cannot use the value of a moved-from object.  
+
+<!-- }}} -->
+
+<!-- }}} -->
+### Move Constructor and Move Assignment <!-- {{{ -->
+As an example, we'll define the `StrVec` constructor to move rather than
+copy the elements from one `StrVec` to another:
+```cpp
+StrVec::StrVec(StrVec &&s) noexcept // promise that move won't throw any exceptions
+    // member initializers take over the resources in s
+    : elements(s.elements), first_free(s.first_free), cap(s.cap) {
+    // leave s in a state in which it is safe to run the destructor
+    s.elements = s.first_free = s.cap = nullptr;
+}
+```
+
+<!-- }}} -->
+### Move-Assignment Operator <!-- {{{ -->
+As with the move constructor, if our move-assignment operator won't
+throw any exception, we should make it `noexcept`. Like a
+copy-assignment operator, a move-assignment operator must guard against
+self-assignment:
+```cpp
+StrVec &StrVec::operator=(StrVec &&rhs) noexcept {
+    // direct test for self-assignment
+    if (this != &rhs) {
+        free();         // free existing elements
+        elements = rhs.elements;    // take over resources from rhs
+        cap = rhs.cap;
+        // leave rhs in a destructible state
+        rhs.elements = rhs.first_free = rhs.cap = nullptr;
+    }
+    return *this;
+}
+```
+
+
+<!-- }}} -->
+### The Synthesized Move Operations <!-- {{{ -->
+The ocmpiler synthesizes the move constructor and move assignment only
+if a class does not define any of its own copy-control members and only
+if all the data members can be moved constructed and move assigned.  
+
+Classes that define a move constructor or move-assignment operator must
+also define their own copy operations. Otherwise, those members are
+deleted by default.  
+<!-- }}} -->
+#### Rvalues Are Moved, Lvalues Are Copies, But Rvalues Are Copied If there Is No Move Constructor. <!-- {{{ -->
+
+```cpp
+StrVec v1, v2;
+v1 = v2;                    // v2 is an lvalue; copy assignment
+StrVec getVec(istream &);   // getVec returns an rvalue
+v2 = getVec(cin);           // getVec(cin) is an rvalue; move assignment
+```
+
+```cpp
+class Foo {
+public:
+    Foo() = default;
+    Foo(const Foo&);    // copy constructor
+    // other members, but Foo does not define a move constructor
+};
+Foo x;
+Foo y(x);               // copy constructor; x is an lvalue
+Foo z(std::move(x));    // copy constructor, because there is no move constructor
+```
+<!-- }}} -->
+#### Copy-and-Swap Assignment Operators and Move <!-- {{{ -->
+If we add a move constructor to this class, it will effectively get a
+move assignment operator as well:
+```cpp
+class HasPtr {
+public:
+    // added move constructor
+    HasPtr(HasPtr &&p) noexcept : ps(p.ps), i(p.i) {p.ps = 0;}
+    // assignment operator in both the move- and copy-assignment operator
+    HasPtr& operator=(HasPtr rhs) { swap(*this, rhs); return *this; }
+}
+```
+
+<!-- }}} -->
+#### Move Operations for the `Message` Class <!-- {{{ -->
+We'll start by defining an operation to do this common work:
+```cpp
+void Message::move_Folders(Message *m) {
+    folders = std::move(m->folders);    // uses set move assignment
+    for (auto f : folders) {    for each Folder
+        f->remMsg(m);       // remove the old Message from the Folder
+        f->addMsg(this);    // add this Message to that Folder
+    }
+    m->folders.clear();     // ensure that destroying m is harmless
+}
+```
+It is worth noting that inserting an element to a set might throw an
+exception-adding an element to a container requires memory to be
+allocated, which means that a `bad_alloc` exception might be thrown.
+Hence `Message` move constructor and move-assignment operators might
+throw exceptions.  
+
+The `Message` move constructor calls `move` to move the contents and
+default initializes its _folders_ member:
+```cpp
+Message::Message(Message contents &&m) : contents(std::move(m.contents))
+{
+    move_Folders(&m);   // moves folders and updates the Folder pointers
+}
+```
+
+The move-assignment operator does a direct check for self-assignment:
+```cpp
+Message& Message::operator=(Message &&rhs) {
+    if (this != &rhs) {                     // direct check for
+    self-assignment
+        remove_from_Folders();
+        contents = std::move(rhs.contents); // move assignment
+        move_FOlders(&rhs); // reset the Folders to point to this Message
+    }
+    return *this;
+}
+```
+
+
+
+<!-- }}} -->
+### Move Iterators <!-- {{{ -->
+The new library defines a _move iterator_ adaptor. A move iterator
+adapts its given iterator by changing the behavior of the iterator's
+dereference operator. Ordinarily, an iterator dereference operator
+returns an lvalue reference to the element. Unlike other iterators, the
+dereference operator of a move iterator yields an rvalue reference.  
+
+```cpp
+void StrVec::reallocate() {
+    // allocate space for twice as many elements as the current size
+    auto newcapacity = size() ? 2 * size() : 1;
+    auto first = alloc.allocate(newcapacity);
+    // move the elements
+    auto last = uninitialized_copy(make_move_iterator(begin()),
+        make_move_iterator(end()), first);
+    free();                         // free the old space
+    elements = first;               // update the pointers
+    first_free = last;
+    cap = elements + newcapacity;
+}
+```
+
+That algorithm uses the iterator dereference operator to fetch elements
+from the input sequence. Because we passed move iterators, the
+dereference operator yields an rvalue reference, which means `construct`
+will use the move constructor to construct the elements.  
+
+<!-- }}} -->
+### Rvalue References and Member Functions <!-- {{{ -->
+The library containers that define `push_back` provide two versions:
+```cpp
+void push_back(const X&);   // copy: binds to any kind of X
+void push_back(X&&);        // move: binds only to modifiable rvalues of type X
+```
+
+As a more concrete example, we'll give our `StrVec` class a second
+version of `push_back`:
+```cpp
+class StrVec {
+public:
+    void push_back(const std::string&); // copy the element
+    void push_back(std::string&&);      // move the element
+};
+// unchanged from the original version
+void StrVec::push_back(const string& s) {
+    chk_n_alloc();  // ensure that there is room for another element
+    // construct a copy of s in the element to which first_free points
+    alloc.construct(first_free++, s);
+}
+void StrVec::push_back(string &&s) {
+    chk_n_alloc();  // reallocates the StrVec if necessary
+    alloc.construct(first_free++, std::move(s));
+}
+```
+
+When we call `push_back` the type of the argument determines whether the
+new element is copied or moved into the container:
+```cpp
+StrVec vec; // empty StrVec
+string s = "some string or another";
+vec.push_back(s);       // calls push_back(const string&)
+vec.push_back("done");  // calls push_back(string&&)
+```
+
+<!-- }}} -->
+#### Rvalue and Lvalue Reference Member Functions <!-- {{{ -->
+We can call member function on an object, regardless of whether that
+object is an lvalue or an rvalue:
+```cpp
+string s1 = "a value", st = "another";
+auto n = (s1 + s2).find('a');
+```
+
+Prior to the new standard there are some weird usage:
+```cpp
+s1 + s2 = "wow!";
+```
+To prevent this we indicate the lvalue/rvalue property of _this_ in the
+same way that we define `const` member functions. We place a _reference
+qualifier_ after the parameter list:
+```cpp
+class Foo {
+public:
+    Foo &operator=(const Foo&) &;   // may assign only to modifiable lvalues
+}
+Foo &Foo::operator=(const Foo &rhs) & {
+    // do something
+    return *this;
+}
+```
+
+WE may run a function qualified by `&` only on an lvalue and may run a
+function qualified by `&&` only on an rvalue:
+```cpp
+Foo &retFoo();  // returns a reference; call ro retFoo is an lvalue
+Foo retVal();   // returns by value; a call to retVal is an rvalue
+Foo i, j;       // i and j are lvalues
+i = j;          // ok: i is an lvalue
+retFoo() = j;   // ok: retFoo() returns an lvalue
+retVal() = j;   // error: retVal() returns an rvalue
+i = retVal();   // ok: we can pass an rvalue as the right-hand operand to assignment
+```
+
+A function can be both `const` and `reference` qualified:
+```cpp
+class Foo {
+public:
+    Foo someMem() & const;      // error: const qualifier must come first
+    Foo anotherMem() const &;   // ok: const qualifier comes first
+}
+```
+
+
+<!-- }}} -->
+#### Overloading and Reference Functions <!-- {{{ -->
+We may overload a function by its reference qualifier and by whether it
+is a `const` member. AS an example, we'll give _Foo_ a _vector_ member
+and a function named _sorted_ that returns a copy of the _Foo_ object in
+which the vector is sorted:
+```cpp
+class Foo {
+public:
+    Foo sorted() &&;        // may run on modifiable rvalues
+    Foo sorted() const &;   // may run on any kind of Foo
+private:
+    vector<int> data;
+};
+// this object is an rvalue, so we can sort in place
+Foo Foo::sorted() && {
+    sort(data.begin(), data.end());
+    return *this;
+}
+// this object is either const or its is an lvalue; either way we can't sort in place
+Foo Foo::sorted() const & {
+    Foo ret(*this);                         // make a copy
+    sort(ret.data.begin(), red.data.end()); // sort the copy
+    return ret;                             // return the copy
+}
+```
+
+When we define two or more members that have the same name and the same
+parameter list, we must provide a reference qualifier on all or none of
+those functions:
+```cpp
+class Foo {
+public:
+    Foo sorted() &&;
+    Foo sorted() const; // error: must have reference qualifier
+    // Comp is type alias for the function type
+    // that can be used to compare int values
+    using Comp = bool(const int&, const int&);
+    Foo sorted(Comp*);          // ok: different parameter list
+    Foo sorted(Comp*) const;    // ok: neither version is reference qualifier
+}
+```
+
+
+<!-- }}} -->
+
+
+<!-- }}} -->
+<!-- }}} -->
+# Overloaded Operations and Conversions <!-- {{{ -->
+<!-- TODO: stopped here -->
 <!-- }}} -->
