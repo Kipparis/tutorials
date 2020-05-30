@@ -1499,5 +1499,454 @@ necessary/possible.
 + `:help index()`  
 + `:help join()`  
 + `:help reverse()`  
-+ `:help functions`
++ `:help functions`  
+<!-- }}} -->
+# Looping <!-- {{{ -->
+These are two main kinds of loops Vim supports.
+
+## For Loops <!-- {{{ -->
+There's no equivalent to the C-style `for (int i = 0; i < foo; ++i)`
+loop form in Vimscript. But you'll never miss it.  
+
+```vim
+:let c = 0
+
+:for i in [1,2,3,4]
+:   let c += i
+:endfor
+
+:echom c
+
+" vim displays 10
+```
+
+<!-- }}} -->
+## While Loops <!-- {{{ -->
+Vim also  supports the classic `while` loop. Run the following commands:
+
+```vim
+:let c = 1
+:let total = 0
+
+:while c <= 4
+:   let total += c
+:   let c += 1
+:endwhile
+
+:echom total
+```
+Once again Vim displays 10.  
+
+<!-- }}} -->
+
++ `:help for`  
++ `:help while`  
+<!-- }}} -->
+# Dictionaries <!-- {{{ -->
+Dictionaries are created using curly brackets. Values are heterogeneous,
+but _keys are always coerced to strings_.  
+
+Run this command:
+```vim
+:echo {'a': 1, 100: 'foo'}
+```
+Vim displays `{'a': 1, '100': 'foo'}`. Vim allows you to use a comma
+after the last element in a dictionary.  
+
+## Indexing <!-- {{{ -->
+To look up a key in a dictionary you use the same syntax as most
+languages:
+```vim
+:echo {'a': 1, 100: 'foo',}['a']
+```
+Vim displays 1. Try it with a non-string index:
+```vim
+:echo {'a': 1, 100: 'foo',}[100]
+```
+Vim coerces the index to a string. Vimscript also supports the
+Javasccript-style "dot" lookup:
+```vim
+:echo {'a': 1, 100: 'foo',}.a
+:echo {'a': 1, 100: 'foo',}.100
+```
+
+<!-- }}} -->
+## Assigning and Adding <!-- {{{ -->
+Adding entries to dictionaries is done by simply assigning them like
+variables:
+```vim
+:let foo = {'a': 1}
+:let foo.a = 100
+:let foo.b = 200
+:echo foo
+```
+Vim displays `{'a': 100, 'b': 200}`.  
+
+<!-- }}} -->
+## Removing Entries <!-- {{{ -->
+There are two ways to remove entries from a dictionary. Run the
+following commands:
+```vim
+:let test = remove(foo, 'a')
+:unlet foo.b
+:echo foo
+:echo test
+```
+Vim displays `{}` and 100. The `remove`function remove the entry with
+the given key from the given dictionary and return the removed value.
+The `unlet` command also removes adictionary entries, but you can't use
+the value.  
+
+<!-- }}} -->
+## Dictionary Functions <!-- {{{ -->
+Get key's value and, if not exist, return default:
+```vim
+:echom get({'a': 100}, 'a', 'default')
+:echom get({'a': 100}, 'b', 'default')
+```
+Vim displays 100 and `default`, just like the `get` function for lists.  
+
+You can also check if a given key is present in a given dictionary:
+```vim
+:echom has_key({'a': 100}, 'a')
+:echom has_key({'a': 100}, 'b')
+```
+Vim displays 1 and 0.  
+
+You can pull the key-value pairs out of a dictionary with `items`. Run
+this command:
+```vim
+:echo items({'a': 100, 'b': 200})
+```
+Vim will display a nested list that looks something like `[['a', 100], ['b',  200]]`.
+You can get just the keys or just the values with the `keys` and `values` functions.
+
+<!-- }}} -->
+
++ `:help Dictionary`  
++ `:help get()`  
++ `:help has_key()`  
++ `:help items()`  
++ `:help keys()`  
++ `:help values()`  
+
+<!-- }}} -->
+# Toggling <!-- {{{ -->
+## Toggling Options <!-- {{{ -->
+Let's start by creating a function that will toggle an option for us,
+and a mapping that will call it.
+
+```vim
+nnoremap <leader>f :call FoldColumnToggle()<cr>
+
+function! FoldColumnToggle()
+    echom &foldcolumn
+endfunction
+```
+
+Let's add in the actual toggling functionality:
+```vim
+nnoremap <leader>f :call FoldColumnToggle()<cr>
+
+function! FoldColumnToggle()
+    if &foldcolumn
+        setlocal foldcolumn=0
+    else
+        setlocal foldcolumn=4
+    endif
+endfunction
+```
+
+
+<!-- }}} -->
+## Toggling Other Things <!-- {{{ -->
+Let's create a mapping that "toggles" quickfix window.
+To get the "toggling" behavior we're looking for we'll use a quick,
+dirty solution: a gloval variable:
+```vim
+nnoremap <leader>q :call QuickfixToggle()<cr>
+
+let g:quickfix_is_open = 0
+
+function! QuickfixToggle()
+    if g:quickfix_is_open
+        cclose
+        let g:quickfix_is_open = 0
+    else
+        copen
+        let g:quickfix_is_open = 1
+    endif
+endfunction
+```
+
+<!-- }}} -->
+## Restoring Windows/Buffers <!-- {{{ -->
+If the user runs the mapping when they're already in the quickfix
+window, Vim closes it and dumps them into the last split instead of
+sending them back where they were. We'll add two line in this mapping.
+One of them sets another global variable which saves the current window
+number before we run `:copen`. The second line executes `wincmd w` with
+that number prepended as a count, which tells Vim to go to that window:
+
+```vim
+nnoremap <leader>q :call QuickfixToggle()<cr>
+
+let g:quickfix_is_open = 0
+
+function! QuickfixToggle()
+    if g:quickfix_is_open
+        cclose
+        let g:quickfix_is_open = 0
+        execute g:quickfix_return_to_window . "wincmd w"
+    else
+        let g:quickfix_return_to_window = winnr()
+        copen
+        let g:quickfix_is_open = 1
+    endif
+endfunction
+```
+
+<!-- }}} -->
+
++ `:help foldcolumn`  
++ `:help winnr()`  
++ `:help ctrl-w_w`  
++ `:help wincmd`  
+<!-- }}} -->
+# Functional Programming <!-- {{{ -->
+## Immutable Data Structures <!-- {{{ -->
+Vim doesn't have any immutable collections like Clojure's vectors and
+maps built-in, but by creating some helper functions we can fake it to
+some degree.  
+
+Add the following function to your file:
+```vim
+function! Sorted(1)
+    let new_list = deepcopy(a:1) 
+    call sort(new_list)
+    return new_list
+endfunction
+```
+
+Source and write the file, then run `:echo Sorted([3, 2, 4, 1])`. Vim
+echoes `[1, 2, 3, 4]`.  
+
+Let's add a few more helper function in this same style:
+```vim
+function! Reversed(1)
+    let new_list = deepcopy(a:1)
+    call reverse(new_list)
+    return new_list
+endfunction
+
+function! Append(1, val)
+    let new_list = deepcopy(a:1)
+    call add(new_list, a:val)
+    return new_list
+endfunction
+
+" returns a new list with the element at the given index replaced by the new
+" value
+function! Assoc(1, i, val)
+    let new_list = deepcopy(a:1)
+    let new_list[a:i] = a:val
+    return new_list
+endfunction
+
+" returns a new list with the element at the given index removed
+function! Pop(1, i)
+    let new_list = deepcopy(a:1)
+    call remove(new_list, a:i)
+    return new_list
+endfunction
+```
+
+
+<!-- }}} -->
+## Functions as Variables <!-- {{{ -->
+Vimscript supports using variables to store functions, but the syntax is
+a bit obtuse:
+```vim
+:let Myfunc = function("Append")
+:echo Myfunc([1, 2], 3)
+```
+If a Vimscript variable refers to a function it must start with a
+capital letter.
+
+Functions can be stored in lists just like any other kind of variable:
+```vim
+:let funcs = [function("Append"), function("Pop")]
+:echo funcs[1](['a', 'b', 'c'], 1)
+```
+
+The _funcs_ variable does not need to start with a capital letter
+because it's storing a list, not a function.  
+
+
+<!-- }}} -->
+## Higher-Order Functions <!-- {{{ -->
+Higher-order functions are functions that take other functions and do
+something with them. We'll begin with the trusty `map` function. Add
+this to your file:
+```vim
+function! Mapped(fn, 1)
+    let new_list = deepcopy(a:1)
+    call map(new_list, string(a:fn) . '(v:val)')
+    return new_list
+endfunction
+```
+Source and write the file, and try it out by running the following
+commands:
+```vim
+:let mylist = [[1, 2], [3, 4]]
+:echo Mapped(function("Reversed"), mylist)
+```
+Vim displays `[[2, 1], [4, 3]]`. Read `:help map` now to see how it works.  
+
+Now we'll create a few other common higher-order functions:
+```vim
+function! Filtered(fn, 1)
+    let new_list = deepcopy(a:1)
+    call filter(new_list, string(a:fn) . '(v:val)')
+    return new_list
+endfunction
+```
+
+Try `Filtered()` out with the following commands:
+```vim
+:let mylist = [[1, 2], [], ['foo'], []]
+:echo Filtered(function('len'), mylist)
+```
+
+Vim displays `[[1, 2], ['foo']]`. `Filtered()` takes a preficate
+function and a list. It returns a copy of the list that contains only
+the elements of the original where the result of calling the function on
+it is "truthy".  
+
+Finally we'll create the counterpart to `Filtered()`:
+```vim
+function! Removed(fn, 1)
+    let new_list = deepcopy(a:1)
+    call filter(new_list, '!' . string(a:fn) . '(v:val)')
+    return new_list
+endfunction
+```
+
+
+<!-- }}} -->
+
++ `:help sort()`  
++ `:help reverse()`  
++ `:help copy()`  
++ `:help deepcopy()`  
++ `:help map()`  
++ `:help function()`  
++ `:help type()`  
+
+<!-- }}} -->
+# Paths <!-- {{{ -->
+## Absolute Paths <!-- {{{ -->
+
+```vim
+" displays the relative path of whatever file you're currently editing
+echom expand('%')
+" the :p tells Vim that you want the absolute path
+echom expand('%:p')
+" displays an absolute path to the file `foo.txt`, regardless of whether
+" that file actually exists
+echom fnamemodify('foo.txt', ':p')
+```
+
+<!-- }}} -->
+## Listing Files <!-- {{{ -->
+To display all files and directories in the current directory run:
+```vim
+:echo globpath('.', '*')
+```
+To get a list you'll need to `split()` it yourself:
+```vim
+:echo split(globpath('.', '*'), '\n')
+```
+
+`globpath()`'s wildcards work mostly as you would expect. This would
+list all `.txt` files:
+```vim
+:echo split(globpath('.', '*.txt'), '\n')
+```
+
+You can recursively list files with `**`:
+```vim
+:echo split(globpath('.', '**'), '\n')
+```
+
+<!-- }}} -->
+
++ `:help expand()`  
++ `:help fnamemodify()`  
++ `:help filename-modifiers`  
++ `:help simplify()`  
++ `:help resolve()`  
++ `:help globpath()`  
++ `:help wildcards`  
+<!-- }}} -->
+
+# Creating a Full Plugin <!-- {{{ -->
+The plugin we're going to make is going to add support for the _Potion_
+programming language.  
+<!-- }}} -->
+# Plugin Layout in the Dark Ages <!-- {{{ -->
+## `~/.vim/colors/` <!-- {{{ -->
+Files inside `~/.vim/colors/` are treated as color schemes. For example:
+if you run `:color mycolors` Vim will look for a file at
+`~/.vim/colors/mycolors.vim` and run it. That file should contain all
+the Vimscript commands necessary to generate your color scheme.  
+
+If you want to create your own colorscheme, you should copy an existing
+scheme and modify it (remember `:help` is your friend).  
+<!-- }}} -->
+## `~/.vim/plugin/` <!-- {{{ -->
+Files inside the directory will each be run once _every time_ Vim
+starts.  
+<!-- }}} -->
+## `~/.vim/ftdetect/` <!-- {{{ -->
+Any files in `~/.vim/ftdetect/` will also be run every time you start
+Vim. `ftdetect` stands for "filetype detection". The files in this
+directory should set up autocommands that detect and set the `filetype`
+of files, and _nothing else_.  
+<!-- }}} -->
+## `~/.vim/ftplugin/` <!-- {{{ -->
+The naming of these files matters! When Vim sets a buffer's `filetype`
+to a value it then looks for a file in `~/.vim/ftplugin/` that maches
+and if there is file, it will run it. Also Vim runs all the files inside
+matching directory in `~/.vim/ftplugin/`.  
+
+Because these files are run every time a buffer's `filetype` is set they
+_must_ only  set buffer-local options! If they set options globally they
+would overwrite them for all open buffers!  
+
+<!-- }}} -->
+## `~/.vim/indent/` <!-- {{{ -->
+`indent` files should set options related to indentation for their
+filetypes, and those options should be buffer-local.  
+<!-- }}} -->
+## `~/.vim/compiler/` <!-- {{{ -->
+File in the directory set compiler-related options in the current buffer
+based on their names.  
+<!-- }}} -->
+## `~/.vim/after/` <!-- {{{ -->
+File in this directory will be loaded every time Vim starts, but _after_
+the files in `~/.vim/plugin/`. This allows you to override Vim's
+internal files.  
+<!-- }}} -->
+## `~/.vim/autoload/` <!-- {{{ -->
+In a nutshell: `autoload` is a way to delay the loading of your plugin's
+code until it's actually needed.  
+<!-- }}} -->
+## `~/.vim/doc/` <!-- {{{ -->
+This directory is where you can add documentation for your plugin.  
+<!-- }}} -->
+<!-- }}} -->
+
+# A New Hope: Plugin Layout with Pathogen <!-- {{{ -->
+<!-- TODO: stopped here -->
 <!-- }}} -->
