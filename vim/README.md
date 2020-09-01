@@ -1949,4 +1949,81 @@ This directory is where you can add documentation for your plugin.
 
 # A New Hope: Plugin Layout with Pathogen <!-- {{{ -->
 <!-- TODO: stopped here -->
+## Runtimepath <!-- {{{ -->
+
+When Vim looks for file in a spacific directory, Vim has the
+`runtimepath` setting which tells it where to find files to load.  
+
+<!-- }}} -->
+## Pathogen <!-- {{{ -->
+
+This means that each directory inside `bundle/` should contain some or
+all of the standard Vim plugin directories, like `colors/` and `syntax/`  
+
+<!-- }}} -->
+## Being Pathogen-Compatible <!-- {{{ -->
+
+We simply put our files in the appropriate directories inside the
+plugin's repository!  
+
+Our plugin's repository will wind up looking like this:  
+```txt
+potion/
+    README
+    LICENSE
+    doc/
+        potion.txt
+    ftdetect/
+        potion.vim
+    syntax/
+        potion.vim
+    ... etc ...
+```
+
+<!-- }}} -->
+
++ `:help runtimepath`  
+<!-- }}} -->
+# Detecting Filetypes <!-- {{{ -->
+
+Create simple factorial function (write it on potion language):
+```txt
+factorial = (n):
+    total = 1
+    n to 1 (i):
+        total *= i.
+    total.
+
+10 times (i):
+    i string print
+    '! is : ' print
+    factorial (i) string print
+    "\n" print.
+```
+
+You can run this by command: `potion factorial.pn`  
+
+## Detecting Potion Files <!-- {{{ -->
+If you run `:set filetype?`, Vim will display `filetype=` because it
+doesn't know what a `.pn` file is yet.  
+
+Create `ftdetect/potion.vim` in your plugin's repo. Put the following
+lines into it:
+```vim
+au BufNewFile,BufRead *.pn set filetype=potion
+```
+Vim automatically wraps the contents of `ftdetect/*.vim` files in
+autocommand groups for you.  
+
+Close the `factorial.pn` file and reopen it. Now run the previous
+command again:
+```vim
+:set filetype?
+```
+This time Vim displays `filetype=potion`  
+<!-- }}} -->
+
++ `:help ft`  
++ `:help setfiletype`  
+
 <!-- }}} -->
