@@ -56,7 +56,7 @@ Use options as variables:
 # Mappings <!-- {{{ -->
 `:verbose imap <Tab>` -- see which plugin is overriding your map  
 
-+ `:execute "write"` replaces <cr>, other special characters  
++ `:execute "write"` replaces `<cr>`, other special characters  
   same as `:write<cr>`  
 + `:execute "normal! gg"`  
   same as: type `gg` in normal mode  
@@ -203,6 +203,40 @@ Examples:
 
 + `ga<symbol>` - allign by symbol  
 <!-- }}} -->
+## fzf <!-- {{{ -->
++ `:Files` - opens file manager  
++ `<C-t>`, `<C-x>`, `<C-v>` - opens in new tab \ split \ vertical split  
+<!-- }}} -->
+<!-- }}} -->
+# Programming <!-- {{{ -->
+
++ `<c-w>gf` - open file under cursor in new tab  
++ `<c-w>f` - open file under cursor in split  
++ `<c-d>` - go to definition  
++ `<c-e>` - go to declaration  
++ `<c-o>` - go to documentation  
+
++ `<c-s>` - move split to tab  
++ `S` - merge next and current tabs  
+
+## Window moving <!-- {{{ -->
+`:help window-moving`:  
+
++ `<c-w>L` - move window to the right  
++ `<c-w>H` - move window to the left  
++ `<c-w>J` - move window to the bottom  
++ `<c-w>K` - move window to the top  
+<!-- }}} -->
+
+<!-- }}} -->
+# Git <!-- {{{ -->
+For more info `tpope/vim-fugitive`  
+
++ `<leader>gd` - opens 3 way merging  
++ `gdh` - accept chank from target (left window)  
++ `gdl` - accept chank from merge branch (right window)  
++ `]c`, `[c` - go to next \ previous chank respectively  
+
 <!-- }}} -->
 
 <!-- TODO: search for this -->{{{
