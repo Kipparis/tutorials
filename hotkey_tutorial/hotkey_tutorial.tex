@@ -1,0 +1,101 @@
+\documentclass{article}
+\usepackage{base}
+
+\begin{document}
+\tableofcontents
+\newpage
+\section{Общее}
+\begin{itemize}
+    \item \verb|mod+shft+;| - открыть мануал
+\end{itemize}
+
+\section{Запись}
+\subsection{Скришноты}
+\begin{itemize}
+    \item \verb|prnt_scr| - создает окошко с выделенной областью
+    \item \verb|mod+ctrl+prnt_scr| - копирует выбранную область в буффер
+        обмена
+    \item \verb|mod+shft+prnt_scr| - сохраняет выбранную область в папку
+        для картинок по умолчанию
+\end{itemize}
+
+\subsection{Аудио, видео}
+Запускаешь скрипт с помощью \verb|mod+ctrl+j|, туда вбиваешь любую
+комбинацию букв, каждая из которых обозначает:
+\begin{itemize}
+    \item \verb|v| - запись видео с экрана (открывает \verb|obs|)
+    \item \verb|p| - запись аудио (playback)
+    \item \verb|m| - запись с микрофона (на каждом компьютере надо
+        тестировать)
+\end{itemize}
+\verb|mod+ctrl+k| - остановить запись
+
+\section{Фокусировка}
+\subsection{Таймер}
+\begin{itemize}
+    \item \verb|mod+t| - создать таймер. Параметры:
+        \subitem *время (в минутах)
+        \subitem *кол-во звоночков
+        \subitem текст, который будет выводиться
+        \subitem файл со звоночком
+    \item \verb|mod+shft+t| - остановить таймер
+\end{itemize}
+
+
+\section{Рабочее пространство}
+\subsection{Управление границами}
+\begin{itemize}
+    \item \verb|mod+shft+g| - расстояние между окнами
+    \item \verb|mod+b| - границы окон
+\end{itemize}
+
+
+\subsection{Создание новых программ}
+С помощью горячих клавиш:
+\begin{itemize}
+    \item \verb|mod+ret| - открытие терминала \verb|st|
+    \item \verb|mod+ctrl+ret| - запускает терминал \verb|urxvt| с
+        дефолтной оболочкой (для случая когда намудрил с конфигами)
+\end{itemize}
+
+\par Горячие клавиши + выделение области:
+\begin{itemize}
+    \item \verb|mod+shft+s| - создается терминал \verb|st| размером с
+        выбранную область
+    \item \verb|mod+shft+w| - создается терминал \verb|st| с открытым
+        менеджером \verb|ranger| размером с выбранную область
+    \item \verb|mod+shft+a| - открывает браузер \verb|surf|
+\end{itemize}
+
+\section{Внешние устройства}
+\begin{itemize}
+    \item \verb|mod+m| - смонтировать устройство из списка доступных
+    \item \verb|mod+u| - отмонтировать устройство из списка доступных
+\end{itemize}
+
+\section{Управление}
+\subsection{Система}
+\begin{itemize}
+    \item \verb|mod+ctrl+b| - открывает \verb|bmenu| (CLI configuration tool)
+много информации о системе.  Если её недостаточно, то можно искать
+в конфиге \verb|zsh|.
+    \item \verb|mod+shft+x| - выходит в режим логина (надо ввести пароль
+        чтобы выйти)
+\end{itemize}
+
+\subsection{Аудио}
+\verb|mod+ctrl+m| - открывает \verb|pavucontrol| - микшер
+
+\section{Приложения}
+\begin{itemize}
+    \item \verb|dunst|, \verb|notify-send| - нотификации
+    \item \verb|st| - терминал
+    \item \verb|dmenu| - интеракция с пользователем
+    \item \verb|wal| - (pywal) управление цветовой схемой
+        \subitem когда ставишь новую схему, придется много повозиться
+        чтоб остальные приложения подходили
+\end{itemize}
+
+
+\end{document}
+
