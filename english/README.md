@@ -4,15 +4,36 @@ _if you need something specific, just open the book and find at the end
 of book section "index"._  
 <!-- 3-10 -->
 
-<!-- How I understood, at is used when I talk about something specific. -->
-## Prepositions.<!-- {{{ -->
-__Preposition phrase__ - a preposition + a noun. _(at the library)_  
+# Notes <!-- {{{ -->
+В английском языке не принято `I`, `you` даже в коротких ответах.  
+<!-- }}} -->
+# Non sorted <!-- {{{ -->
+## Progressive form.<!-- {{{ -->
++ I &rarr; my;  
++ you &rarr; your;  
++ she &rarr; her;  
++ he &rarr; his;  
++ we &rarr; out;  
++ they &rarr; their;  
+They come in front of nouns.  
+<!-- }}} -->
+## Nonaction verbs  <!-- {{{ -->
+want, hear, undestand, need, see, know, like, smell, believe, love,
+taste, think (meaning believe), hate.
 <!-- }}} -->
 ## Talk to, talk on<!-- {{{ -->
+<!-- How I understood, at is used when I talk about something specific. -->
 __talk to__ (someone)  
 __talk on__ the phone  
-__talk to__ each other  <!-- }}} -->
-
+__talk to__ each other  
+<!-- }}} -->
+## Nonaction verbs <!-- {{{ -->
+See, hear, want  
+<!-- }}} -->
+<!-- }}} -->
+# Prepositions.<!-- {{{ -->
+__Preposition phrase__ - a preposition + a noun. _(at the library)_  
+<!-- }}} -->
 # Nouns and pronouns<!-- {{{ -->
 ## subject and object<!-- {{{ -->
 __Birds__ fly. -- A noun is used as the object of a sentence.  
@@ -21,7 +42,7 @@ __object of the verb__ _is holding_.
 __Birds__ fly in the __sky__ -- A noun is also used as the __object of a
 preposition__.  
 <!-- }}} -->
-## Adjective + noun{{{
+## Adjective + noun <!-- {{{ -->
 _Adjectives describe nouns. In grammar, we say that adjectives "modify"
 nouns._  
 Adjectives come in front of nouns.   
@@ -43,7 +64,7 @@ meaning as a noun.
 ## Singular and plural  <!-- {{{ -->
 __one pen__ - __two pens__ -- to make the plural form of most nouns: add
 -s   
-__baby__ - __babies__ -- end: _consonant + **-y**_, plural: y -> i, add
+__baby__ - __babies__ -- end: _consonant + **-y**_, plural: y &rarr; i, add
 -es   
 __boy__ - __boys__ -- end: _vowel + -y_, plural: add _-s_  
 __wife__ - __wives__ -- end: _-fe_ or _-f_, plural: change _f_ to _v_,
@@ -75,6 +96,7 @@ A noncount none:
 _(How much coffee is there in that pot?)_  
 _(noncount nones usually acts like a group of nouns: jewelry, meat,
 fruit, mail, advice)._  
+
 Use __many__ with COUNT NOUNS.  
 Use __much__ with NONCOUNT NOUNS.  
 Use __a few__ with COUNT NOUNS.  
@@ -92,23 +114,25 @@ Use __a little__ with NONCOUNT NOUNS.
 | luck        | work    | milk   | water  |
   <!-- }}} -->
 ### Measurements with noncount nouns<!-- {{{ -->
-I'd like __some__ water.  
-I'd like __a glass of__ water.  
-I'd like __a cup of__ coffee.  
-I'd like __a piece of__ fruit.  
++ I'd like __some__ water.  
++ I'd like __a glass of__ water.  
++ I'd like __a cup of__ coffee.  
++ I'd like __a piece of__ fruit.  
+
 Units of measure are used with noncount nouns to __express a specific
 quantity__, for example: _a glass of_, _a cup of_, _a piece of_.  
 <!-- }}} -->
 <!-- }}} -->
 ## Indefinite pronouns<!-- {{{ -->
-###  **_something_**, **_someone_**, **_anything_**, **_anyone_**{{{
+###  **_something_**, **_someone_**, **_anything_**, **_anyone_** <!-- {{{ -->
 Mary bought **_something_** at the store -- In a statement, use
 _something_ or _someone_.  
 Mary didn't buy **_anything_** at the store -- In a negative sentence, use
 _anything_ or _anyone_.  
 Did Mary buy **_something_** at the store? -- In a question, use either
 _something/someone_ or _anything/anyone_.  
-### **_nothing_** and **_no one_**
+<!-- }}} -->
+### **_nothing_** and **_no one_** <!-- {{{ -->
 (a) I **_didn't say anything_**  
 (b) I **_said nothing_**  
 (a) and (b) have the _same_ meaning.  
@@ -171,7 +195,7 @@ I don't have **any money**. (noncount noun)
 I don't have **any matches**. (plural count noun)   
 _Any_ is used with noncount nouns and plural count nouns.  
 <!-- }}} -->
-## Questions. <!-- {{{ -->
+# Question words. <!-- {{{ -->
 ### What\Who<!-- {{{ -->
 __What__ asks about things.  
 __Who__ asks about people.  
@@ -185,8 +209,8 @@ _A_ Yes, I __would__. (I would like some tea.)
 **_Whose_** asks about possession. **_Whose_** is often used with a noun
 (e.h. _whose book_)  
 
-+ **_Whose book_** is this? $rarr; Mine. / It's mine. / It's my book.  
-+ **_Whose books_** are these? $rarr; Rita's. / They're Rita's. / They're
++ **_Whose book_** is this? &rarr; Mine. / It's mine. / It's my book.  
++ **_Whose books_** are these? &rarr; Rita's. / They're Rita's. / They're
 Rita's books.  
 
 **_Whose_** can be used without a noun if the meaning is clear.  
@@ -210,6 +234,7 @@ Typical responses:
 + **_Sure._**\*  
 + **_No problem._**\*  
 \* informal, it's typically used between friends and family members.  
+
 Typical conversation:  
 A: _May I please borrow your pen?_  
 B: **_Yes, of course_**. _Here it is._  
@@ -231,37 +256,30 @@ Typical responses:
 
 <!-- }}} -->
 <!-- }}} -->
-## Progressive form.<!-- {{{ -->
-+ I &rarr; my;  
-+ you &rarr; your;  
-+ she &rarr; her;  
-+ he &rarr; his;  
-+ we &rarr; out;  
-+ they &rarr; their;  
-They come in front of nouns.  
-<!-- }}} -->
-## Nonaction verbs  <!-- {{{ -->
-want, hear, undestand, need, see, know, like, smell, believe, love,
-taste, think (meaning believe), hate.
-<!-- }}} -->
 
 # Tenses <!-- {{{ -->
-## Simple Present <!-- {{{ -->
+## Present <!-- {{{ -->
+### Simple Present <!-- {{{ -->
+
 _The simple present tense expresses habits._  
 Verb after she, he, it (3rd person singular) has a final -s: talks.  
-### Negative
-I do not drink coffee
-She does not drink coffee. (s goes to helping verb)
-### To be  
+#### Negative <!-- {{{ -->
+I do not drink coffee.  
+She does not drink coffee. (`s` goes to helping verb)
+<!-- }}} -->
+#### To be  <!-- {{{ -->
 __Is__ the book on the table?  
 __Where is__ the book?  
-### Where  
+<!-- }}} -->
+#### Where  <!-- {{{ -->
 __Do__ they live in Tokyo?  
 __Where do__ they live?  
-### When  
+<!-- }}} -->
+#### When  <!-- {{{ -->
 __When__ do you go to class?  
 __What time__ do you go to class?  
-### Using frequency adverbs.  
+<!-- }}} -->
+#### Using frequency adverbs.  <!-- {{{ -->
 Subject + frequency adverb + present verb.  
 with __be__:  
 
@@ -270,57 +288,91 @@ with __be__:
 
 Frequency adverbs come before all simple present verbs except be.
 <!-- }}} -->
-## Present Progressive <!-- {{{ -->
+<!-- }}} -->
+### Present Progressive <!-- {{{ -->
 
 _The present progressive is also called the "present continuous" or the
-"continuous present."_
-am/is/are + -ing; I __am sitting__ in class right now.  
-The PRESENT PROGRESSIVE expresses actions that are happening right now,
+"continuous present."_  
+Form: am/is/are + -ing;  
+Meaning: The PRESENT PROGRESSIVE expresses actions that are happening right now,
 while the speaker is speaking.  
+Example: I __am sitting__ in class right now.  
   
 __Nonaction__ verbs not used in the PRESENT PROGRESSIVE.  
 I'm hungry __right now__. __I want__ an apple.  
 _(incorrect: I am wanting an apple.)_
-### Questions  
-__Is__ Mary __sleeping__? -> Yes, __she is__. (She's sleeping.)  
+#### Questions  <!-- {{{ -->
+__Is__ Mary __sleeping__? &rarr; Yes, __she is__. (She's sleeping.)  
 __Where is__ Mary __sleeping__?  
 <!-- }}} -->
-## Past Progressive <!-- {{{ -->
-The past progressive des cribes an activity in progress at a particular
-time in the past.  
-    It was 10:00. Boris **_was sitting_** in class.  
-Form: **_was_**,**_were_** + **_-ing_**. The past progressive uses the
-past forms of **_be_**: **_was_** and **_were_** + **_-ing_**  
-
-### Using while with the past progressive <!-- {{{ -->
-**_while_** + _subject_ + _verb_ = _a time clause_  
-A _while_-clause describes an activity that was in progress at the time
-another activity happened. The verb in a _while_-clause is often past
-progressive.  
-
-+ The phone rang **_while_** _I was sleeping_.  
-+ **_While_** _I was sleeping_, the phone rang.  
 <!-- }}} -->
-### While vs. When in past time clauses <!-- {{{ -->
-The verb is a _while_-clause is often past progressive, as in (a) and
-(b).  
-The verb in a _when_-clause is often simple past, as in (c) and (d).  
+### Present Perfect <!-- {{{ -->
+#### Using have been <!-- {{{ -->
+**_Have been_** expresses the idea that a situation began in the past
+and still exists at present. **_Have been_** is used with **_since_** or
+**_for_** to tell how long the situation has existed.  
 
-+ (a) The mouse appeared _while_ **_I was studying_**.  
-+ (b) _While **I was studying**_, the mouse appeared.  
-+ (c) _When the mouse **appeared**_, I was studying.  
-+ (d) I was studying _when the mouse **appeared**_.  
+Form: **_have/has_** + _past participle_  
+He has &rarr; He's
+
+Situation: I came to this city on February 1st. It is now April 1st. I
+am still in this city.  
+
++ (a) I **_have been_** here **_since_** _February 1st._  
++ (b) I **_have been_** here **_for_** _two months._  
+
+**_Since_** is followed by **_a specific time_**:  
+
++ _since February_ (specific month)  
++ _since nine o'clock_ (specific clock time)  
++ _since 1995_ (specific year)  
+
+**_For_** is followed by **_a length of time:_**  
+
++ _for two months_  
++ _for 30 minutes_  
++ _for four days_  
++ _for three years_  
 <!-- }}} -->
-### Simple past vs. Past progressive <!-- {{{ -->
-The **_simple past_** describes activities or situations that began and
-ended at a particular time in the past.  
-The **_past progressive_** describes an activity that was in progress at
-the time another action happened.  
+#### Using never with the present perfect <!-- {{{ -->
+**_Never_** is frequently used with the _present perfect_.  
 
-If both  the _when_-clause and the main clause in a sentence are simple
-past, it means that the action in the _when_-clause happened first and
-the action in the main clause happened second.  
-    I **_opened_** my umbrella when it **_began_** to rain.  
+> _I've **never** touched_ an elephant.  
+  
+That means "From the beginning of my life to the present moment, I have
+never touched and elephant."  
+<!-- }}} -->
+#### Present perfect: questions and negatives <!-- {{{ -->
+Question has a form: **_have/has_** + _subject_ + _past participle_  
+> **_Have_**_you **lived**_ here for along time?  
+
+Negative form of the present perfect: **_have/has_** + **_not_** + _past
+participle_  
+> I **_have not (haven't) lived_** here for a long time.  
+<!-- }}} -->
+#### Using ever with the present perfect <!-- {{{ -->
+**_ever_** means "in your lifetime, from the time you were born to the
+present moment." Questions with **_ever_** frequently use the present
+perfect.  
+
+_Have_ you **_ever_** _been_ in Hawaii?  
+Yes, I **_have._** ( I have been in Hawaii )  
+
+Note:  
+I **_haven't ever been_** in Korea. _is the same as_  
+I**_'ve never been_** in Korea.  
+<!-- }}} -->
+#### The present perfect: questions with how long <!-- {{{ -->
+Form: same.  
+
+_How long **have** you **been**_ in this city?  
+For five months.  
+<!-- }}} -->
+#### Using since-clauses <!-- {{{ -->
+**_Since_** can be followed by a subject and verb. The verb in the
+_since_-clause is **simple past**.  
+    I've been afraid of dogs, _**since** I was a child._  
+<!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
 ## Past <!-- {{{ -->
@@ -343,28 +395,28 @@ They **weren't** at home last night.
 
 Questions:  
 Yes/no que: _(be) + (subject)_  
-**Were** **you** in class yesterday? $rarr; **Yes, I was.** (I was in
+**Were** **you** in class yesterday? &rarr; **Yes, I was.** (I was in
 class yesterday.)  
 Information que: _where + (be) + (subject)_  
-**Where** **were** **you** yesterday? $rarr; **_In class._** (I was in
+**Where** **were** **you** yesterday? &rarr; **_In class._** (I was in
 class yesterday.)  
 <!-- }}} -->
 ### Simple past tense: using -ed<!-- {{{ -->
 _verb_ + **_ed_** = the simple past tense  
 simple present: I **walk** to school **every day**.  
 simple past: I **walked** to school **yesterday**.  
-<!-- }}} -->
 #### Spelling of -ed verbs<!-- {{{ -->
-+ end of verb: a consonant + **_-e_** $rarr; add **_-d_**.
-smile $rarr; smiled  
-+ one vowel + one consonant $rarr; double the consonant, add **_-ed_**.
-  stop $rarr; stopped  
-    - stress on first syllable $rarr; not doubled  
-    - stress on the second syllable $rarr; doubled  
-+ consonant + **_-y_** $rarr; change **_-y_** to **_-i_**, 
-add **_ed_**. study $rarr; studied  
-+ vowel + **_-y_** $rarr; add **_-ed_**; 
-do not change **_-y_** to **_-i_**. play $rarr; played  
++ end of verb: a consonant + **_-e_** &rarr; add **_-d_**.
+smile &rarr; smiled  
++ one vowel + one consonant &rarr; double the consonant, add **_-ed_**.
+  stop &rarr; stopped  
+    - stress on first syllable &rarr; not doubled  
+    - stress on the second syllable &rarr; doubled  
++ consonant + **_-y_** &rarr; change **_-y_** to **_-i_**, 
+add **_ed_**. study &rarr; studied  
++ vowel + **_-y_** &rarr; add **_-ed_**; 
+do not change **_-y_** to **_-i_**. play &rarr; played  
+<!-- }}} -->
 <!-- }}} -->
 ### Past time words: yesterday, last, and ago<!-- {{{ -->
 + _yesterday_ is used with _morning, afternoon,_ and _evening_.  
@@ -382,8 +434,8 @@ _Some verbs do not have **ed** forms. The past form is irregular._
 | Simple form | Simple past | Past Participle |
 | ---         | ---         | ---             |
 | be          | was,were    | been            |
-| come        | came        |                 |
-| do          | did         |                 |
+| come        | came        | come            |
+| do          | did         | done            |
 | eat         | ate         | eaten           |
 | get         | got         |                 |
 | go          | went        | gone            |
@@ -467,7 +519,7 @@ both pronounced "red".
 ### Negative<!-- {{{ -->
 (pronoun / noun) + **_did_** **_not_** + main verb\*(simple form).  
 I **_did_** **_not_** **_walk_** to school yesterday.  
-Notice that the simple form of the main virb is used with **_did not_**.  
+Notice that the simple form of the main verb is used with **_did not_**.  
 **_did_** is not used when the main verb is **_be_**.:  
 
 + incorrect: Joe _didn't_ be here yesterday.  
@@ -476,35 +528,81 @@ Notice that the simple form of the main virb is used with **_did not_**.
 ### Questions <!-- {{{ -->
 #### yes/no<!-- {{{ -->
 structure: _did_ + _subject_ + _main verb_  
-**_Did_** **_Mary_** **_walk_** to school? $rarr; **_Yes, she did_**.  
+**_Did_** **_Mary_** **_walk_** to school? &rarr; **_Yes, she did_**.  
 <!-- }}} -->
 #### Simple past tense: using where, when, what time, and why<!-- {{{ -->
-_Did_ you _go_ downtown? $rarr; yes, I did. / No, I didn't.  
-**_Where_** _did_ you _go_? $rarr; **_Downtown_**  
+_Did_ you _go_ downtown? &rarr; yes, I did. / No, I didn't.  
+**_Where_** _did_ you _go_? &rarr; **_Downtown_**  
 
----  
-_Did_ you _run_ because you were late? $rarr; Yes, I did  
-**_Why_** _did_ you _run?_ $rarr; **_Because I was late_**.  
+_Did_ you _run_ because you were late? &rarr; Yes, I did  
+**_Why_** _did_ you _run?_ &rarr; **_Because I was late_**.  
 
----  
-_Did_ Ann _come_ as six? $rarr; Yes, she did.  
-**_When/What time_** did Ann come? $rarr; **_At six._**  
+_Did_ Ann _come_ as six? &rarr; Yes, she did.  
+**_When/What time_** did Ann come? &rarr; **_At six._**  
 <!-- }}} -->
+<!-- }}} -->
+### Past Progressive <!-- {{{ -->
+Form: **_was_**,**_were_** + **_-ing_**. The past progressive uses the
+past forms of **_be_**: **_was_** and **_were_** + **_-ing_**  
+Meaning: The past progressive describes an activity in progress at a particular
+time in the past.  
+Example: It was 10:00. Boris **_was sitting_** in class.  
+
+### Using while with the past progressive <!-- {{{ -->
+**_while_** + _subject_ + _verb_ = _a time clause_  
+A _while_-clause describes an activity that was in progress at the time
+another activity happened. The verb in a _while_-clause is often past
+progressive.  
+
++ The phone rang **_while_** _I was sleeping_.  
++ **_While_** _I was sleeping_, the phone rang.  
+<!-- }}} -->
+### While vs. When in past time clauses <!-- {{{ -->
+The verb is a _while_-clause is often past progressive, as in (a) and
+(b).  
+The verb in a _when_-clause is often simple past, as in (c) and (d).  
+
++ (a) The mouse appeared _while_ **_I was studying_**.  
++ (b) _While **I was studying**_, the mouse appeared.  
++ (c) _When the mouse **appeared**_, I was studying.  
++ (d) I was studying _when the mouse **appeared**_.  
+<!-- }}} -->
+### Simple past vs. Past progressive <!-- {{{ -->
+The **_simple past_** describes activities or situations that began and
+ended at a particular time in the past.  
+The **_past progressive_** describes an activity that was in progress at
+the time another action happened.  
+
+If both  the _when_-clause and the main clause in a sentence are simple
+past, it means that the action in the _when_-clause happened first and
+the action in the main clause happened second.  
+    I **_opened_** my umbrella when it **_began_** to rain.  
+<!-- }}} -->
+<!-- }}} -->
+### Using _a couple of_ or _a few_ with _ago_ <!-- {{{  -->
+Numbers are often used in time expressions with **_ago_**.  
+
++ Sam arrived here **_one_**(or: **_a_**) _year ago_.  
+
+I saw Carlos **_a couple of_** _months ago_. - **_A couple of_** means
+"two." _A couple of months ago_ = two months ago.  
+I got a letter from Gina _**a few** weeks ago_.  - **_A few_** means "a
+small number, not a large number." _A few weeks ago_ = three, four, or
+five weeks ago.  
 <!-- }}} -->
 <!-- }}} -->
 ## Future <!-- {{{ -->
-### Using be going to
+### Future Simple <!-- {{{ -->
+### Using be going to <!-- {{{ -->
 **_Be going to_** expresses (talks about) the future.  
 form: _**am/is/are**_ + **_going_** + infonitive  
-I **_am goind to go_** downtown tomorrow  
+I **_am going to go_** downtown tomorrow  
 Negative: **_be_** + **_not_** + **_going to_**  
-I**_'m not goint to go_** downtown tomorrow.  
+I **_am not going to go_** downtown tomorrow.  
 Questions: **_be_** + _subject_ + **_going to_**  
 Q: **_Are_** you **_going to come_** to class tomorrow?  
 A: No, I'm not.  
-### Next
-_It's going to rain **tomorrow**_.  
-_I'm going to be_ in class **_tomorrow morning._**  
+<!-- }}} -->
 ### Using will <!-- {{{ -->
 (a) Mike **_will go_** to the library tomorrow.  
 (b) Mike **_is going to go_** to the library tomorrow.  
@@ -512,85 +610,33 @@ _I'm going to be_ in class **_tomorrow morning._**
 **contractions** - 'll, won't  
 #### Asking questions with will
 _form:_   question + **_will_** + subject + main verb  
-**_Will_** **_Tom_** **_come_** tomorrow? $rarr; **_Yes, he will._**  
-When **_will_** **_Ann_** **_arrive?_** $rarr; **_Next Saturday._**
+**_Will_** **_Tom_** **_come_** tomorrow? &rarr; **_Yes, he will._**  
+When **_will_** **_Ann_** **_arrive?_** &rarr; **_Next Saturday._**
+<!-- }}} -->
+<!-- }}} -->
+### Next <!-- {{{ -->
+Mary _is going to go_ downtown **_next week_**  
+Ann _is going to graduate_ from high school **_next spring_**.  
 <!-- }}} -->
 ### Time clauses with before, after, and when <!-- {{{ -->
 _Before Ann **goes** to work tomorrow,_ she will eat breakfast.  
 A future time clause uses the SIMPLE PRESENT TENSE, not **_will_** or **_be going to_**.
 <!-- }}} -->
-<!-- }}} -->
-## Using have been (the present perfect) <!-- {{{ -->
-**_Have been_** expresses the idea that a situation began in the past
-and still exists at present. **_Have been_** is used with **_since_** or
-**_for_** to tell how long the situation has existed.  
+### Using _a couple of_ or _a few_ with and _in_ <!-- {{{  -->
+Numbers are often used in time expressions with **_in_**.  
 
-Form: **_have/has_** + _past participle_  
-He has &rarr; He's
++ Jack is going to be here _in **two** minutes_.  
 
-Situation: I came to this city on February 1st. It is now April 1st. I
-am still in this city.  
-
-+ (a) I **_have been_** here **_since_** _February 1st._  
-+ (b) I **_have been_** here **_for_** _two months._  
-
-**_Since_** is followed by **_a specific time_**:  
-
-+ _since February_ (specific month)  
-+ _since nine o'clock_ (specific clock time)  
-+ _since 1995_ (specific year)  
-
-**_For_** is followed by **_a length of time:_**  
-
-+ _for two months_  
-+ _for 30 minutes_  
-+ _for four days_  
-+ _for three years_  
-
-### Using since-clauses <!-- {{{ -->
-
-<!-- }}} -->
-### Using never with the present perfect <!-- {{{ -->
-**_Never_** is frequently used with the _present perfect_.  
-
-> _I've **never** touched_ an elephant.  
-  
-That means "From the beginning of my life to the present moment, I have
-never touched and elephant."  
-<!-- }}} -->
-### Present perfect: questions and negatives <!-- {{{ -->
-Question has a form: **_have/has_** + _subject_ + _past participle_  
-> **_Have_**_you **lived**_ here for along time?  
-
-Negative form of the present perfect: **_have/has_** + **_not_** + _past
-participle_  
-> I **_have not (haven't) lived_** here for a long time.  
-<!-- }}} -->
-### Using ever with the present perfect <!-- {{{ -->
-**_ever_** means "in your lifetime, from the time you were born to the
-present moment." Questions with **_ever_** frequently use the present
-perfect.  
-
-_Have_ you **_ever_** _been_ in Hawaii?  
-Yes, I **_have._** ( I have been in Hawaii )  
-
-Note:  
-I **_haven't ever been_** in Korea. _is the same as_  
-I**_'ve never been_** in Korea.  
-<!-- }}} -->
-### The present perfect: questions with how long <!-- {{{ -->
-Form: same.  
-
-_How long **have** you **been**_ in this city?  
-For five months.  
+Frequently the word **_more_** is used in future time expressions that
+begin with **_in_**.  
+I began college last year. I'm going to graduate _in **two more**
+years_. My sister is almost finished with her education. She's going to
+graduate _in **a few more** months_. She's going to graduate _in **three
+more** months_.
 <!-- }}} -->
 <!-- }}} -->
-## Using since-clauses <!-- {{{ -->
-**_Since_** can be followed by a subject and verb. The verb in the
-_since_-clause is **simple past**.  
-    I've been afraid of dogs, _**since** I was a child._  
 <!-- }}} -->
-<!-- }}} -->
+<!-- TODO: stopped here -->
 ## Parts of words <!-- {{{ -->
 ### Final -s (singular/plural)  
 Final __*s*__ pronounces /z/ after voiced sounds (rubs - rub/z/).  
@@ -603,14 +649,14 @@ End of verb - consonant + __-y__:
 End of verb - vowel + __-y__:  
 |-> Spelling: add __-s__.  
 ### -ing
-consonant + __*e*__ -> drop the __-e__ and add __-ing__.  
-smile -> smiling  
-one vowel + one consonant -> double the consonant and add __-ing__ _(do
+consonant + __*e*__ &rarr; drop the __-e__ and add __-ing__.  
+smile &rarr; smiling  
+one vowel + one consonant &rarr; double the consonant and add __-ing__ _(do
 not double w,x, and y)_.  
 
-+ sit $rarr; sitting   
-+ snow $rarr; snowing  
-+ fix $rarr; fixing  
++ sit &rarr; sitting   
++ snow &rarr; snowing  
++ fix &rarr; fixing  
 <!-- }}} -->
 # Meaning <!-- {{{ -->
 ## See, look at, watch, hear, and listen to <!-- {{{ -->
@@ -622,7 +668,7 @@ an action verb. Looking is a planned or purposeful action. Looking
 happens for a reason.  
 Bob __is watching__ TV. -- __watch__ = an action verb. I watch something
 for a long time, but I look at something for a short time.   
-I'm in my apartment. I'm trying to study. I __hear__ msic from the next
+I'm in my apartment. I'm trying to study. I __hear__ music from the next
 apartment. The music is loud. -- __hear__ = a nonaction verb. Hearing is
 unplanned act. It expresses a physical reaction  
 I'm in my apartment. I'm studying. I have a tape recorder. I __am
@@ -680,7 +726,7 @@ respectively - these and those.
 **_What_** is used in a question when you want to dinf out about a
 thing.  
 (c) **_Who_** is used when you want to find out about a person.  
-(d) **_Whom_** did they see? $rarr; **_Jim._** _(They saw Jim.)_  
+(d) **_Whom_** did they see? &rarr; **_Jim._** _(They saw Jim.)_  
 \(c) and (d) have the same meaning. **_who_** is usually used in everyday
 English. **_whom_** is used in very formal English. **_Whom_** is rarely
 used in everyday spoken English.  
@@ -712,8 +758,8 @@ Negative:
 **_can_** + **_not_** = **_can not_** or **_cannot_** or **_can't_**  
 ### Using can: questions  
 Form: (question words) + _can_ + subject + main verb  
-**_Can you speak_** Arabic $rarr; **_Yes, I can._**  
-**_Where can I buy_** a hammer? $rarr; **_At a hardware store._**  
+**_Can you speak_** Arabic &rarr; **_Yes, I can._**  
+**_Where can I buy_** a hammer? &rarr; **_At a hardware store._**  
 ### Using _know how to_  
 (a) I can swim.  
 (b) I **_know how to swim._**  
@@ -856,8 +902,8 @@ The man is __in the back of__ the bus. -- man is inside.
 ## Activities <!-- {{{ -->
 **_What_** + _a formt of **do**_ is used to ask about activities  
 
-+ _What **do** you **do** every_ day? $rarr; I _work_ every day.  
-+ _What **are**_ you **_doing_** right now? $rarr; I'm _studying
++ _What **do** you **do** every_ day? &rarr; I _work_ every day.  
++ _What **are**_ you **_doing_** right now? &rarr; I'm _studying
   English._  
 <!-- }}} -->
 ## Clauses <!-- {{{ -->
@@ -944,24 +990,6 @@ A: I do fine, thank you. And you?
 <!-- }}} -->
 <!-- }}} -->
 # Combinations of tense and words <!-- {{{ -->
-## Using _a couple of_ or _a few_ with _ago_(past) and _in_(future) <!-- {{{  -->
-Numbers are often used in time expressions with **_ago_** and **_in_**.  
-
-+ Sam arrived here **_one_**(or: **_a_**) _year ago_.  
-+ Jack is going to be here _in **two** minutes_.  
-
-I saw Carlos **_a couple of_** _months ago_. - **_A couple of_** menas
-"two." _A couple of months ago_ = two months ago.  
-I go a letter from Gina _**a few** weeks ago_.  - **_A few_** means "a
-small number, not a large number." _A few weeks ago_ = three, four, or
-five weeks ago.  
-Frequently the word **_more_** is used in future time expressions that
-begin with **_in_**.  
-I began college last year. I'm going to graduate _in **two more**
-years_. My sister is almost finished with her education. She's going to
-graduate _in **a few more** months_. She's going to graduate _in **three
-more** months_.
-<!-- }}} -->
 ## Using today, tonight, this + morning, week, month, etc <!-- {{{ -->
 Present: Right now it's 10 a.m. We are in our English class. We **_are
 studying_** English **_this morning._**  
@@ -1159,9 +1187,9 @@ The preposition **_to_** is not used when the indirect object is first
 and the direct object is second.  
 
 A direct object answers the question _What?_  
-    What did you write? $rarr; A letter.  
+    What did you write? &rarr; A letter.  
 An indirect object answers the question _Who(m)?_  
-    Who(m) did you write a letter to? $rarr; Alex.  
+    Who(m) did you write a letter to? &rarr; Alex.  
 When the direct object is pronoun (e.g. _them_), it must precede the
 indirect object, as in (f).  
     Did you write a letters to Alex?  
@@ -1260,14 +1288,14 @@ patterns are different:
 When we use adjectives (e.g., _old_, _important_) to compare two people
 or two things, the adjectives have special forms:  
 
-+ adjectives tiwh one syllable $rarr; add **_-er_**
++ adjectives tiwh one syllable &rarr; add **_-er_**
     Mary is **_older than_** John.  
     Spelling note: if an a djective ends in one vowel and one consonant,
     double the consonant: big-bigger.  
-+ adjectives that end in _-y_ $rarr; change the **_-y_** to **_i_** and
++ adjectives that end in _-y_ &rarr; change the **_-y_** to **_i_** and
   edd **_-er_**  
-    pretty $rarr; prettier  
-+ adjectives with two or more syllables $rarr; use **_more_** in fron of
+    pretty &rarr; prettier  
++ adjectives with two or more syllables &rarr; use **_more_** in fron of
   adjectives  
     Health is **_more important than_** money.  
 + irregular comparative forms:  
@@ -1306,21 +1334,21 @@ The superlative **_(-est/most)_** compares three or more things or
 people.  
 
 + adjectives with one syllable:  
-  **_old_** $rarr; **_older_** _(then)_ $rarr; **_the oldest_** _(of
+  **_old_** &rarr; **_older_** _(then)_ &rarr; **_the oldest_** _(of
   all)_  
-  **_big_** $rarr; **_bigger_** _(then)_ $rarr; **_the biggest_** _(of
+  **_big_** &rarr; **_bigger_** _(then)_ &rarr; **_the biggest_** _(of
   all)_  
 + adjectives that end in _-y_:  
-  **_easy_** $rarr; **_easier_** _(than)_ $rarr; **_the easiest_** _(of
+  **_easy_** &rarr; **_easier_** _(than)_ &rarr; **_the easiest_** _(of
   all)_  
 + adjectives with two or more syllables:  
-  **_expensive_** $rarr; **_more expensive_** _(than)_ -> **_the most
+  **_expensive_** &rarr; **_more expensive_** _(than)_ &rarr; **_the most
   expensive_** _(of all)_  
 + irregular forms:  
-  **_good_** $rarr; **_better_** _(than)_ $rarr; **_the best_** _(of
+  **_good_** &rarr; **_better_** _(than)_ &rarr; **_the best_** _(of
   all)_  
-  **_bad_** $rarr; **_worse_** _(than)_ $rarr; **_the worst_** _(of all)_  
-  **_far_** $rarr; **_farther/further_** _(than)_ $rarr; **_the
+  **_bad_** &rarr; **_worse_** _(than)_ &rarr; **_the worst_** _(of all)_  
+  **_far_** &rarr; **_farther/further_** _(than)_ &rarr; **_the
   farthest/furthest_** _(of all)_  
 <!-- }}} -->
 ## Using one of + superlative + plural noun <!-- {{{ -->
@@ -1445,3 +1473,93 @@ to_**, **_be going to_**, **_have to_**.
 
 <!-- }}} -->
 <!-- }}} -->
+# Part of speech
+## Participle I
+Participle is a word formed from a verb. It can be used as verb, noun or
+adjective.  
+To form a present participle, you start with the base verb. Next, you
+add "ing" to the end of the base verb.  
+### As a compund verb:
+> My baby sister _is_ **crying** because she's hungry.  
+
++ Remember that present participles form compound verbs with forms of
+  the auxiliary verb "be"  
+### As an adjective:
+> Mom got up to soothe the **crying** baby.  
+
+## Participle II (or past participle)
+It is used to describe an action that happened in the past. It can
+also be used as adjective.  
+To form it take base verb and create third form.  
+### As a compound verb:
+> Jordan _had_ **kicked** the ball into his neighbor's yard.  
+
++ Remember that past participles form compound verbs with the auxiliary
+  verbs "has", "have" and "had"  
+### As an adjective
+> Jordan went into the yard to get the **kicked** ball.  
+
+## Gerund
+Gerund are formed from verbs but act as nouns. They're created by adding
+"ing" to theirs tail.  
+**Examples:**  
+
++ **Swimming** in the ocean has been Sharon's passion since she was five
+  years old.  
++ Let's go **dancing** at the club tonight.  
+
+# Part of sentence
+## Conditional
+A conditional sentence tells the "conditions" in which something
+happens. It shows a possible cause and effect situation in the form of
+an "if...then" staatement.  
+
+**Structure:**  
+| Conditional Clause | Main Clause                    |
+| ---                | ---                            |
+| If you want        | I can go with you to the store |
+
+### "Real" Conditionals (Zero Conditional)
+Real conditionals are sentences expressing the real conditions for
+things that happen, not hypothetical things.  
+
+**Present simple tense:**  
+> He cleans if I cook  
+
+**Present continuous + Present simple**  
+> If it is snowing, we don't drive  
+
+**Present continuous + Present continuous**  
+> If he is staying, I am going  
+
+**Past simple + Past simple**  
+> If it snowed, we never drove  
+
+**Past simple + Past continuous**  
+> We always made swonmen if it was snowing  
+
+### First conditional
+The first conditional shares the result of situation in the future that
+we think is pretty likely to happen.  
+**If <present simple> + future tense:**  
+> If I sleep now, I will be up all night.  
+
+### Second conditional
+The second conditional shows possible outcomes that could occur in the
+present or future, if specific conditions exist.  
+**If <past simple> + future tense:**  
+
++ If you slept until 3pm, you shouldn't be tired  
++ If you did well on the SATs, you will get accepted  
++ If you wanted to avoid traffic, you could take the highway  
++ If he ate all the cookies, you would have to bake more  
+
+### Third conditional
+The third conditional lets us express that if something could happen,
+other things could happen as well.  
+**If <past perfect> + would have + <verb>**:(_you can also use other
+modals instead of would_)  
+
++ If you had gone to bed earlier, you would have been well rested.  
++ If you had taked the highway, you oculd have avoided traffic.  
++ If you had made more cookies, we might have had enough.  
