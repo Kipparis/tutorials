@@ -1563,3 +1563,23 @@ modals instead of would_)
 + If you had gone to bed earlier, you would have been well rested.  
 + If you had taked the highway, you oculd have avoided traffic.  
 + If you had made more cookies, we might have had enough.  
+
+# Transcription \[ EN | RU \]<!-- {{{ -->
+In this system, transcriptions are shorter, but the reader has to know
+that, in American English, ɒ changes to ɑ: and ʳ changes to r.  
+
++ [english soundcard](http://www.antimoon.com/how/pronunc-soundsipa.htm)  
+
+| Symbol | How pronounced |
+| ---    | ---            |
+| ʌ | а |
+| ɑ:| аа |
+| æ | а + э |
+| e | э + е |
+| ə | э (очень глухое) |
+| ɜ:| ё или о |
+| I | и |
+| i: | ии |
+| ɒ | а (о в Британском)|
+
+<!-- }}} -->

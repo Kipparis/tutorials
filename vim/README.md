@@ -367,7 +367,7 @@ then does something on the text between where you currently are and
 where the movement would take you.  
 
 ## Movement Mappings <!-- {{{ -->
-Vim letse you create new movements that work with all existing commands:
+Vim lets you create new movements that work with all existing commands:
 ```vim
 :onoremap p i(
 ```
