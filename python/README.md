@@ -1,5 +1,6 @@
 # General Structure of file <!-- {{{ -->
 __primitive call__ == nonrecursive function call  
+
 ```python
 def _test():				# for testing purpose
     import doctest	# may be used any package from `testing` section
@@ -9,11 +10,14 @@ if __name__ == "__main__":  # for execution
     _test()
 ```
 <!-- }}} -->
+
 # Debugging, Testing, and Profiling <!-- {{{ -->
+
 ## Debugging <!-- {{{ -->
 __Tracebacks__ should be read from last line.   
 __!Warning!__ catching all exceptions will lead to when user presses Ctrl+C the
   program won't stop and you lock the user.  
+
 ### Exception chaining
 ```python
 class InvalidDataError(Exception): pass
@@ -45,6 +49,7 @@ pdb.set_trace()
 ```
 Use of debugger __IDLE__  
 <!-- }}} -->
+
 ## Testing <!-- {{{ -->
 __Unit testing__ - e.g. testing individual functions, classes, and methods, to ensure that
 they begave as expected.  
@@ -123,7 +128,9 @@ with self.asssertRaises(AttributeError):
     ...
 ```
 <!-- }}} -->
+
 ## Profiling <!-- {{{ -->
+
 Best practices:  
 + prefer tuples to lists when a __read-only sequence is needed__  
 + __use generators__ rather than creating large upbles or lists  
@@ -178,22 +185,29 @@ python3 -m cProfile -o profileDataFile programOrModule.py
 , then use __pstats__
 <!-- }}} -->
 <!-- }}} -->
+
 # Classes <!-- {{{ -->
+
 ## Special Methods <!-- {{{ -->
 + __bool__ - useful for if  
 + __format__ - provides str.format()  
 + __init__  
 + etc
 <!-- }}} -->
+
 ## Variables <!-- {{{ -->
+
 ### How they are inited
+
 ```
 f = FuzzyBool(0.7) <=> {
     FuzzyBool.__new__(FuzzyBool, 0.7)
     fuzzy.__init__()
 }
 ```
+
 ### Optimizing class variables
+
 when assigning object attributes we can use folowing structure
 ```python
 class Point:
@@ -205,7 +219,9 @@ class Point:
 ```
 it works __faster__. if subclassing, we have to reimplement __slots__  
 if empty => __slots__ = ()  
+
 ### Creating attributes on fly
+
 ```python
 class Ords:
     def __getattr__(self, char):
@@ -217,7 +233,9 @@ when accessing attributes first call is __getattribute__(), then __getattr__()
 + getattr -- invoked if the attribute wasn't found the usual ways  
 
 <!-- }}} -->
+
 ## Function manipulation <!-- {{{ -->
+
 make function unimplemented
 ```python
 def __add__(self, other):
@@ -234,10 +252,12 @@ functions = dict(a=add_dvd, e=edit_dvd, l=list_dvds,
 functions[action](db)
 ```
 <!-- }}} -->
+
 ## Descriptors <!-- {{{ -->
 Descriptors are classes which provide access control for the attributes of
 other classes.
 <!-- }}} -->
+
 ## Context managers <!-- {{{ -->
 syntax:  
 _`with expression as variable: suite`_
@@ -247,9 +267,11 @@ try:
     with(open(source) as fin, open(target, "w") as fout:
 ```
 <!-- }}} -->
+
 ## Class Decorators <!-- {{{ -->
 same as func decorators
 <!-- }}} -->
+
 ## Abstract Base Classes <!-- {{{ -->
 __Why?__ kind of promise - a promise that any derived class will provide the methods and properties that
 the abstract base class specifies  
@@ -321,6 +343,7 @@ bases - base classes
 dictionary - attributes
 <!-- }}} -->
 <!-- }}} -->
+
 # Lists <!-- {{{ -->
 generator expressions:  
 + `(expression for item in iterable)`  
@@ -349,6 +372,7 @@ x = next(generator)
 x = generator.send(1.0)
 ```
 <!-- }}} -->
+
 # Dynamic code execution <!-- {{{ -->
 ```python
 import math
@@ -369,7 +393,9 @@ context = globals().copy() to not override current dict
 + `eval` -- can handle only single expression  
 use of function.cache = {} to memoize data, _like here `https://jeremykun.com/2012/03/22/caching-and-memoization/`_  
 <!-- }}} -->
+
 # Functions <!-- {{{ -->
+
 ## Decorators <!-- {{{ --> 
 __decorators__ - one who take function and incorporates it with additional functionality and returns it
 example:
@@ -411,6 +437,7 @@ def bounded(min, max):
 	return decorator
 ```
 <!-- }}} -->
+
 ## Functors <!-- {{{ -->
 ```python
 class Strip:	# strip passed characters
@@ -440,6 +467,7 @@ class SortKey:
         return values
 ```
 <!-- }}} -->
+
 ## Functional-Style Programming <!-- {{{ -->
 __mapping__ - calling function on each item from iterable:  
 `list(map(lambda x: x**2, [1, 2, 3, 4]))   # returns: [1, 4, 9, 16]`  
@@ -466,6 +494,7 @@ for value in itertools.chain(data_list1, data_list2, data_list3):
 	total += value
 ```
 <!-- }}} -->
+
 ## Partial Function Application <!-- {{{ -->
 Creating one function from another but with fixed arguments
 ```python
@@ -474,17 +503,21 @@ for lino, line in enumerate1(lines):
   process_line(i, line)
 ```
 <!-- }}} -->
+
 ## Coroutines <!-- {{{ -->
 Coroutine - function that has at least one _yield_ expression.  
 to gain from function: `while True: match = (yield)`  
 to send to function:   `matcher.send(html)`  
 at the end call:	   `matcher.close()`  
 <!-- }}} -->
+
 ## Creating pipelines <!-- {{{ -->
 `pipeline = get_data(process(reporter()))`
 <!-- }}} -->
 <!-- }}} -->
+
 # Processes and Threading <!-- {{{ -->
+
 ## Subprocess
 __Subprocess__ module provides facilities for tunning other programs and
 communicating using pipes.  
@@ -550,6 +583,7 @@ threads.
 With threading we devise come kind of communication, shared memory (mmap
 module), shared files or networking.  
 <!-- }}} -->
+
 # Networking <!-- {{{ p. 465 -->
 __UDP__ - it's not necessary to create reliable connection  
 __TCP__ - reliable connection and stream-oriented protocol  
@@ -569,12 +603,14 @@ at the end of try block with server write saving and shutdown
 in `handle(self)` function read data from self.rfile 
 and write data to self.wfile  
 <!-- }}} -->
+
 # Database programming <!-- {{{ -->
 Pypi contains many database-related packages and interfaces to popular
 client/server databases.  
 More Pythonic way to interact with databases is use of __ORM__ _(Object
 Relational Mapper)_ : SQLAlchemy and SQLObject  
 <!-- }}} -->
+
 # Regular Expressions <!-- {{{ -->
 Every character match one occurance.  
 Special characters have to be escaped: `\.^$?+*{}[]()|`  
@@ -590,6 +626,7 @@ example: travell?ed matches: traveled, travelled
 by pressing a key too long (bevell+ed)  
 	+ `*` means `{0,n}` - leads to unexpected results
 	+ `??`, `+?`, `*?` - nongreedily match  
+
 ### Shortcuts
 	+ `.` any character except newline (or any character with re.DOTALL flag)  
 	+ `\d` Unicode digit; `[0-9]` with re.ASCII flag  

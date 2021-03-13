@@ -1,37 +1,37 @@
-tmux:{
-    https://www.bugsnag.com/blog/tmux-and-vim
-    good source file:
-    https://github.com/Starefossen/dotfiles/blob/master/.tmux.conf
-  --b4 all commands <C-b>--
-  
-  pane {
-    % open pane horizontally
-    " open pane vertically
-    ; move to previous active pane
-    o next pane in the current window
-    x kill current pane
+# sources
 
-    { swap current pane with the previous pane
-    } swap current pane with the next pane
++ [tmux-and-vim](https://www.bugsnag.com/blog/tmux-and-vim): good source file  
++ [Starefossen github](https://github.com/Starefossen/dotfiles/blob/master/.tmux.conf): good source file  
 
-    {arrows} change to the pane above/below, to the left/right
+# commands
 
-    {C-arrows} resize the current pane
-  }
+b4 all commands `<C-a>`  
 
-  window {
-    c create new window
-    [0..9] select window
-    l move to previously selected window
-    n change to the next window
-    f search for text in open windows
+## pane
 
-    & kill the current window
-  }
++ `%`: open pane horizontally  
++ `"`: open pane vertically  
++ `;`: move to previous active pane  
++ `o`: next pane in the current window  
++ `x`: kill current pane  
 
-  I resource conf (or tmux source ~/.tmux.conf)
-  alt+u remove the plugin
-  $ kill the current session
++ `{`: swap current pane with the previous pane  
++ `}`: swap current pane with the next pane  
 
-  plugins are installed to ~/.tmux/plugins
-}
++ `{arrows}`: change to the pane above/below, to the left/right  
+
++ `{C-arrows}`: resize the current pane  
+
+## window
++ `c`: create new window  
++ `[0..9]`: select window
++ `l`: move to previously selected window  
++ `n`: change to the next window  
++ `f`: search for text in open windows  
+
++ `&`: kill the current window  
+
++ `$`: kill the current session  
+
+# locations
+plugins are installed to `~/.tmux/plugins`  

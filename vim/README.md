@@ -1,23 +1,28 @@
 # Book
 Learn Vimscript the Hard Way by Steve Losh
 
-# Interesting options <!-- {{{ -->
+# Interesting options
 
 + `numberwidth` - how wide the column containing line numbers  
 + `help lh<TAB>` - various vim highlighting groups  
 
 <!-- }}} -->
-# Creating a Vimrc File <!-- {{{ -->
+
+# Creating a Vimrc File
 A `~/.vimrc` file is a file that contains some Vimscript code. Vim will
 automatically run the code inside this file every time you open Vim.  
 
 To easily find the location of the file, run `:echo $MYVIMRC` in Vim.  
 <!-- }}} -->
-# Echoing Messages <!-- {{{ -->
+
+# Echoing Messages
 You can use either `:echo` or `:echom`  
+
+
 ## Persisntent Echoing <!-- {{{ -->
 `:messages` - list of messages displayed via `:echom ""`  
 <!-- }}} -->
+
 ## Comments <!-- {{{ -->
 That is lines starting with `"` character  
 
@@ -29,37 +34,45 @@ From `:help messages`:
 
 + `g<` - used to display last message  
 <!-- }}} -->
-# Setting Options <!-- {{{ -->
+
+# Setting Options
 There are two main kinds of options:  
 
 + boolean - either "on" or "off"  
 + that take a value  
 
+
 ## Boolean Options <!-- {{{ -->
 All boolean work this way. `:set <name>` turns the option on and `:set
 no<name>` turns it off.  
 <!-- }}} -->
+
 ## Toggling Boolean Options <!-- {{{ -->
 `:set <name>!` - adding a `!` (exlamation point or "bang") to a boolean
 ooption toggles it.  
 <!-- }}} -->
+
 ## Checking Options <!-- {{{ -->
 `:set <name>?`  
 <!-- }}} -->
+
 ## Options with Values <!-- {{{ -->
 `:set <name>=<value>` - change non-boolean options  
 <!-- }}} -->
+
 ## Setting Multiple Options at Once <!-- {{{ -->
 `:set number numberwidth=6` - delimit options with space  
 <!-- }}} -->
 <!-- }}} -->
-# Basic Mapping <!-- {{{ -->
+
+# Basic Mapping
 Mapping keys lets you tell Vim:  
 
 > When I press this key, I want you to do this stuff instead of whatever
 > you would normally do.  
 
 Remove mapping with `:nunmap <character>`  
+
 
 ## Special Characters <!-- {{{ -->
 You can use `<keyname>` to tell Vim about special keys.
@@ -73,23 +86,28 @@ You may also map modifier keys like Ctrl and Alt:
 
 <!-- }}} -->
 <!-- }}} -->
-# Modal Mapping <!-- {{{ -->
+
+# Modal Mapping
 Be more specific:  
 
 + `nmap` - normal mode mapping  
 + `vmap` - visual mode  
 + `imap` - insert mode  
 
+
 ## Insert Mode <!-- {{{ -->
 If you want to run Vim command from mappings in insert mode, you have to
 implicitly pass `<esc>` for vim.  
 <!-- }}} -->
 <!-- }}} -->
-# Strict Mapping <!-- {{{ -->
+
+# Strict Mapping
+
 ## Recursion <!-- {{{ -->
 If you call `:nmap dd O<esc>jddk` it will go into recursion. The reason
 is key is a part mapped command  
 <!-- }}} -->
+
 ## Nonrecursive Mapping <!-- {{{ -->
 Vim offers another set of mapping commands that will not take mappings
 into account when they perform their actions.  
@@ -99,14 +117,17 @@ other mappings.
 **You should use it always**  
 <!-- }}} -->
 <!-- }}} -->
-# Leaders <!-- {{{ -->
+
+# Leaders
 There are a bunch of keys that you don't normally need in your
 day-to-day Vim usage: `-`, `H`, `L`, `<space>`, `<cr>`, and `<bs>`.  
+
 
 ## Mapping Key Sequences <!-- {{{ -->
 You can map key sequences in vim. They are work if you press them
 quickly.  
 <!-- }}} -->
+
 ## Leader <!-- {{{ -->
 Vim calls this "prefix" key the "leader". To set your own:
 ```vim
@@ -115,6 +136,7 @@ Vim calls this "prefix" key the "leader". To set your own:
 
 Now you can use special character `<leader>` in your mappings.  
 <!-- }}} -->
+
 ## Local Leader <!-- {{{ -->
 Vim has a second "leader" key called "local leader". This is meant to be
 a prefix for mappings that only take effect for certain types of files,
@@ -128,9 +150,11 @@ You can set it via:
 Now you can use `<localleader>` in mappings and it will work just like `<leader>` does  
 <!-- }}} -->
 <!-- }}} -->
-# Editing Your Vimrc <!-- {{{ -->
+
+# Editing Your Vimrc
 If you have something on your mind, you don't want to loose your
 concentration to add useful mapping to vimrc.  
+
 
 ## Editing Mapping <!-- {{{ -->
 Mapping that will open your `$HOME/.vimrc` file in a split so you can
@@ -141,6 +165,7 @@ quickly edit it and get back to cofing.
 If you prefer a horizontal split, you can replace `vsplit` with `split`  
 
 <!-- }}} -->
+
 ## Sourcing Mapping <!-- {{{ -->
 Vimrc file is read upon startup only. Let's add a mapping get rid of
 useless restarting vim:
@@ -152,12 +177,14 @@ The `source` command tells Vim to take the contents of the given file
 and execute it as Vimscript.  
 <!-- }}} -->
 <!-- }}} -->
-# Abbreviations <!-- {{{ -->
+
+# Abbreviations
 Vim has a feature called "abbreviations" that feel similar to mappings
 but are meant for use in insert, replace, and command modes.  
 
 `:iabbrev adn and` - abbreviations expanded after you type word and
 something that is not a letter, number or underscore afterwards.  
+
 
 ## Keyword Characters <!-- {{{ -->
 Vim will substitute an abbreviation when you type any "non-keyword
@@ -178,15 +205,19 @@ You'll see output like `@,48-57,_,192-255`:
 
 Read about it: `:help isfname`  
 <!-- }}} -->
+
 ## Why Not Use Mappings <!-- {{{ -->
 Mappings could be expanded inside of word, whereas abbreviations take
 care of such cases.  
 <!-- }}} -->
 <!-- }}} -->
-# More Mappings <!-- {{{ -->
+
+# More Mappings
 You can find out which mapings did you overwrote by reading `:help <key>`  
 <!-- }}} -->
-# Training Your Fingers <!-- {{{ -->
+
+# Training Your Fingers
+
 ## Learning the Map <!-- {{{ -->
 The trick to relearning a mapping is to _force_ yourself to use it by
 _disabling_ the old key(s). Run the following command:
@@ -199,7 +230,9 @@ your `jk` mapping to exit insert mode.
 
 <!-- }}} -->
 <!-- }}} -->
-# Buffer-Local Options and Mappings <!-- {{{ -->
+
+# Buffer-Local Options and Mappings
+
 ## Mappings <!-- {{{ -->
 Consider following mappings:
 ```vim
@@ -210,6 +243,7 @@ First will set mapping globally (for all opened files and buffers),
 while second only to the current opened buffer.  
 
 <!-- }}} -->
+
 ## Settings <!-- {{{ -->
 Some options always apply to all of Vim, but others can be set on a
 per-buffer basis:
@@ -228,6 +262,7 @@ per-buffer basis:
     - `:unmap <buffer> ,w` - unmaps only locally  
 
 <!-- }}} -->
+
 ## Shadowing <!-- {{{ -->
 Consider following mappings:
 ```vim
@@ -239,7 +274,8 @@ second.
 
 <!-- }}} -->
 <!-- }}} -->
-# Autocommands <!-- {{{ -->
+
+# Autocommands
 Autocommands are a way to tell Vim to run certain commands whenever
 certain events happen.  
 
@@ -248,6 +284,7 @@ the first time. To change this behaviour run this:
 ```vim
 :autocmd BufNewFile * :write
 ```
+
 
 ## Autocommand Structure <!-- {{{ -->
 ```vim
@@ -275,6 +312,7 @@ autocommands to.
 
 
 <!-- }}} -->
+
 ## Another Example <!-- {{{ -->
 ```vim
 :autocmd BufWritePre *.html :normal gg=G
@@ -282,6 +320,7 @@ autocommands to.
 Re-indent whole file before saving.  
 
 <!-- }}} -->
+
 ## Multiple Events <!-- {{{ -->
 ```vim
 :autocmd BufWritePre,BufRead *.html :normal gg=G
@@ -297,6 +336,7 @@ regardless of whether it happend to exist already or not.
 ```
 
 <!-- }}} -->
+
 ## FileType Events <!-- {{{ -->
 One of the most useful events is the `FileType` event. this event is
 fired whenever Vim sets a buffer's `filetype`.  
@@ -309,11 +349,13 @@ Mappings to comment current line:
 
 <!-- }}} -->
 <!-- }}} -->
-# Buffer-Local Abbreviations <!-- {{{ -->
+
+# Buffer-Local Abbreviations
 You should understand easily how this words:
 ```vim
 :iabbrev <buffer> --- &mdash;
 ```
+
 
 ## Autocommands and Abbreviations <!-- {{{ -->
 ```vim
@@ -329,13 +371,16 @@ time.
 
 <!-- }}} -->
 <!-- }}} -->
-# Autocommand Groups <!-- {{{ -->
+
+# Autocommand Groups
+
 ## The Problem <!-- {{{ -->
 Sourcing your `vimrc` file rereads the entire file, including any
 autocommands you've defined! This means that every time you source your
 `vimrc` you''be duplicating autocommands, which will make Vim run slower
 because it executes the same commands over and over.  
 <!-- }}} -->
+
 ## Grouping Autocommands <!-- {{{ -->
 Vim has a solution to the problem. The first step is to group related
 autocommands into names groups:
@@ -350,6 +395,7 @@ Every time Vim reads same group, it will combine readed with previous one.
 
 `:help autocmd-groups`  
 <!-- }}} -->
+
 ## Clearing Groups <!-- {{{ -->
 If you want to _clear_ a group you can use `autocmd!` inside the group:
 ```vim
@@ -361,10 +407,12 @@ If you want to _clear_ a group you can use `autocmd!` inside the group:
 
 <!-- }}} -->
 <!-- }}} -->
-# Operator-Pending Mappings <!-- {{{ -->
+
+# Operator-Pending Mappings
 An operator is a command that waits you to enter a movement command, and
 then does something on the text between where you currently are and
 where the movement would take you.  
+
 
 ## Movement Mappings <!-- {{{ -->
 Vim lets you create new movements that work with all existing commands:
@@ -384,6 +432,7 @@ movement, you can think of it like this:
 `:help omap-info`  
 
 <!-- }}} -->
+
 ## Changing the Start <!-- {{{ -->
 If our movements always have to start at the current cursor position it
 limits what we can do. Of course there's a way around this problem:
@@ -397,6 +446,7 @@ This is equivalent to "inside next parantheses". Let's make a companion
 ```
 
 <!-- }}} -->
+
 ## General Rules <!-- {{{ -->
 
 + If your operator-pending mapping ends with some t ext visually
@@ -405,7 +455,8 @@ This is equivalent to "inside next parantheses". Let's make a companion
   position and the new position.  
 <!-- }}} -->
 <!-- }}} -->
-# More Operator-Pending Mappings <!-- {{{ -->
+
+# More Operator-Pending Mappings
 Assume following text in markdown:
 ```markdown
 Topic One
@@ -428,10 +479,12 @@ Run the following command:
 ```
 That is operator-pending mapping for acting on current section's heading.
 
+
 ## Normal <!-- {{{ -->
 The `:normal` command takes a set of characters and performs whatever
 action they would do if they were typed in normal mode.  
 <!-- }}} -->
+
 ## Execute <!-- {{{ -->
 The `execute` command takes a Vimscript string and performs it as a
 command. For example this:
@@ -467,6 +520,7 @@ The final piece is a sequence of three normal mode commands:
   as well, and this isn't what we want.  
 
 <!-- }}} -->
+
 ## Results <!-- {{{ -->
 Let's look at one more mapping:
 ```vim
@@ -482,7 +536,8 @@ this will execute operation on whole header (including equal signs)
 <!-- }}} -->
 
 <!-- }}} -->
-# Status Lines <!-- {{{ -->
+
+# Status Lines
 Vim allows you to customize the text in the status line at the bottom
 through the `statusline` option:
 ```vim
@@ -495,6 +550,7 @@ you can use `+=` to build up the option one piece at a time:
 :set statusline+=FileType:\ 
 :set statusline+=%y
 ```
+
 
 ## Width and Padding <!-- {{{ -->
 You can change how the information is displayed:
@@ -524,6 +580,7 @@ You can also set a maximum width of a code's output:
 
 
 <!-- }}} -->
+
 ## General Format <!-- {{{ -->
 ```txt
 %-0{minwid}.{maxwid}{item}
@@ -532,6 +589,7 @@ Everything except the `%` and the item is optional.
 
 `:help statusline`
 <!-- }}} -->
+
 ## Splitting <!-- {{{ -->
 The `%=` code tells Vim that everything coming after that should be
 aligned (as a whole) to the right instead of the left:
@@ -546,17 +604,21 @@ aligned (as a whole) to the right instead of the left:
 <!-- }}} -->
 
 <!-- }}} -->
-# Responsible Coding <!-- {{{ -->
+
+# Responsible Coding
+
 ## Commenting <!-- {{{ -->
 Be defensive when writing anything that takes more than a few lines of
 Vimscript. Add a comment explaining what it does, and if there is a
 relevant help topic, mention it in the comment!  
 <!-- }}} -->
+
 ## Grouping <!-- {{{ -->
 Use folding and autgroups  
 
 + `:help foldlevelstart` Vim may fold everything automatically  
 <!-- }}} -->
+
 ## Short Names <!-- {{{ -->
 Vim allows you to use abbreviated names for most commands and options.
 For example, both of these commands do exactly the same thing:
@@ -570,7 +632,8 @@ Abbreviated forms are _great_ for running commands manually in the
 middle of coding.  
 <!-- }}} -->
 <!-- }}} -->
-# Variables <!-- {{{ -->
+
+# Variables
 You can create them by running:
 ```vim
 :let foo = "bar"
@@ -581,6 +644,7 @@ Vim will display `bar`. Now run these commands:
 :let foo = 42
 :echo foo
 ```
+
 
 ## Options as Variables <!-- {{{ -->
 You can read and set options as variables by using an ampersand in front
@@ -596,6 +660,7 @@ You can also set options as variables:
 ```
 
 <!-- }}} -->
+
 ## Local Options <!-- {{{ -->
 If you want to set the local value of an option as a varialbe, you need
 to prefix the variable name:
@@ -604,6 +669,7 @@ to prefix the variable name:
 ```
 
 <!-- }}} -->
+
 ## Registers as Variables <!-- {{{ -->
 You can also read and set registers as variables:
 ```vim
@@ -634,7 +700,8 @@ Search register (register containing text that you recently searched):
 
 <!-- }}} -->
 <!-- }}} -->
-# Variable Scoping <!-- {{{ -->
+
+# Variable Scoping
 Consider following code:
 ```vim
 :let b:hello = "world"
@@ -647,7 +714,9 @@ variale local to the current buffer.
 + `:help internal-variables` - list of scopes  
 
 <!-- }}} -->
+
 # Conditionals <!-- {{{ -->
+
 ## Multiple-Line Statements <!-- {{{ -->
 You can separate each line with a pipe character (`|`). As ion the
 following command:
@@ -656,6 +725,7 @@ following command:
 ```
 
 <!-- }}} -->
+
 ## Basic `if` <!-- {{{ -->
 example syntax is:
 ```vim
@@ -675,6 +745,7 @@ Several informed conclusions about Vimscript:
   evaluates to a non-zero integer, _after_ all coercion takes place.  
 
 <!-- }}} -->
+
 ## Else and Elseif <!-- {{{ -->
 Example is the following commands:
 ```vim
@@ -689,7 +760,9 @@ Example is the following commands:
 Vim echoes `finally!`.  
 <!-- }}} -->
 <!-- }}} -->
-# Comparisons <!-- {{{ -->
+
+# Comparisons
+
 ## Case Sensitivity <!-- {{{ -->
 Consider following code:
 ```vim
@@ -704,6 +777,7 @@ Consider following code:
 **The behavior of == depends on a user's settings**  
 
 <!-- }}} -->
+
 ## Code Defensively <!-- {{{ -->
 
 + `==?` is the "case-insensitive no matter what the use has set"
@@ -720,7 +794,8 @@ Using `==#` and `==?` with integers will work just fine.
 + `:help expr4` to see all available comparison operators  
 <!-- }}} -->
 <!-- }}} -->
-# Functions <!-- {{{ -->
+
+# Functions
 **Vimscript functions _must_ start with a capital letter if they are
 unscoped!** Even if you do add a scope to a function you may as well
 capitalize the first letter of function names anyway. Most Vimscript
@@ -749,6 +824,7 @@ Now try it out by running this command:
 :echom GetMeow()
 ```
 
+
 ## Calling Functions <!-- {{{ -->
 You can directly call a function, like here:
 ```vim
@@ -763,6 +839,7 @@ The second way to call functions is in expressions:
 ```
 
 <!-- }}} -->
+
 ## Implicit Returning <!-- {{{ -->
 If Vimscript function doesn't a value, it implicitly returns 0.  
 <!-- }}} -->
@@ -772,7 +849,8 @@ If Vimscript function doesn't a value, it implicitly returns 0.
 + `:help return` - look up for short form of return  
 
 <!-- }}} -->
-# Function Arguments <!-- {{{ -->
+
+# Function Arguments
 Run the following commands:
 ```vim
 :function DisplayName(name)
@@ -788,6 +866,7 @@ Run the function:
 When you write a Vimscript function that takes arguments you _always_
 need to prefix those arguments with `a:` when you use them to tell Vim
 that they're in the argument scope.  
+
 
 ## Varargs <!-- {{{ -->
 Vimscript functions can optionally take variable-length argument lists.  
@@ -809,6 +888,7 @@ Vimscript functions can optionally take variable-length argument lists.
   list, so we cannot display it with `echom`)  
 
 <!-- }}} -->
+
 ## Assignment <!-- {{{ -->
 Consider following commands:
 ```vim
@@ -831,14 +911,17 @@ Vim will throw an error, because you can't reassign argument variables.
 + `:help local-variables`  
 
 <!-- }}} -->
-# Numbers <!-- {{{ -->
+
+# Numbers
 Vimscript has two types of numeric variables: Numbers and Floats.  
+
 
 ## Number Formats <!-- {{{ -->
 
 + specify hex notation by prefixing with `0x` or `0X`  
 + specify ocal notation by prefixing with `0`
 <!-- }}} -->
+
 ## Float Formats <!-- {{{ -->
 
 + `:echo 100.1`  
@@ -846,11 +929,13 @@ Vimscript has two types of numeric variables: Numbers and Floats.
   default it's positive)  
 + `:echo 15.45e-2`  
 <!-- }}} -->
+
 ## Coercion <!-- {{{ -->
 When you combine a Number and a Float through arithmetic, comparison, or
 any other operation Vim will cast the Number to a Float, resulting in a
 Float.  
 <!-- }}} -->
+
 ## Division <!-- {{{ -->
 When dividing Numbers, the remainder is dropped.  
 
@@ -862,7 +947,9 @@ needs to be a Float
 + `:help floating-point-precision` what you need to remember about
   floating point numbers when write Vim plugin  
 <!-- }}} -->
-# Strings <!-- {{{ -->
+
+# Strings
+
 ## Concatenation <!-- {{{ -->
 ```vim
 :echom "Hello, " . "world"
@@ -878,6 +965,7 @@ Vim will display "10foo".
 This time Vim throws an error, saying we're using a Float as String.
 
 <!-- }}} -->
+
 ## Special Characters <!-- {{{ -->
 Like most programming languages, Vimscript lets you use escape sequences
 in strings to represent hard-to-type characters.  
@@ -897,6 +985,7 @@ of `echo` with a String Vim will echo the _exact_ characters of the
 string (`^@` is Vim's way of saying "newline character")  
 
 <!-- }}} -->
+
 ## Literal Strings <!-- {{{ -->
 Using single quotes tells Vim that you want the string `exactly` as-is,
 with no escape sequences. The one exception is that two single quotes in
@@ -913,7 +1002,9 @@ Vim will display "That's enough."
 + `:help i_CTRL-V`  
 + `:help literal-string`  
 <!-- }}} -->
-# String Functions <!-- {{{ -->
+
+# String Functions
+
 ## Length <!-- {{{ -->
 Get length of strings:
 ```vim
@@ -922,6 +1013,7 @@ Get length of strings:
 ```
 When used with Strings `len` and `strlen` have identical effects.  
 <!-- }}} -->
+
 ## Splitting <!-- {{{ -->
 The `split` function splits a String into a List.
 ```vim
@@ -937,6 +1029,7 @@ In both cases Vim display `['one', 'two', 'three']`
 + `:help split()`
 
 <!-- }}} -->
+
 ## Joining <!-- {{{ -->
 ```vim
 :echo join(["foo", "bar"], "...")
@@ -950,6 +1043,7 @@ effect:
 + `:help join()`  
 
 <!-- }}} -->
+
 ## Lower and Upper Case <!-- {{{ -->
 Vim has two functions to change the case of Strings:
 ```vim
@@ -961,9 +1055,11 @@ Vim displays `foo` and `FOO`.
 
 + `:help functions` - list of built-in functions  
 <!-- }}} -->
-# Execute <!-- {{{ -->
+
+# Execute
 The execute command is used to evaluate a string as if it were a
 Vimscript command.  
+
 
 ## Basic Execution <!-- {{{ -->
 Execute is a very powerfull tool because it lets you build commands out
@@ -975,6 +1071,7 @@ split:
 :execute "rightbelow vsplit " . bufname("#")
 ```
 <!-- }}} -->
+
 ## Is Execute Dangerous? <!-- {{{ -->
 
 1. Vim is a unique environment where the normal security concerns simply
@@ -986,14 +1083,17 @@ split:
 + `:help leftabove`, `:help rightbelow`, `:help :split`, `:help :vsplit`  
 
 <!-- }}} -->
-# Normal <!-- {{{ -->
+
+# Normal
 The `normal` command simply takes a sequence of keys and pretends they
 were typed in normal mode.  
+
 
 ## Avoiding Mappings <!-- {{{ -->
 Vim has a `normal!` command that does not take into account user
 mappings.  
 <!-- }}} -->
+
 ## Special Characters <!-- {{{ -->
 `normal!` doesn't parse special character sequences. For instance
 following command won't work as expected:
@@ -1006,7 +1106,8 @@ following command won't work as expected:
 + `:help normal`  
 + `:help helpgrep`  
 <!-- }}} -->
-# Execute Normal! <!-- {{{ -->
+
+# Execute Normal!
 `execute` ltes you build commands programmatically, so you can use Vim's
 normal string escape sequences to generate the non-printing characters
 you need.
@@ -1016,7 +1117,9 @@ you need.
 will append `;` to the current line.  
 
 <!-- }}} -->
-# Basic Regular Expressions <!-- {{{ -->
+
+# Basic Regular Expressions
+
 ## Highlighting <!-- {{{ -->
 Before we start lets turn on some of the highlighting features:
 ```vim
@@ -1027,6 +1130,7 @@ a search, and `incsearch` tells Vim to highlight the _next_ match while
 you're still typing out your seach pattern.  
 
 <!-- }}} -->
+
 ## Seaching <!-- {{{ -->
 
 ```vim
@@ -1045,6 +1149,7 @@ Searches backward from bottom
 
 
 <!-- }}} -->
+
 ## Magic <!-- {{{ -->
 Command
 ```vim
@@ -1060,6 +1165,7 @@ So resulting command is:
 (remember about special characters for execute)  
 
 <!-- }}} -->
+
 ## Literal Strings <!-- {{{ -->
 If you don't want to place double slashes everywhere, you use literal
 strings:
@@ -1068,6 +1174,7 @@ strings:
 ```
 
 <!-- }}} -->
+
 ## Very Magic <!-- {{{ -->
 `\v` tells Vim to use its "very magic" regex parsing mode, which is
 pretty mush the same as you're used to in any other programming
@@ -1082,7 +1189,9 @@ language:
 + `:help pattern-overview` - kinds of things Vim regexes support  
 + `:help match` - define a pattern to highlight in the current window.  
 <!-- }}} -->
-# Case Study: Grep Operator, Part One <!-- {{{ -->
+
+# Case Study: Grep Operator, Part One
+
 ## Grep <!-- {{{ -->
 
 Our example is going to make `:grep` easier to invoke by adding a "grep
@@ -1090,6 +1199,7 @@ operator" you can use with any of Vim's built-in (or custom!) motions to
 select the text you want to search for.  
 
 <!-- }}} -->
+
 ## Usage <!-- {{{ -->
 The first thing you should think about when creating any non-trivial
 piece of Vimscript is: "how will this functionaliry be used?".  
@@ -1103,6 +1213,7 @@ Some examples of how you might end up using it:
 + `viwe<leader>g` - visually select a word, extend the selection to the
   end of the word after it, then grep for the selected text.  
 <!-- }}} -->
+
 ## A Preliminary Sketch <!-- {{{ -->
 Let's simplify our goal to: "create a mapping to search for the word
 under the cursor". This is useful but should be easier, so we can get
@@ -1112,6 +1223,7 @@ something running much faster.
 ```
 
 <!-- }}} -->
+
 ## The Search Term <!-- {{{ -->
 First we need to search for the word under the cursor, not the string
 something. Run the command:
@@ -1136,6 +1248,7 @@ To try to fix this we'll quote the argument in the grep call:
 ```
 
 <!-- }}} -->
+
 ## Escaping Shell Command Arguments <!-- {{{ -->
 There appears another problem, if we try the mapping on the word
 `that's` single quote inside the word will interfere with the
@@ -1172,6 +1285,7 @@ the cursor, it's time to concatenate it into our mapping:
 + `:help escape()`  
 + `:help shellescape()`  
 <!-- }}} -->
+
 ## Cleanup <!-- {{{ -->
 First, we said that we don't want to go to the first result
 automatically, and we can use `grep!` instead of plain `grep` to do
@@ -1198,12 +1312,15 @@ D>")) . " ."<cr>:copen<cr>
 + `:help copen`  
 + `:help silent`  
 <!-- }}} -->
-# Case Study: Grep Operator, Part Two <!-- {{{ -->
+
+# Case Study: Grep Operator, Part Two
+
 ## Create a File <!-- {{{ -->
 Create separate file named `grep-operator.vim` and place it in
 `~/.vim/plugin` directory. We'll type the command there instead of in
 command line.  
 <!-- }}} -->
+
 ## SKeleton <!-- {{{ -->
 To create a new Vim operator you'll start with two components: a
 function and a mapping:
@@ -1223,6 +1340,7 @@ option to our function, and then we run `g@` which calls this function
 as an operator.  
 
 <!-- }}} -->
+
 ## Visual Mode <!-- {{{ -->
 We've added the operator to normal mode, but we'll want to be able to
 use it from visual mode as well. Add another mapping below the first:
@@ -1236,6 +1354,7 @@ string representing the last type of visual mode used: "v" for
 characterwise, "V" for linewise, and a `Ctrl-v` character for blockwise.  
 
 <!-- }}} -->
+
 ## Motion Types <!-- {{{ -->
 Change function body:
 ```cpp
@@ -1252,6 +1371,7 @@ examples of the output you get are:
 + `<leader>giw` - echoes `char`  
 + `<leader>gG` - echoes `line`  
 <!-- }}} -->
+
 ## Copying the Text <!-- {{{ -->
 Our function is going to need to somehow get access to the text the user
 wants to search for, and the easiest way to do that is to simply copy
@@ -1277,6 +1397,7 @@ endfunction
 Each time Vim will echo the text that the motion covers.  
 
 <!-- }}} -->
+
 ## Escping the Search Term <!-- {{{ -->
 Now that we've got the text we need in a Vim string we can escape it
 like we did in the previous chapter. Modify the `echom` command so it
@@ -1298,6 +1419,7 @@ endfunction
 ```
 
 <!-- }}} -->
+
 ## Running Grep <!-- {{{ -->
 We're finally ready to add the `grep!` command that will perform the
 actual search:
@@ -1329,9 +1451,11 @@ Now the command is wrote.
 + `:help map-operator`  
 
 <!-- }}} -->
-# Case Study: Grep Operator, Part Three <!-- {{{ -->
+
+# Case Study: Grep Operator, Part Three
 Part of writing Vimscript is being considerate and making your users'
 lives easier.  
+
 
 ## Saving Registers <!-- {{{ -->
 By yanking the text into the unnamed register we destroy anything that
@@ -1358,6 +1482,7 @@ endfunction
 ```
 
 <!-- }}} -->
+
 ## Namespacing <!-- {{{ -->
 Our script created a function named `GrepOperator` in the global
 namespace. This probably isn't a big deal, but when you're writing
@@ -1380,7 +1505,8 @@ function name with `<SID>` so they could find the function.
 
 + `:help <SID>`  
 <!-- }}} -->
-# Lists <!-- {{{ -->
+
+# Lists
 Vimscript lists are ordered, heterogeneous collections of elements.
 ```vim
 :ehco ['foo', 3, 'bar']
@@ -1390,6 +1516,7 @@ Vim displays the list. Lists can of course be nested.
 ```vim
 :echo ['foo', [3, 'bar']]
 ```
+
 
 ## Indexing <!-- {{{ -->
 Vimscript lists are zero-indexed, you can get at the elements in the
@@ -1401,6 +1528,7 @@ usual way as well as in reverse order.
 :echo [0, [1,2]][-2]
 ```
 <!-- }}} -->
+
 ## Slicing <!-- {{{ -->
 This will look familiar to Python programmers, but it does not always
 act the same way!
@@ -1438,6 +1566,7 @@ negative indices when slicing string though!
 ```
 
 <!-- }}} -->
+
 ## Concatenation <!-- {{{ -->
 You can combine Vim lists with `+`.
 ```vim
@@ -1446,6 +1575,7 @@ You can combine Vim lists with `+`.
 Vim displays `['a','b','c']`.  
 
 <!-- }}} -->
+
 ## List Functions <!-- {{{ -->
 Append `b`:
 ```vim
@@ -1501,8 +1631,10 @@ necessary/possible.
 + `:help reverse()`  
 + `:help functions`  
 <!-- }}} -->
-# Looping <!-- {{{ -->
+
+# Looping
 These are two main kinds of loops Vim supports.
+
 
 ## For Loops <!-- {{{ -->
 There's no equivalent to the C-style `for (int i = 0; i < foo; ++i)`
@@ -1521,6 +1653,7 @@ loop form in Vimscript. But you'll never miss it.
 ```
 
 <!-- }}} -->
+
 ## While Loops <!-- {{{ -->
 Vim also  supports the classic `while` loop. Run the following commands:
 
@@ -1542,7 +1675,8 @@ Once again Vim displays 10.
 + `:help for`  
 + `:help while`  
 <!-- }}} -->
-# Dictionaries <!-- {{{ -->
+
+# Dictionaries
 Dictionaries are created using curly brackets. Values are heterogeneous,
 but _keys are always coerced to strings_.  
 
@@ -1552,6 +1686,7 @@ Run this command:
 ```
 Vim displays `{'a': 1, '100': 'foo'}`. Vim allows you to use a comma
 after the last element in a dictionary.  
+
 
 ## Indexing <!-- {{{ -->
 To look up a key in a dictionary you use the same syntax as most
@@ -1571,6 +1706,7 @@ Javasccript-style "dot" lookup:
 ```
 
 <!-- }}} -->
+
 ## Assigning and Adding <!-- {{{ -->
 Adding entries to dictionaries is done by simply assigning them like
 variables:
@@ -1583,6 +1719,7 @@ variables:
 Vim displays `{'a': 100, 'b': 200}`.  
 
 <!-- }}} -->
+
 ## Removing Entries <!-- {{{ -->
 There are two ways to remove entries from a dictionary. Run the
 following commands:
@@ -1598,6 +1735,7 @@ The `unlet` command also removes adictionary entries, but you can't use
 the value.  
 
 <!-- }}} -->
+
 ## Dictionary Functions <!-- {{{ -->
 Get key's value and, if not exist, return default:
 ```vim
@@ -1631,7 +1769,9 @@ You can get just the keys or just the values with the `keys` and `values` functi
 + `:help values()`  
 
 <!-- }}} -->
-# Toggling <!-- {{{ -->
+
+# Toggling
+
 ## Toggling Options <!-- {{{ -->
 Let's start by creating a function that will toggle an option for us,
 and a mapping that will call it.
@@ -1659,6 +1799,7 @@ endfunction
 
 
 <!-- }}} -->
+
 ## Toggling Other Things <!-- {{{ -->
 Let's create a mapping that "toggles" quickfix window.
 To get the "toggling" behavior we're looking for we'll use a quick,
@@ -1680,6 +1821,7 @@ endfunction
 ```
 
 <!-- }}} -->
+
 ## Restoring Windows/Buffers <!-- {{{ -->
 If the user runs the mapping when they're already in the quickfix
 window, Vim closes it and dumps them into the last split instead of
@@ -1713,7 +1855,9 @@ endfunction
 + `:help ctrl-w_w`  
 + `:help wincmd`  
 <!-- }}} -->
-# Functional Programming <!-- {{{ -->
+
+# Functional Programming
+
 ## Immutable Data Structures <!-- {{{ -->
 Vim doesn't have any immutable collections like Clojure's vectors and
 maps built-in, but by creating some helper functions we can fake it to
@@ -1763,6 +1907,7 @@ endfunction
 
 
 <!-- }}} -->
+
 ## Functions as Variables <!-- {{{ -->
 Vimscript supports using variables to store functions, but the syntax is
 a bit obtuse:
@@ -1784,6 +1929,7 @@ because it's storing a list, not a function.
 
 
 <!-- }}} -->
+
 ## Higher-Order Functions <!-- {{{ -->
 Higher-order functions are functions that take other functions and do
 something with them. We'll begin with the trusty `map` function. Add
@@ -1844,7 +1990,9 @@ endfunction
 + `:help type()`  
 
 <!-- }}} -->
-# Paths <!-- {{{ -->
+
+# Paths
+
 ## Absolute Paths <!-- {{{ -->
 
 ```vim
@@ -1858,6 +2006,7 @@ echom fnamemodify('foo.txt', ':p')
 ```
 
 <!-- }}} -->
+
 ## Listing Files <!-- {{{ -->
 To display all files and directories in the current directory run:
 ```vim
@@ -1890,11 +2039,14 @@ You can recursively list files with `**`:
 + `:help wildcards`  
 <!-- }}} -->
 
-# Creating a Full Plugin <!-- {{{ -->
+
+# Creating a Full Plugin
 The plugin we're going to make is going to add support for the _Potion_
 programming language.  
 <!-- }}} -->
-# Plugin Layout in the Dark Ages <!-- {{{ -->
+
+# Plugin Layout in the Dark Ages
+
 ## `~/.vim/colors/` <!-- {{{ -->
 Files inside `~/.vim/colors/` are treated as color schemes. For example:
 if you run `:color mycolors` Vim will look for a file at
@@ -1904,16 +2056,19 @@ the Vimscript commands necessary to generate your color scheme.
 If you want to create your own colorscheme, you should copy an existing
 scheme and modify it (remember `:help` is your friend).  
 <!-- }}} -->
+
 ## `~/.vim/plugin/` <!-- {{{ -->
 Files inside the directory will each be run once _every time_ Vim
 starts.  
 <!-- }}} -->
+
 ## `~/.vim/ftdetect/` <!-- {{{ -->
 Any files in `~/.vim/ftdetect/` will also be run every time you start
 Vim. `ftdetect` stands for "filetype detection". The files in this
 directory should set up autocommands that detect and set the `filetype`
 of files, and _nothing else_.  
 <!-- }}} -->
+
 ## `~/.vim/ftplugin/` <!-- {{{ -->
 The naming of these files matters! When Vim sets a buffer's `filetype`
 to a value it then looks for a file in `~/.vim/ftplugin/` that maches
@@ -1925,42 +2080,51 @@ _must_ only  set buffer-local options! If they set options globally they
 would overwrite them for all open buffers!  
 
 <!-- }}} -->
+
 ## `~/.vim/indent/` <!-- {{{ -->
 `indent` files should set options related to indentation for their
 filetypes, and those options should be buffer-local.  
 <!-- }}} -->
+
 ## `~/.vim/compiler/` <!-- {{{ -->
 File in the directory set compiler-related options in the current buffer
 based on their names.  
 <!-- }}} -->
+
 ## `~/.vim/after/` <!-- {{{ -->
 File in this directory will be loaded every time Vim starts, but _after_
 the files in `~/.vim/plugin/`. This allows you to override Vim's
 internal files.  
 <!-- }}} -->
+
 ## `~/.vim/autoload/` <!-- {{{ -->
 In a nutshell: `autoload` is a way to delay the loading of your plugin's
 code until it's actually needed.  
 <!-- }}} -->
+
 ## `~/.vim/doc/` <!-- {{{ -->
 This directory is where you can add documentation for your plugin.  
 <!-- }}} -->
 <!-- }}} -->
 
-# A New Hope: Plugin Layout with Pathogen <!-- {{{ -->
+
+# A New Hope: Plugin Layout with Pathogen
 <!-- TODO: stopped here -->
+
 ## Runtimepath <!-- {{{ -->
 
 When Vim looks for file in a spacific directory, Vim has the
 `runtimepath` setting which tells it where to find files to load.  
 
 <!-- }}} -->
+
 ## Pathogen <!-- {{{ -->
 
 This means that each directory inside `bundle/` should contain some or
 all of the standard Vim plugin directories, like `colors/` and `syntax/`  
 
 <!-- }}} -->
+
 ## Being Pathogen-Compatible <!-- {{{ -->
 
 We simply put our files in the appropriate directories inside the
@@ -1984,7 +2148,8 @@ potion/
 
 + `:help runtimepath`  
 <!-- }}} -->
-# Detecting Filetypes <!-- {{{ -->
+
+# Detecting Filetypes
 
 Create simple factorial function (write it on potion language):
 ```txt
@@ -2002,6 +2167,7 @@ factorial = (n):
 ```
 
 You can run this by command: `potion factorial.pn`  
+
 
 ## Detecting Potion Files <!-- {{{ -->
 If you run `:set filetype?`, Vim will display `filetype=` because it

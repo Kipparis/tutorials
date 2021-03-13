@@ -30,6 +30,7 @@ time, respectively.
 <!-- }}} -->
 Filtering by Message Interest<!-- {{{ -->
 =============================
+
 ### By Unit<!-- {{{ -->
 
 Use `-u` option to filter this way.  
@@ -39,6 +40,7 @@ To see all of the logs from an Ngingx unit:
 You may merge the entries from both services in chonologival order:  
 `journalctl -u nginx.service -u php-fpm.service --since today`  
 <!-- }}} -->
+
 ### By Process, User, or Group ID<!-- {{{ -->
 
 If you know PID of process you want to monitor. Use `_PID` option:  
@@ -50,16 +52,19 @@ The `-F` option shows all of the available values for a given journal
 field.  
 `journalctl -F _GID`  
 <!-- }}} -->
+
 ### By Component Path <!-- {{{ -->
 For instance, to find those entries that involve the `bash` executable,
 you can type:  
 `journalctl /usr/bin/bash`  
 <!-- }}} -->
+
 ### Displaying Kernel Messages <!-- {{{ -->
 Add `-k` or `--dmesg` flags to your command:  
 `journalctl -k`  
 By default this will display thekernel messages from thecurrent boot.  
 <!-- }}} -->
+
 ### By Priority <!-- {{{ -->
 You can use `journalctl` to display only messages of a specified
 priority or above by using the `-p` option. This allows you to filter
@@ -80,6 +85,7 @@ In order of highest to loves priority, these are:
 + 6: info  
 + 7: debug  
 <!-- }}} -->
+
 ### Help<!-- {{{ -->
 You cann find out about all of the available journal fields by typing:  
 `man systemd.journal-fields`  

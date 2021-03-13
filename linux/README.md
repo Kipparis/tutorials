@@ -34,6 +34,7 @@ Usefull things:
 <!--     aliases -->
 <!--     functions -->
 <!-- and find out cool, or those need for modification -->
+
 # What Is a Shell?<!-- {{{ -->
 The shell's job is to traslate the user's command lines into operating
 system instructions.  
@@ -41,12 +42,14 @@ Remember that the shell itself is not UNIX - just the **_user interface_** to it
 UNIX is one of the first operating systems to make the user interface
 independent of the operating system.  
 <!-- }}} -->
+
 # Features of bash<!-- {{{ -->
     + command-line editing modes  
     + job control  
     + many options and variables for customization  
     + it have expanded programming features  
 <!-- }}} -->
+
 # Structure of commands<!-- {{{ -->
 Shell command lines consist of one or more words, which are separated on
 a command line by blanks or TABs. The first word one the line is the
@@ -55,6 +58,7 @@ An **_option_** is a special type of argument that give the command
 specific information on what it is supposed to do. Options usually
 consist of a dash followed by a letter.  
 <!-- }}} -->
+
 # Directory<!-- {{{ -->
 Tilde (~) is abbreviation for homedirectories:  
 
@@ -63,6 +67,7 @@ Tilde (~) is abbreviation for homedirectories:
 
 + `cd -` - changes to whatever directory you were in before  
 <!-- }}} -->
+
 # Filenames, Wildcards, and Pathname Expansion<!-- {{{ -->
 The process of matching expressions containing wildcards to filenames is
 called **_wildcard expansion_** or **_globbing_**.  
@@ -86,6 +91,7 @@ names into patters, using _**wildcards**_.
 To match **!** itself, place it after the first character in the set, or
 precede it with a backslash, as in `[\!]`  
 <!-- }}} -->
+
 # Brace Expansion <!-- {{{ -->
 Expands to an arbitrary string of a given form:  
 
@@ -101,6 +107,7 @@ $ echo b{ed,olt,ar}s
 beds bolts bars
 $ echo b{ar{d,n,k},ed}s
 bards barns barks beds
+
 # another example of brace expansion
 $ echo {2..5}
 2 3 4 5
@@ -108,9 +115,11 @@ $ echo {d..h}
 d e f g h
 ```
 <!-- }}} -->
+
 # Input and Output <!-- {{{ -->
 Everything on the system that produces or accepts data is treated as a
 file;
+
 ## Standard I/O <!-- {{{ -->
 By convention, each UNIX program has a single way of accepting input
 called _standard input_, a single way of producint output called
@@ -137,12 +146,14 @@ bigger programs:
 | _sed_   | Perform editing operations on input                   |
 | _tr_    | Translate characters in the input to other characters |
 <!-- }}} -->
+
 ## I/O Redirection <!-- {{{ -->
 The notation `command < filename>` sets things up so that _command_
 takes standard input from a file instead of from a terminal.  
 Similarly, `command > filename` causes the command's standard output to
 be redirected to the named file.  
 <!-- }}} -->
+
 ## Pipelines <!-- {{{ -->
 To redirect the output of a command into the standard input of another
 command instead of a file use **_pipe_**, notated as "|". Command line
@@ -150,6 +161,7 @@ that contains two or more commands connected with pipes is called a
 pipeline.  
 <!-- }}} -->
 <!-- }}} -->
+
 # Background Jobs <!-- {{{ -->
 If you want to run a command that does not require user input and you
 want to do other things while the command is running, put an ampersand
@@ -160,11 +172,13 @@ contrast a job run the normal way - foreground job.
 
 You can overview background jobs with `jobs`, printing an indication
 lines of the job's status.  
+
 ## Background I/O <!-- {{{ -->
 If a background job produces screen output, the output will jsut appear
 on your screen (which will intersperse with foreground job).  
 To solve, use redirect (`>`) to file
 <!-- }}} -->
+
 ## Background Jobs and Priorities <!-- {{{ -->
 Every job on the system is assigned a _priority_, a number that tells
 the operating system how much priority to give the job whe it doles out
@@ -173,7 +187,9 @@ resources (the higher the nubmer, the lower the priority).
 UNIX command that lets you lower (or higher) the priority of any job - `nice`  
 <!-- }}} -->
 <!-- }}} -->
+
 # Special Characters and Quoting <!-- {{{ -->
+
 ## Table of special characters <!-- {{{ -->
 | Character | Meaning                      |
 | ---       | ---                          |
@@ -200,15 +216,18 @@ UNIX command that lets you lower (or higher) the priority of any job - `nice`
 | ?         | Single-character wildcard    |
 | !         | Pipeline logical NOT         |
 <!-- }}} -->
+
 ## Quoting <!-- {{{ -->
 Sometimes you will want to use special characters literally, i.e.
 without their special meanings. This is called _quoting_.  
 ``'string'``  
 <!-- }}} -->
+
 ## Backslash-Escaping <!-- {{{ -->
 Another way to change the meaning of a character is to precede it with a
 backslash (`\`). This is called _backslash-escaping_ the character.  
 <!-- }}} -->
+
 ## Control Keys <!-- {{{ -->
 Control keys - those that you type by holding down the CTRL key and
 hitting another key.  
@@ -228,6 +247,7 @@ Common control keys:
 | Ctrl-Z        | susp      | Suspend current command                     |
 <!-- }}} -->
 <!-- }}} -->
+
 # Help <!-- {{{ -->
 In bash you can type `help` by itself to get a list of the built-in
 shell commands.  
@@ -236,9 +256,11 @@ detailed description.
 You can also provide _help_ with a **_partial name_**. For example `help
 re` will provide details on _read_, _readonly_, _return_.  
 <!-- }}} -->
+
 # Command-Line Editing <!-- {{{ -->
 `fc` command allows you edit your last command with your favorite
 editor.  
+
 ## Enabling Command-Line Editing <!-- {{{ -->
 Two ways to enter either editing mode:  
 
@@ -247,10 +269,12 @@ Two ways to enter either editing mode:
     Note about .inputrc. It is only sourced by bash :)  
     If you want to set up eny mode on your shell, search for this  
 <!-- }}} -->
+
 ## The History List <!-- {{{ -->
 Default to *.bash\_history*, buy you can change to whatever you like by
 setting the environment varialbe **HISTFILE**.  
 <!-- }}} -->
+
 ## vi Editing Mode <!-- {{{ -->
 vim-mode has two modes of its own: _input_ and _control_ mode.  
 
@@ -287,6 +311,7 @@ In modern shells it's called via `TAB` key.
 <!-- }}} -->
 <!-- }}} -->
 
+
 ## The fc Command <!-- {{{ -->
 `fc -l` - lists last commands (you may specify 2 arguments - since,
 before), time window is specified by number arguments or by prefix
@@ -304,6 +329,7 @@ string
 **Warning!** After exit fc editor will execute all commands.
 
 <!-- }}} -->
+
 ## History Expansion <!-- {{{ -->
 The way to recall commands is by the use of _event designators_.  
 
@@ -344,6 +370,7 @@ There are also **_modifiers_**, but it's better to master vi or emacs
 mode skills. If you wish to read about **_modifiers_** go to page 168.  
 <!-- }}} -->
 
+
 # Customizing Your Environment <!-- {{{ -->
 + **_Special files_** - like *.bash_profile*(better to use _.profile_),
 *.bash_logout*,_.bashrc_ are read by _bash_ when you log in
@@ -354,6 +381,7 @@ and out or start a new shell
 + **_Variables_** - shell and other programs can modify their behavior
   according to the values stored in the variables  
 
+
 ## The .bash\_profile, .bash\_logout, and .bashrc Files <!-- {{{ -->
 Default for *.bash_profile* is _/etc/profile_. This file is read and the
 commands in it are executed by _bash_ every time you log in to the
@@ -363,6 +391,7 @@ command `source .bash_profile`
 _.bashrc_ executed every time subshell runs  
 *.bash_logout* - every logout  
 <!-- }}} -->
+
 ## Aliases <!-- {{{ -->
 Sytax `alias name=command`  
 Two ways of using an alias:  
@@ -387,6 +416,7 @@ Notes:
 `alias name` - output alias' value  
 `alias` - output all available aliases  
 <!-- }}} -->
+
 ## Options <!-- {{{ -->
 _Options_ allow you to change shell's behavior  
 Syntax is: `set +\-o optionname [+\- optionname [...]]`  
@@ -409,10 +439,12 @@ Basic shell options:
 
 `set -o` will output all options and their status.  
 <!-- }}} -->
+
 ## Shell Variables <!-- {{{ -->
 To set variable use command `varname=value`  
 To unset - `unset varname`  
 <!-- }}} -->
+
 ## Built-In Variables <!-- {{{ -->
 **Editing mode variables:**  
 
@@ -423,6 +455,7 @@ To unset - `unset varname`
 | HISTSIZE | Maximum number of commands to remember (default 500)  |
 | FCEDIT   | Pathname of the editor to use with the **fc** command |
 <!-- }}} -->
+
 ## Prompting variables <!-- {{{ -->
 They are:  
 
@@ -460,11 +493,13 @@ They are:
 | `\\`         | backslash                                               |
 | `\[`, `\]`   | Begin, and a sequence of non-printing characters        |
 <!-- }}} -->
+
 ## Command search path <!-- {{{ -->
 Safe way to extend PATH is `PATH=$PATH":/home/you/bin`  
     You command won't be executed if you already have command with this
     name  
 <!-- }}} -->
+
 ## Command hashing <!-- {{{ -->
 First time you enter command, bash will store its path to hashtable.
 When you enter this command again, bash will search for its location in
@@ -480,7 +515,9 @@ Command hashing can be turned on and off with the **hashall** option.
 <!-- }}} -->
 
 <!-- }}} -->
+
 # Customization and Subprocesses <!-- {{{ -->
+
 ## Subprocesses and environment variables <!-- {{{ -->
 Environment Variables are very basic thing that known to all
 subprocesses. You can define **your own environment variables** with
@@ -503,6 +540,7 @@ values by typing `export` or by using `-p` option to the command
 | SHELL    | Pathname of the shell you are running   |
 | TERM     | The type of terminal that you are using |
 <!-- }}} -->
+
 ## Terminal types <!-- {{{ -->
 The value of **TERM** must be ashort character string with lowercase
 letters that appears as a filename in the _terminfo_ database. This
@@ -513,7 +551,9 @@ begin with taht character.
 <!-- }}} -->
 <!-- }}} -->
 
+
 # Basic Shell Programming <!-- {{{ -->
+
 ## Shell Scripts and Functions <!-- {{{ -->
 Running scripts as `source scriptname` causes the commands in the script
 to be read and run as if you typed them in.  
@@ -531,6 +571,7 @@ More important difference between the two ways of running shell scripts:
     + the subshell then takes commands from the script, runs them, and
   terminates, handing control back to the parent shell  
 <!-- }}} -->
+
 ## Functions <!-- {{{ -->
 You use them to define some shell code by name and store it in the
 shell's **_memory_**, to be invoked and run later:  
@@ -545,6 +586,7 @@ To define a function, you can use either one of two forms:
 function functname {
     shell commands
 }
+
 # or
 functname() {
     shell commands
@@ -575,7 +617,9 @@ If you want to find out a source of command, `type -all/-a` will help you.
 + `-t` - restrict to single word description  
 
 <!-- }}} -->
+
 ## Shell Variables <!-- {{{ -->
+
 ### Positional Parameters <!-- {{{ -->
 _Positional parameters_ hold the command-line arguments to scripts when
 they are invoked. Positional parameters have the names
@@ -591,22 +635,27 @@ Two special variables contain all of the positional parameters (expect
 The variable **#** holds the number of positional parameters  
 All of these variables are "read-only".  
 <!-- }}} -->
+
 ### Positional parameters in functions <!-- {{{ -->
 Acting basically the same way as in scripts  
+
 #### Local Variables in Functions <!-- {{{ -->
 A **local** statement inside a function definition makes the variables
 involved all become _local_ to that function.  
 <!-- }}} -->
 <!-- }}} -->
+
 ### Quoting with $@ and $\* <!-- {{{ -->
 For example calling `countargs "$*"` will print **1 args**  
 `countargs "$@"` will print **3 args**  
 <!-- }}} -->
+
 ### More on Variable Syntax <!-- {{{ -->
 `$varname` is the same as `${varname}`. Second is used to bring
 clarification for bash.  
 <!-- }}} -->
 <!-- }}} -->
+
 ## String Operators <!-- {{{ -->
 The _curly-bracket_ syntax allows for the shell's _string operators_. In
 particular, string operators let you do the following:  
@@ -623,6 +672,7 @@ Syntax of String Operators<!-- {{{ -->
 Any special characters are inserted between the variable's name and the
 right curly bracket. Any argument - to the operator's right.  
 <!-- }}} -->
+
 ### Existense of variables and substitutions <!-- {{{ -->
 + `${varname:-word}` - if _varname_ exists and isn't null, return its
   value; otherwise return _word_  
@@ -643,6 +693,7 @@ right curly bracket. Any argument - to the operator's right.
   is @, the _length_ is the number of positional parameters starting at
   parameter offset.  
 <!-- }}} -->
+
 ### Patterns and Pattern Matching <!-- {{{ -->
 Patterns are strings that can contain wildcard characters (\*, ?, and []
 for character sets and ranges)  
@@ -670,10 +721,12 @@ for character sets and ranges)
   positional parameter in turn and the expansion is the resultant
   list.  
 <!-- }}} -->
+
 ### Length Operator <!-- {{{ -->
 `${#varname}` - returns the length of the value of the variable as a
 character string  
 <!-- }}} -->
+
 ### Extended Pattern Matching <!-- {{{ -->
 Bash provides a further set of pattern matching operators if the **shopt**
 option **extglob** is switched on. Each operator takes one or more
@@ -692,14 +745,17 @@ Patterns can contain shell wildcards and can be nested.
 Example: output all .txt or .md files: `ls -al *(*.txt|*.md)`  
 <!-- }}} -->
 <!-- }}} -->
+
 ## Command Substitution <!-- {{{ -->
 Command substitution allows you to use the standard output of a command
 as if it were the value of a variable. The syntax is: `$(UNIX command)` (can be nested)  
 <!-- }}} -->
+
 ## Some examples from `pushd` and `popd` <!-- {{{ -->
 If you want to read full paragraph go to page 306  
 <!-- }}} -->
 <!-- }}} -->
+
 # Flow Control <!-- {{{ -->
 Bash supports:  
 
@@ -710,6 +766,7 @@ Bash supports:
 + **case**  
 + **select** - allow the user to select one of a list of possibilities
   from a menu  
+
 
 ## if/else <!-- {{{ -->
 The **if** construct has the following syntax:  
@@ -762,6 +819,7 @@ pathname expansion are not performed on the words within the brackets.
 They can also be combined using this syntax:  
 ```bash
 if [ condition ] && [ condition ]; then
+
 # or
 if command && [ condition ]; then
 ```
@@ -779,6 +837,7 @@ if [ -n "$dirname" ] && [ \( -d "$dirname" \) -a \( -x "$dirname" \) ]; then
 
 
 <!-- }}} -->
+
 ## String Comparisons <!-- {{{ -->
 **Operator** - **True if...**  
 
@@ -789,6 +848,7 @@ if [ -n "$dirname" ] && [ \( -d "$dirname" \) -a \( -x "$dirname" \) ]; then
 + `-n str1` - _str1_ is not null (length > 0)  
 + `-z str1` - _str1_ is null (length == 0)  
 <!-- }}} -->
+
 ## File attribute checking <!-- {{{ -->
 There are 24 such operators. We will cover those of most general
 interest here.  
@@ -823,6 +883,7 @@ Integer Conditionals<!-- {{{ -->
 + `-gt` - greater than  
 + `-ne` - not equal  
 <!-- }}} -->
+
 ## for <!-- {{{ -->
 The shell's standard **for** loop doesn't
 let you specify a number of times to iterate or a range of values over
@@ -848,6 +909,7 @@ done
 
 
 <!-- }}} -->
+
 ## case <!-- {{{ -->
 _bash_'s **case** construct lets you test strings against patterns that
 can contain wildcard characters.  
@@ -868,6 +930,7 @@ Any of the _patterns_ can actually be several patterns separated by pipe
 characters (|).
 
 <!-- }}} -->
+
 ## select <!-- {{{ -->
 **select** allows you to generate simple menus easily. It has concise
 syntax, but it does quite a lot of work. The syntax is:  
@@ -890,6 +953,7 @@ What **select** does is:
     If you want to exit, use `break` statement  
 
 <!-- }}} -->
+
 ## while and until <!-- {{{ -->
 They both allow a section of code to be run repeatitively while (or
 until) a certain condition becomes true.  
@@ -905,7 +969,9 @@ example.
 
 <!-- }}} -->
 <!-- }}} -->
+
 # Command-Line Options and Typed Variables <!-- {{{ -->
+
 ## Command-Line Options <!-- {{{ -->
 
 shift<!-- {{{ -->
@@ -990,6 +1056,7 @@ If an option has an argument, **getopts** stores it in the variable
 as $1, $2, etc"  
 <!-- }}} -->
 <!-- }}} -->
+
 ## Typed Variables <!-- {{{ -->
 You can set variable attributes with the `declare` built-in. A `-` turns
 the option on, while `+` turns it off.  
@@ -1011,7 +1078,9 @@ name be a type of readonly
 - `-f` interprets the name as function  
 
 <!-- }}} -->
+
 ## Integere Variables and Arithmentic <!-- {{{ -->
+
 ### Basic <!-- {{{ -->
 The shell interprets words surrounded by `$((` and `))` as arithmetic
 expressions.  
@@ -1045,6 +1114,7 @@ Shell also supports base _N_ numbers, where _N_ can be from 2 to 36. The
 notation _B # N_ means "_N_ base _B_".  
 
 <!-- }}} -->
+
 ## Arithmetic Conditionals <!-- {{{ -->
 Arithmetic conditions can also be tested as strings (in `[[...]]`):  
 
@@ -1059,6 +1129,7 @@ MOre efficient way of performing an arithmetic test:
 by using the `((...))` construct. This returns an exit status of 0 if
 the expression is true, and 1 otherwise.  
 <!-- }}} -->
+
 ## Arithmetic Variables and Assignment <!-- {{{ -->
 You can evaluate arithmetic expressions and assign them to variables
 with the use of `let`. The syntax is:  
@@ -1070,6 +1141,7 @@ redundant). There must not be any space on either side of the equal
 sign. It is good practive to surround expressions with quotes, since
 many characters are treated as special by the shell.  
 <!-- }}} -->
+
 ## Arithmetic for Loops <!-- {{{ -->
 The form of an arithmetic for loop is very similar to those found in
 Java and C:
@@ -1094,6 +1166,7 @@ done
 
 <!-- }}} -->
 <!-- }}} -->
+
 ## Arrays <!-- {{{ -->
 There are several ways to assign values to arrays:  
 an array is created automatically by any of the following assignment or
@@ -1137,6 +1210,7 @@ Remove element from array - `unset array[i]`, destroy entire array -
 
 <!-- }}} -->
 <!-- }}} -->
+
 # Input/Output and Command-Line Processing <!-- {{{ -->
 
 **I/O redirectors**:  <!-- {{{ -->
@@ -1169,6 +1243,7 @@ File Descriptors<!-- {{{ -->
 a process starts, it usually has three file descriptors open: standart
 inpu (0), standard output (1), standard error (2).  
 <!-- }}} -->
+
 ## String I/O <!-- {{{ -->
 
 echo<!-- {{{ -->
@@ -1356,6 +1431,7 @@ you can use this technique with any flow-control construct.
 
 
 <!-- }}} -->
+
 ### Command blocks <!-- {{{ -->
 The coude surrounded by curly brackets (_{}_) will behave like a
 function that has no name. This code will also standard I/O descriptors.  
@@ -1384,6 +1460,7 @@ or in case of creating a standard algebraic notation frontend to the _dc_ comman
 ```
 
 <!-- }}} -->
+
 ### Reading user input <!-- {{{ -->
 Shell convention dictates that prompts should go to standard _error_,
 not standard output.  
@@ -1392,6 +1469,7 @@ You may use `-p "propmt"` option to **read** and redirect it to
 stderr (`>&2`).  
 <!-- }}} -->
 <!-- }}} -->
+
 ## Command-Line Processing <!-- {{{ -->
 Each line that the shell reads from the standard input or a script
 - **_pipeline_** (contains one or more _commands_ separeted by zero or
@@ -1512,7 +1590,9 @@ eval "$@" > logfile 2>&1 &
 <!-- }}} -->
 
 <!-- }}} -->
+
 # Process Handling <!-- {{{ -->
+
 ## Process IDs and Job Nubmers <!-- {{{ -->
 ```shell
 $ alice &
@@ -1523,6 +1603,7 @@ processes that are currently running under your shell), while `93` -
 process ID refer to all processes currently running on the entire
 system.  
 <!-- }}} -->
+
 ## Job Control <!-- {{{ -->
 
 Foreground and Background<!-- {{{ -->
@@ -1559,6 +1640,7 @@ If you need the command to finish, but you would also like to control of
 your terminal back - you can type `bg`, which moves the job to the
 background.  
 <!-- }}} -->
+
 ### Signals <!-- {{{ -->
 A signal is a message that one process sends to another when it wants
 the other process to do something.  
@@ -1622,10 +1704,12 @@ Traps defined in the invoking shell will be recognized inside the
 function, and any traps defined in the function will be recognized by
 the invoking shell. (traps can be overwritten)  
 
+
 ### Process ID Variables and Temporary Files <!-- {{{ -->
 + `$$` - process ID of the current shell  
 + `$!` - process ID of the most recent background job  
 <!-- }}} -->
+
 ### Ignoring Signals <!-- {{{ -->
 Signal called HUP (hangup) called when network disconnection occure. You
 could write function that ignore that signal. Also there's keyword
@@ -1639,11 +1723,13 @@ Removes job from list of jobs.
 + `disown -a` - disown's all jobs owned by the shell  
 + `disown -r` - same as above but only for currently running jobs  
 <!-- }}} -->
+
 ### Resetting Traps <!-- {{{ -->
 When you pass `-`(dash) as the command argument trap is resetted to
 default (usually is termination of the process).  
 <!-- }}} -->
 <!-- }}} -->
+
 ### Coroutines <!-- {{{ -->
 Coroutines - two or more processes are explicitly programmed to run
 simultaneously and possibly communicate with each other.  
@@ -1664,6 +1750,7 @@ By default `wait` simpy waits until all background jobs have finished.
 If you have specific job you need to wait, you can pass PID as argument
 to `wait`.  
 <!-- }}} -->
+
 #### Advantages and Disadvantages of Coroutines <!-- {{{ -->
 Three characteristics of process:  
 
@@ -1674,6 +1761,7 @@ Three characteristics of process:
 It's usefull to parallel processes of different type.
 But harmfull to parallel same type.  
 <!-- }}} -->
+
 #### Parallelization <!-- {{{ -->
 Breaking up a process into coroutines is sometimes called _parallelizing_ the job.  
 
@@ -1691,10 +1779,12 @@ Generaly speaking this is _concurrency control_ issues.
 
 <!-- }}} -->
 <!-- }}} -->
+
 ## Subshells <!-- {{{ -->
 We saw earlier that when you run a shell script, you actually invoke
 another copy of the shell that is a subprocess of the main, or _parent_,
 shell process.  
+
 
 ### Subshell Inheritance <!-- {{{ -->
 They _inherit_ from their parents:  
@@ -1710,6 +1800,7 @@ Does not inherit:
   environment file (usually _.bashrc_)  
 + Handling of signals that are not ignored  
 <!-- }}} -->
+
 ### Nested Subshells <!-- {{{ -->
 Just surround some shell code with parentheses, and that code will run
 in a subshell. That is _nested_ subshell.  
@@ -1726,6 +1817,7 @@ code after the block, whereas those defined in a subshell are not.
 
 <!-- }}} -->
 <!-- }}} -->
+
 ## Process Substitution <!-- {{{ -->
 Two forms:  
 
@@ -1745,11 +1837,13 @@ information.
 
 <!-- }}} -->
 <!-- }}} -->
+
 # Debugging Shell Programs <!-- {{{ -->
 The debugger, called _bashdb_, is a basic yet functional program that
 will not only serve as an extended example of various shell programming
 techniques, but will also provide you with a useful tool for examining
 the working of your own shell scripts.  
+
 
 ## Basic Debugging Aids <!-- {{{ -->
 Sterps through debugging code:
@@ -1759,6 +1853,7 @@ Sterps through debugging code:
 + then _how_ to fix it  
 
 First aid is **echo**, but you'll spend a lot of time  
+
 
 ### Set Options <!-- {{{ -->
 Debugging options:
@@ -1774,6 +1869,7 @@ Debugging options:
 
 <!-- }}} -->
 <!-- }}} -->
+
 ## Fake Signals <!-- {{{ -->
 Fake singlas work in the same way as ordinary do, but they are generated
 by the shell itself, as opposed to the other signals which are generated
@@ -1820,6 +1916,7 @@ Some debugging features bash 3.0 introduced:
 + `debugger` option, which switches on both the **extdebug** nad
   **functrace** functionality.  
 <!-- }}} -->
+
 ## Debugging Variables <!-- {{{ -->
 Bash 3.0 added some useful environment variables to facilitate
 developing:  
@@ -1837,11 +1934,13 @@ exec<!-- {{{ -->
 place of the current program, in the same process.  
 <!-- }}} -->
 <!-- }}} -->
+
 # Bash Administration <!-- {{{ -->
 Two fields for system administrators maintaining shell:  
 
 + generic environment for users  
 + for system security  
+
 
 ## Installing bash as the Standard Shell <!-- {{{ -->
 Better way to install bash is to install it in any directory, than
@@ -1849,6 +1948,7 @@ simplink `/bin/sh` to it (it'll mimic the Bourne shell as closely as
 possible, ignoring `~/.bash_profile` on login and `~/.bashrc` when
 interactive).  
 <!-- }}} -->
+
 ## POSIX Mode <!-- {{{ -->
 The POSIX (Portable Operating System Interface) standard defines
 guidelines for standardizing UNIX.  
@@ -1856,9 +1956,11 @@ _bash_ is nearly 100% POSIX-compliant in its native mode. It you want
 strict POSIX adherence, you can either start _bash_ with the `posix`
 option, or set it from within the shell with `set -o posix`  
 <!-- }}} -->
+
 ## Command-Line Options <!-- {{{ -->
 I won't list those. Open man, type `/OPTIONS` and here you are.  
 <!-- }}} -->
+
 ## Environment Customization <!-- {{{ -->
 _bash_ uses the file _/etc/profile_ for system-wide customization and
 login. After which he reads *.bash_profile*  
@@ -1913,6 +2015,7 @@ ulimit -Hn unlimited
 
 <!-- }}} -->
 <!-- }}} -->
+
 ## Types of Global Customization <!-- {{{ -->
 file _/etc/profile_ contains definitions such as **PATH** and **TERM**.  
 
@@ -1921,12 +2024,14 @@ and you want to set timeout for prompt.
 
 Also you can set up global functions.  
 <!-- }}} -->
+
 ## System Security Features <!-- {{{ -->
 _bash_ has two features that help solve security problem:  
 
 + _restricted shell_ which is intentionally "brain damaged"  
 + _privileged mode_ which is used with shell scripts that run as if the
   user were **root**.  
+
 
 ### Restricted Shell <!-- {{{ -->
 It's designed to put the user into an environment where her ability to
@@ -1951,11 +2056,13 @@ __BASH_ENV__, __SHELL__, or **PATH**
 + specifying the **-p** option to the bultin command.  
 + turning off restricted mode with **set +r**  
 <!-- }}} -->
+
 ### A System Break-In Scenario <!-- {{{ -->
 _suid_ allows change effective user ID equal to the owner of the file,
 which is usually **root**. To set a file's _suid_ bit, the superuser can
 type `chmod 4755 filename` the **4** is the _suid_ bit.  
 <!-- }}} -->
+
 ### Privileged Mode <!-- {{{ -->
 To set this mode type `set -o privileged` or `set -p`. In privileged
 mode, when as _suid bash_ shell script is invoked, the shell does not
@@ -1964,14 +2071,17 @@ effective user ID to be the same as the real user ID.
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
+
 # Shell Scripting <!-- {{{ -->
 This chapter will give a briedf introduction to some aspects of good
 practice and writing maintainable shell scripts along with helpful tips
 and tricks that you can use to make writing scripts easier.  
 
+
 ## What's That Do ? <!-- {{{ -->
 That's common question from current programmer to the same programmer
 but 1 year ago.  
+
 
 ### Comments <!-- {{{ -->
 Always comment your code and add header: filename, purpose, usage,
@@ -1984,6 +2094,7 @@ Comments within the flow of the code are generally better on a line by
 themselves, while variable declaration comments are better on the same
 line as the variable.  
 <!-- }}} -->
+
 ### Variables and Constants <!-- {{{ -->
 Another way of commenting is use of descriptive variable names.  
 
@@ -2010,6 +2121,7 @@ if [[ $process_result == $STAGE_3_FAILURE ]]
 
 
 <!-- }}} -->
+
 ## Starting Up <!-- {{{ -->
 Free Software Foundat ion ahs published a set of guidelines for writing
 GNU software that suggests standard ways in which UNIX utilities should
@@ -2034,6 +2146,7 @@ For commands accepting several input and only one output, it's good
 practive to only make input filenames as normal arguments, and have
 option for an output (i.e., _command -o filename_).  
 <!-- }}} -->
+
 ## Potential Problems <!-- {{{ -->
 
 + Don't create massive scripts or functions that try to do everything.  
@@ -2043,6 +2156,7 @@ option for an output (i.e., _command -o filename_).
 + Don't use the same names for variables and functions  
 + Be careful when using the test operator `[...]`.  
 <!-- }}} -->
+
 ## Don't Use `bash` <!-- {{{ -->
 None a languages is good of every task.  
 
@@ -2053,9 +2167,11 @@ None a languages is good of every task.
   solution and trying out various options.  
 <!-- }}} -->
 <!-- }}} -->
+
 # `bash` for Your System <!-- {{{ -->
 How to get the latest version of _bash_ and install it on your system.
 Potential problems you might encounter along the way.  
+
 
 ## Obtaining `bash` <!-- {{{ -->
 The _bash_ home page is located at
@@ -2074,6 +2190,7 @@ Email: order@fsf.org
 ```
 
 <!-- }}} -->
+
 ## Unpacking the Archive <!-- {{{ -->
 
 + `gunzip bash-3.0.tar.gz`  
@@ -2086,6 +2203,7 @@ and how you go about makeing a _bash_ executable in the rest of this
 chapter.  
 
 <!-- }}} -->
+
 ## What's in the Archive <!-- {{{ -->
 
 + MANIFEST - a list of all the files and directories in the archive  
@@ -2104,6 +2222,7 @@ to a pager: `nroff -man bash.1 | less`
 + _readline.3_ - manual entry for the _readline_ facility  
 + _article.ms_ - article about the shell that appeared in _Linux Journal_, by the current _bash_ maintainer, Chet Ramey.  
 <!-- }}} -->
+
 ### Configuring and Building `bash` <!-- {{{ -->
 You just type **configure** and the **make**.  
 
@@ -2134,9 +2253,11 @@ _config-.top.h_
 To clean up the source directory and remove all of the object files and
 executables, type **make clean**.  
 <!-- }}} -->
+
 ### Testing `bash` <!-- {{{ -->
 To run them type **make tests**.  
 <!-- }}} -->
+
 ### Potential Problems <!-- {{{ -->
 If _bash_ didn't compile, the first thing to do is check that _configure_ guessed your machine and operating system correctly.  
 
@@ -2146,6 +2267,7 @@ Then check files:
 + INSTALL - for additional information on how to give _configure_ specific
   compilation instructions.  
 <!-- }}} -->
+
 ### Installing `bash` as a Login Shell <!-- {{{ -->
 Individual users can use the _chsh_ (change shell) utility after they
 log in to  their acocunts. _chsh_ asks for their password and displays a
@@ -2186,6 +2308,7 @@ examples<!-- {{{ -->
 
 <!-- }}} -->
 <!-- }}} -->
+
 # Who Do I Turn to? <!-- {{{ -->
 Documentation, Internet ofc.
 <!-- }}} -->

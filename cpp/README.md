@@ -1,7 +1,9 @@
 <!-- книга: с++ premier -->
 <!-- если какой-либо термин непонятен, в книге, в конце каждой главы есть -->
 <!-- определения -->
+
 # Data types<!-- {{{ -->
+
 ## Pointers, reference<!-- {{{ -->
 _diff btw pointer and reference_. reference is not an object, hence, once we 
 defined reference, we cannot make that reference refer to another
@@ -9,6 +11,7 @@ object.
 
 `void*` pointer can hold the address of __any object__.  
 <!-- }}} -->
+
 ## Strings<!-- {{{ -->
 include:  
 ```cpp
@@ -24,6 +27,7 @@ you can use __conditions__ while working with strings:
 while (cin >> word)         { /* body */ }
 while (getline(cin, line))  { /* body */ }
 ```
+
 ### Notes<!-- {{{ -->
 `string.size()` returns `string::size_type` type which is unsigned. 
 So don't mix up _int_ and _unsigned_ values.
@@ -36,6 +40,7 @@ You need know what type char is __cctype__ library helps.
     + `islower()`  
 <!-- }}} -->
 <!-- }}} -->
+
 ## Arrays<!-- {{{ -->
 when use arrays, the compiler automatically 
 substitutes a __pointer to the first element__.  
@@ -48,6 +53,7 @@ iterating over container:
 `index != s.size() && !isspace(s[index])`  
 <!-- }}} -->
 <!-- }}} -->
+
 # Operations<!-- {{{ -->
 __Division__ is rounded towards zero.  
 
@@ -61,6 +67,7 @@ __Shift__ operators are left associative.
 __Comma operator__ is left associative, the result is right-hand expression 
 will be lvalue if right-hand operand is an lvalue  
 
+
 ## Conditions<!-- {{{ -->
 Binary operations are left associative <=> first evaluated left assigment.  
 `if (i < j < k)` => _k_ compared to 1 ( bool result of i < j )  
@@ -68,6 +75,7 @@ Binary operations are left associative <=> first evaluated left assigment.
 
 condition operator may result as _rvalue_ as _lvalue_.  
 <!-- }}} -->
+
 ## Explicit conversion<!-- {{{ -->
 _Syntax:_ `cast-name<type>(expression)`  
 where type is:  
@@ -79,7 +87,9 @@ where type is:
 
 why? to not loose precision or to cast `void*` to any other pointer  
 <!-- }}} -->
+
 ## Statements<!-- {{{ -->
+
 ### Decision branches<!-- {{{ -->
 __if-else -- wrong path__
 ```cpp
@@ -101,6 +111,7 @@ case true:
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
+
 # Exception handling<!-- {{{ -->
 Throw exception - `throw exception;`  
 
@@ -128,6 +139,7 @@ __exception classes__ defined in `<stdexcept>`:
 + `length_error`  
 + `out_of_range`  
 
+
 ## Assert<!-- {{{ -->
 `assert` executes only if _NDEBUG_ is not defined.
 if your want to turn off asserts => provide #define NDEBUG 
@@ -135,6 +147,7 @@ if your want to turn off asserts => provide #define NDEBUG
 CC -D NDEBUG main.c
 <!-- }}} -->
 <!-- }}} -->
+
 # Functions<!-- {{{ -->
 you may define defaults for parameters, however, if a parameter has a
 __default argument__, all the parameters that follow it must also have
@@ -146,6 +159,7 @@ cout << shorterString(s1, s2) << endl;
 cout << (s1.size() < s2.size() ? s1 : s2) << endl
 ```
 
+
 ### Pointers to function<!-- {{{ -->
 function that return pointers to function:  
 `auto f1(int) -> int(*)(int*,int);`  
@@ -156,7 +170,9 @@ typedef decltype(lengthCompare) Func2;	# by another function
 ```
 <!-- }}} -->
 <!-- }}} -->
+
 # Classes<!-- {{{ -->
+
 ### Class vs struct<!-- {{{ -->
 The only difference is that variables before the first access specifier:  
 
@@ -176,6 +192,7 @@ struct Sales_data {
 };
 ```
 <!-- }}} -->
+
 ## Access Control and Encapsulation<!-- {{{ -->
 + Members defined after a public specifier are accessible to all 
 parts of the program  
@@ -185,6 +202,7 @@ member functions of the class
 __To access non public__ members of class precede it's declaration with 
 'friend' keyword
 <!-- }}} -->
+
 ## Functions<!-- {{{ -->
 __member functions__ access the object on which they were called through an
 extra implicit parameter named this. So when we call `total.isbn()` 
@@ -218,6 +236,7 @@ us __chain operations__ like: `myScreen.move(4,0).set('#');`
 
 __Member functions defined inside the class are automatically inline!__
 <!-- }}} -->
+
 ## Constructors<!-- {{{ -->
 Force compiler to provide default constructor: `Sales_data() = default;`  
 Constructor initializer list provides initial values for data members:
@@ -241,6 +260,7 @@ Sales_data(std::string s, unsigned cnt, double price):
 // contructor that delegate to another constructor
 Sales_data(): Sales_data("", 0, 0) {}
 ```
+
 ### Default Constructor<!-- {{{ -->
 Default constructor is used automatically on object default or value
 initialization.  
@@ -265,6 +285,7 @@ Sales_data obj;     // ok: object
 ```
 <!-- }}} -->
 <!-- }}} -->
+
 ## Implicit Class-Type conversions  <!-- {{{ -->
 _aka converting contructors._  
 Every constructor that can be called with a __single argument__ defines an
@@ -281,6 +302,7 @@ We can do this, by explicitly calling conversion
 item.combine(string("9-999-99999-9"));      // ok
 item.combine(Sales_data("9-999-99999-9"));  // ok
 ```
+
 ### Prevent the use of constructor in implicit conversion  <!-- {{{ -->
 ```cpp
 explicit Sales_data(const std::string &s): bookNo(s) { }
@@ -300,11 +322,13 @@ We can use explicit constructors for an implicit conversion:
 item.combine(Sales_data(null_book));
 ```
 <!-- }}} -->
+
 ### Library Classes<!-- {{{ -->
     + `string` constructor with arg of `const char*` is not explicit  
     + `vector` constructor that takes a size is explicit  
 <!-- }}} -->
 <!-- }}} -->
+
 ## Aggregate Classes  <!-- {{{ -->
 __aggregate class__ gives users direct access to its members and has
 special initialization syntax. A class is aggregate if:  
@@ -322,6 +346,7 @@ struct Data {
 Initialize data members by providing a praced list of member
 initializers: `Data val1 = { 0, "Anna" };`  
 <!-- }}} -->
+
 ## Data types <!-- {{{ -->
 __mutable__ data member can be changed inside of const functions
 Defining class member types: `typedef std::string::size_type pos;`  
@@ -329,6 +354,7 @@ or: `using pos = std::string::size_type;`
 
 to get name __from outer scope__ use ::height;
 <!-- }}} -->
+
 ## Literal Classes<!-- {{{ -->
 Literal class - a class whose data members are __all of literal
 type__.  
@@ -338,6 +364,7 @@ Restrictions to be literal class:
 
 + must have at least one `constexpr` contructor  
 + must use default definition for its destructor
+
 
 ### Constexpr constructors<!-- {{{ -->
 + Declared as `= default;`  
@@ -350,10 +377,12 @@ Restrictions to be literal class:
 Example: `constexpr Debug(book b = true): hw(b), io(b), other(b) {}`  
 <!-- }}} -->
 <!-- }}} -->
+
 ## Static Class Members <!-- {{{ -->
 Use **_static class members_** when value represent more class value
 than object value. When changing **_static_** field it changing in all
 objects.  
+
 ### Declaring  `static` Members <!-- {{{ -->
 ```cpp
 class Account {
@@ -376,6 +405,7 @@ private:
   declared as a `const`.  
 
 <!-- }}} -->
+
 ### Defining `static` Members <!-- {{{ -->
 When we define `static` member outside the class, we do not repeat the `static` keyword.  
 Because `static` data members are not part of objects, they are not defined when we
@@ -401,6 +431,7 @@ function to initialize `interestRate`. The definition of last _(like any
 other member definition)_, has access to the _private_ members of the
 class.  
 <!-- }}} -->
+
 ### In-Class Initialization of `static` Data Members <!-- {{{ -->
 <!-- p. 391 -->
 Example:
@@ -423,6 +454,7 @@ substituted, then there must be a definition for that member.
 in the class body, that member ordinarily should be defined outside the
 class definition.  
 <!-- }}} -->
+
 ### Using a Class `static` Member <!-- {{{ -->
 + Access static member using the scope operator  
     `double r = Account::rate()`  
@@ -433,6 +465,7 @@ class definition.
 + **_member functions_** can use `static` members directly, without the
   scope operator  
 <!-- }}} -->
+
 ### `static` Members Can Be Used in Ways Ordinary Members Can't <!-- {{{ -->
 + Can have **_incomplete_** type:  
 ```cpp
@@ -461,6 +494,7 @@ private:
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
+
 # IO Library<!-- {{{ -->
 manipulating with input and output:
 ```cpp
@@ -471,6 +505,7 @@ istream &read(istream &is, Sales_data &item) {
     return is;
 }
 ```
+
 ## IO classes <!-- {{{ -->
 All support to different kinds of IO processing in splitted on 3
 headers:  
@@ -502,6 +537,7 @@ on both of them.
 return type that is one of stream types. Stream is passed only by
 reference.  
 <!-- }}} -->
+
 ## Condition States <!-- {{{ -->
 IO classes define functions and flags, listed below, that let us access
 and manipulate the **_condition state_** of a stream.  
@@ -534,6 +570,7 @@ while (cin >> word)
     // ok: read operation successful
 ```
 <!-- }}} -->
+
 ## Integrrogating the State of a Stream <!-- {{{ -->
 Using a stream as a condition tells us only whether the stream is valid, not
 telling what happened.  
@@ -545,6 +582,7 @@ iostate that represent particular bit patterns.
 Right way to determine the state of a stream is to use either `good()`
 or `fail()`.  
 <!-- }}} -->
+
 ## Managing the Condition State <!-- {{{ -->
 The following turns off `failbit` and `badbit` but leaves eofbit untouched:  
 ```cpp
@@ -552,6 +590,7 @@ cin.clear(cin.rdstate() & ~cin.failbit & ~cin.badbit);
 ```
 
 <!-- }}} -->
+
 ## Managing the Output Buffer <!-- {{{ -->
 When the following code is executed:
 ```cpp
@@ -575,6 +614,7 @@ There are several conditions that cause the buffer to be flushed:
     `cerr`flushed the buffer in `cout`.  
 
 <!-- }}} -->
+
 ## Flushing the Output Buffer <!-- {{{ -->
 ```cpp
 cout << "hi!" << endl;  // writes hi and a newline, then flushes the buffer
@@ -592,6 +632,7 @@ cout << nounitbuf;  // returns to normal buffering
 ```
 
 **Caution: Buffers Are Not Flushed If the Program Crashes**  
+
 
 #### Tying Input and Output Streams Together <!-- {{{ -->
 When _cout_ tied to _cin_, the statement:  
@@ -612,6 +653,7 @@ cin.tie(old_tie);   // reestablish normal tie between cin and cout
 <!-- }}} -->
 
 <!-- }}} -->
+
 ## File Input and Output <!-- {{{ -->
 The _fstream_ header defines three types to support file IO:  
 
@@ -634,6 +676,7 @@ _fstream_-Specific Operations:
 
 _fstream_ is one of the types defined in the `fstream` header  
 
+
 ### Using File Stream Objects <!-- {{{ -->
 When we supply a file name, `open` is called automatically:  
 ```cpp
@@ -642,6 +685,7 @@ ofstream out;           // output file stream that is not associated with any fi
 ```
 
 <!-- }}} -->
+
 ### The open and close Members <!-- {{{ -->
 If a call to _open_ fails, _failbit_ is set. Because a call to open
 might fail, it is good to check this:  
@@ -654,6 +698,7 @@ To **_associate new file_**, we must close existing file, and then open
 another.  
 
 <!-- }}} -->
+
 ### Automatic Construction and Destruction <!-- {{{ -->
 Consider a folowing program:  
 ```cpp
@@ -673,6 +718,7 @@ When an `fstream` object **_goes out of scope_**, the file it is bound to is
 **_automatically closed_**.
 
 <!-- }}} -->
+
 ### File Modes <!-- {{{ -->
 Each stream has an associated _file mode_that represents how the file
 may be used:  
@@ -702,6 +748,7 @@ ofstream app2("file2", ofstream::out | ofstream::app);
 **File Mode is Determined Each Time open Is Called**  
 <!-- }}} -->
 <!-- }}} -->
+
 ## `string` Streams <!-- {{{ -->
 The `sstream` header defines three types to support in-memory IO; these
 types read from or write to a string as if the string were an IO stream.  
@@ -712,6 +759,7 @@ _sstream_ is one of the type defined in the `sstream` header
 | _sstream_ strm(s); | strm holds a copy of the string s (explicit constructor) |
 | strm.str() | Returns a copy of the string that strm holds |
 | strm.str(s) | Copies the string s into strm. Returns void |
+
 
 ### Using an `istringstream` <!-- {{{ -->
 An `istringstream` is often used when we have some work to do on an
@@ -742,13 +790,16 @@ while (getline(cin, line)) {
 
 
 <!-- }}} -->
+
 ### Using `ostringstream`s <!-- {{{ -->
 An `ostringstream` is useful when we need to build up our output a
 little at a time but do not want to print the output until later.  
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
+
 # Sequential Containers <!-- {{{ -->
+
 ## Preface <!-- {{{ -->
 + _sequential_ container - order corresponds to the positions in whic the
   elements are added  
@@ -765,6 +816,7 @@ which the elements are stored and accessed.
 The library also provide three _container adaptors_ - adapts a container
 type by defining a different interface to the container's operations.  
 <!-- }}} -->
+
 ## Overview of the Sequential Containers <!-- {{{ -->
 Sequential Container Types:  
 
@@ -781,7 +833,9 @@ Sequential Container Types:
 + `string` - A specialized container, similar to `vector`, that contains
   characters. Fast random access. Fast insert/delete at the back.  
 <!-- }}} -->
+
 ## Container Library Overview <!-- {{{ -->
+
 ### Container Operations <!-- {{{ -->
 Some operations are provided by all container types:  
 
@@ -849,6 +903,7 @@ list<Sales_data>    // list that holds Sales_data object
 deque<double>       // deque that holds doubles
 ```
 <!-- }}} -->
+
 ### Constraints on Types That a Container Can Hold <!-- {{{ -->
 Some container operations impose requirements of their own on the
 element type. As an example:  
@@ -858,8 +913,10 @@ vector<noDefault> v1(10, init); // ok: element initializer supplied
 vector<noDefault> v2(10);       // error: must supply an element initializer
 ```
 <!-- }}} -->
+
 ### Iterators <!-- {{{ -->
 They are provide access to element from container.  
+
 #### Iterator Ranges <!-- {{{ -->
 **Iterator range** is denoted by a pair of iterators each of which
 refers to element, or to _one past the last element_, in the same
@@ -870,6 +927,7 @@ end)`
 Requirements on Iterators Forming an Iterator Range:  
 + They refer to elements of, or one past the end of, the same container.  
 + It is possible to reach end by repeatedly incrementing begin.  
+
 ##### Programming Implications of Using Left-Inclusive Ranges <!-- {{{ -->
 Assuming begin and end denote a valid iterator range, then:  
 
@@ -889,6 +947,7 @@ while (begin != end) {
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
+
 ### Container Type Members <!-- {{{ -->
 To use one of these type, we must name the class of which they are a
 member:  
@@ -900,11 +959,14 @@ vector<int>::difference_type count;
 ```
 
 <!-- }}} -->
+
 ### `begin` and `end` Members <!-- {{{ -->
 These iterators are most often used to form an iterator range that
 encompasses all the elements in the container.  
 <!-- }}} -->
+
 ### Defining and Initializing a Container <!-- {{{ -->
+
 #### Initializing a Container as a Copy of Another Container <!-- {{{ -->
 Two ways to create a new container as a copy of another one:  
 
@@ -916,12 +978,14 @@ Two ways to create a new container as a copy of another one:
    long as it is possible to convert 
     2. Container types can differ  
 <!-- }}} -->
+
 #### List Initialization <!-- {{{ -->
 Since _c++11_ standart we can list initialize a container:  
 ```cpp
 list<string> authors = {"Milton", "Shakespeare", "Austen"};
 ```
 <!-- }}} -->
+
 #### Sequential Container Size-Related Constructors <!-- {{{ -->
 We can also initialize the sequential containers (other than array) from
 a size and an (optional) element initializer. If we do not supply
@@ -934,6 +998,7 @@ deque<string> svec(10); // ten elements, each an empty string
 ```
 
 <!-- }}} -->
+
 #### Library `arrays` Have Fixed Size <!-- {{{ -->
 The size of a library `array` is part of its type.  
 ```cpp
@@ -959,6 +1024,7 @@ array<int, 10> copy = digits;   // ok: so long as array types match
 
 <!-- }}} -->
 <!-- }}} -->
+
 ### Assignment and `swap`<!-- {{{ -->
 + `c1 = c2` - replace the elements in `c1` with copies of the elements
   in `c2`. `c1` and `c2` must be the same type.  
@@ -981,6 +1047,7 @@ array<int, 10> copy = digits;   // ok: so long as array types match
 Unlike built-in arrays, the library `ar ray` type does allow assignment
 (types must be the same)  
 
+
 #### Using `swap`<!-- {{{ -->
 Excepting `array`, `swap` does not copy, delete, or insert any elements
 and is guaranteed to run in constant time. Swapping two `arrays` does
@@ -988,6 +1055,7 @@ exchange the elements. As a result, swapping two `arrays` requires time
 proportional to the number of elements in the array.  
 <!-- }}} -->
 <!-- }}} -->
+
 ### Relational Operators <!-- {{{ -->
 Every container type support the equality operators (== and !=), and
 (except unordered associative) support relational operators (>, >=, <,
@@ -1007,8 +1075,10 @@ Comparing two containers performs lexicographic comparison:
 **Relational Operators Use Their Element's Relational Operator**  
 <!-- }}} -->
 <!-- }}} -->
+
 ## Sequential Container Operations <!-- {{{ -->
 **Container Operations May Invalidate Iterators**  
+
 ### Adding elements to a Sequential Container <!-- {{{ -->
 Excepting `array`, all of the library containers provide flexible memory
 management. We can add or remove elements dynamically changing the size
@@ -1039,6 +1109,7 @@ When use these operations, we must remember that the containers use
 different strategies for allocating elements and that these strategies
 affect performance.  
 
+
 #### Using `push_back` <!-- {{{ -->
 The call to `push_back` creates a new element at the end of `container`,
 increasing the `size` of container by 1. The value of that element is a
@@ -1046,16 +1117,19 @@ copy of _word_. The type of container can be any of list, vector, or
 deque.  
 **Key concept: Container Elements Are Copies**  
 <!-- }}} -->
+
 #### Using `push_front` <!-- {{{ -->
 This operatrion inserts a new element at the front of the container.  
 As with `vector`, inserting elements other than at the front or back of
 a `deque` is ponentially expensive operation.  
 <!-- }}} -->
+
 #### Adding Elements at a Specified Point in the Container <!-- {{{ -->
 The `insert` members let us insert zero or more elements at any point in
 the container. Elements are inserted _before_ the position denoted by
 the iterator.  
 <!-- }}} -->
+
 #### Using the Return from `insert` <!-- {{{ -->
 We can use the this value to repeatedly insert elements at a specified
 position in the container:
@@ -1068,6 +1142,7 @@ while (cin >> word)
 
 <!-- }}} -->
 <!-- }}} -->
+
 ### Accessing Elements <!-- {{{ -->
 The access operations are undefined if the container has no elements.  
 
@@ -1081,6 +1156,7 @@ The access operations are undefined if the container has no elements.
 
 All seq. containers, including `array`, has a `front` member.  
 All (except `forward_list`) have a `back` member.  
+
 
 #### The Access Members Return References <!-- {{{ -->
 If the ocntainer is `const` object, the return is a reference to
@@ -1098,6 +1174,7 @@ if (!c.empty()) {
 
 <!-- }}} -->
 <!-- }}} -->
+
 ### Erasing Elements <!-- {{{ -->
 Undefined if container is empty.  
 
@@ -1114,6 +1191,7 @@ Undefined if container is empty.
 **Removing elements invalidates pointers, references.**  
 **The programmer must ensure that elements exist before removing them.**  
 
+
 #### The `pop_front` and `pop_back` Members <!-- {{{ -->
 There's no `pop_front` for `vector` and `string`.  
 There's no `pop_back` for `forward_list`.  
@@ -1121,6 +1199,7 @@ There's no `pop_back` for `forward_list`.
 These operatrions return _void_. If you need the value you are about to
 pop, you must store that value before doing the pop.  
 <!-- }}} -->
+
 #### Removing an Element from within the Container <!-- {{{ -->
 Both forms of `erase` return an iterator referring to the location after
 the (last) element that wasa removed.  
@@ -1137,6 +1216,7 @@ while (it != lst.end())
 
 <!-- }}} -->
 <!-- }}} -->
+
 ### Specialized `forward_list` Operations <!-- {{{ -->
 Operatrions to add or remove element in a `forward_list` operate by
 changing the element _after_ the given element. Instead of common
@@ -1145,6 +1225,7 @@ changing the element _after_ the given element. Instead of common
 
 **erase** operators return pointer to the element after the one deleted.  
 <!-- }}} -->
+
 ### Resizing a Container <!-- {{{ -->
 + current size > requested size &rarr; elements are deleted from
   the back of the container;  
@@ -1160,11 +1241,13 @@ ilist.resize(5);    // erases 20 elements from the back of ilist
 
 <!-- }}} -->
 <!-- }}} -->
+
 ## How a `vector` Grows <!-- {{{ -->
 Because reallocation every time new element is inserted is too
 expensive, library implementors use allocation strategies that reduce
 the number of times the container is reallocated. Thus `vector` usually
 grows more efficiently than a `list` or a `deque`.  
+
 
 ### Members to Manage Capacity <!-- {{{ -->
 + `c.shring_to_fit()` - request to reduce `capacity()` to equal `size()`  
@@ -1175,12 +1258,14 @@ grows more efficiently than a `list` or a `deque`.
 Under the **c++11**, we can call `shrink_to_fit` to ask a `deque`,
 `vector`, or `string` to return unneeded memory.  
 <!-- }}} -->
+
 ### `capacity` and `size` <!-- {{{ -->
 **size** - number of elements it already holds;  
 **capacity** - how many element it can hold before more space must be
 allocated.  
 <!-- }}} -->
 <!-- }}} -->
+
 ## Additional `string` Operations <!-- {{{ -->
 More constructors:  
 
@@ -1194,6 +1279,7 @@ More constructors:
   copies at most `s2.size() - pos2` characters.  
 + `s.substr(pos, n)` - return a `string` containing _n_ characters from
   _s_ starting at _pos_.  
+
 
 ### Other Ways to Change a `string` <!-- {{{ -->
 In addition to the versions of `insert` and `erase` that take iterators,
@@ -1227,6 +1313,7 @@ _args_ can be:
   braces.  
 
 <!-- }}} -->
+
 ### `string` Search Operations <!-- {{{ -->
 Eache of these search operations returns a `string::size_type` value
 that is the index of wehre the match occured. If these is no match, the
@@ -1265,6 +1352,7 @@ while ((pos = name.find_first_of(numbers, pos)) != string::npos) {
 ```
 
 <!-- }}} -->
+
 ### The `compare` Functions <!-- {{{ -->
 `s.compare` returns zero or a positive or negative value depending on
 whether _s_ is equal to, greter than, or less than the string formed
@@ -1280,6 +1368,7 @@ from the given arguments.
 + `pos1, n1, cp` - similar to one for string.  
 + `pos1, n1, cp, n2` - cimilar to one for string.  
 <!-- }}} -->
+
 ### Numeric conversions <!-- {{{ -->
 **c++11** introduced several functions that convert between numeric data
 and library `string`s:
@@ -1315,6 +1404,7 @@ May contain an e or E to designate the exponent.
 <!-- }}} -->
 
 <!-- }}} -->
+
 ## Container Adaptors <!-- {{{ -->
 An **adaptor** is a general concept in the library. There are container,
 iterator, and function adaptors. Essentially, an adaptor is a mechanism
@@ -1337,6 +1427,7 @@ for making one thing act line another.
 + `a.size()`  
 + `swap(a,b)`, `a.swap(b)`  
 <!-- }}} -->
+
 ### Defining an Adaptor <!-- {{{ -->
 We can override the default container type:
 ```cpp
@@ -1352,6 +1443,7 @@ Constraints:
   cannot be built on an _array_)  
 
 <!-- }}} -->
+
 ### Stack Adaptor <!-- {{{ -->
 Stack Operations:  
 
@@ -1360,6 +1452,7 @@ Stack Operations:
 + `s.emplace(args)` - constructs top element from _args_  
 + `s.top()` - returns top element  
 <!-- }}} -->
+
 ### Queue Adaptor <!-- {{{ -->
 `queue` and `priority_queue` adaptors are defined in the _queue_ header.  
 
@@ -1371,12 +1464,14 @@ Stack Operations:
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
+
 # Generic Algorithms <!-- {{{ -->
 Rather than define each of these operations as members of each container
 type, the standard library defines a set of **generic algorithms**:
 "algorithms" because they implement common classical algorithms such as
 sorting and searching, and "generic" because they operate on elements of
 differing type and across multiple container types.  
+
 
 ## Overview <!-- {{{ -->
 
@@ -1387,6 +1482,7 @@ Alghorithms require some comparison operators to be defined. However
 we'll see, most algorithms provide a way for us to supply our own
 operation to use in place of the default operator.  
 <!-- }}} -->
+
 ## A First Look at the Algorithms <!-- {{{ -->
 **input range** - range of elements on which algorithms operate.  
 How alghorithms use the elements in that range:  
@@ -1401,6 +1497,7 @@ third argument.
 Algorithms that write to a destination iterator _assume_ the destination
 is large enough to hold the number of elements being written.  
 
+
 ### Read-Only Algorithms <!-- {{{ -->
 
 + `find` - finds element in input range  
@@ -1413,6 +1510,7 @@ is large enough to hold the number of elements being written.
   iterator (must be at least as long as input range)  
 
 <!-- }}} -->
+
 ### Algorithms That Write Container Elements <!-- {{{ -->
 Algorithms do not perform container operations,  so you must set correct
 size of container by yourself.  
@@ -1434,6 +1532,7 @@ auto ret = copy(begin(a1), end(a1), a2);
   source sequence unchanged  
 
 <!-- }}} -->
+
 ### Introducing `back_inserter` <!-- {{{ -->
 One way t o ensure that an algorithm has enough elements to h old the
 output is to use an **insert iterator**. An insert iterator is an
@@ -1448,9 +1547,11 @@ _iterator_ header.
 iterator. When we assign through that iterator, the assignment calls
 `push_back` to add an element with the given value to the container.  
 <!-- }}} -->
+
 ### Algorithms That Reorder Container Elements <!-- {{{ -->
 
 + `sort` - arranges the elements in the input range into sorted order  
+
 
 #### Eliminating Duplicates <!-- {{{ -->
 
@@ -1463,18 +1564,22 @@ iterator. When we assign through that iterator, the assignment calls
 
 <!-- }}} -->
 <!-- }}} -->
+
 ## Customizing Operations <!-- {{{ -->
 The library also defines versions of these algorithms that let us supply
 our own operation to use in place of the default operator.  
+
 
 ### Passing a Function to an Algorithm <!-- {{{ -->
 Other version of `sort` takes a third argument that is a
 **predicate** (and uses it instead of default `<`).  
 **Predicate** - unary or binary function that returns bool.  
 <!-- }}} -->
+
 ### Sorting Algorithms <!-- {{{ -->
 We may use `stable_sort` if we want to.  
 <!-- }}} -->
+
 ### Lambda Expressions <!-- {{{ -->
 When we need to do processing that requires more arguments that the
 algorithm's predicate allows, we use **lambda expressions**.  
@@ -1492,6 +1597,7 @@ must always include the capture list (often empty) and function body
 > Lambdas with function bodies that contain anything other than a single
 > return statement that do not specify a return type return void.  
 
+
 #### Using the Capture List <!-- {{{ -->
 Inside the `[]` that begins a lambda we can provide a comma-separated
 list of names defined in the surrounding function.  
@@ -1503,10 +1609,12 @@ is equal to 1.
 <!-- }}} -->
 
 <!-- }}} -->
+
 ### The `for_each` Algorithm <!-- {{{ -->
 `for_each` takes a callable object and calls that object on each element
 in the input range.  
 <!-- }}} -->
+
 ### Lambda Captures and Returns <!-- {{{ -->
 By default, the class generated from a lambda contains a data member
 corresponding to the variables captured by the lambda. Like the data
@@ -1530,6 +1638,7 @@ created
 
 Note: avoid capturing pointers or references  
 <!-- }}} -->
+
 #### Mutable Lambdas <!-- {{{ -->
 If you want to change variable value that passed to lambda via copying,
 you may use `mutable` keyword after parameter list.
@@ -1546,6 +1655,7 @@ void fcn3()
 
 <!-- }}} -->
 <!-- }}} -->
+
 ### Binging Arguments <!-- {{{ -->
 To create function that _imitates_ lambda capture list we can use
 **library** `bind` **function** (defined in the `functional` header).  
@@ -1571,6 +1681,7 @@ auto g = bind(f, a, b, _2, c, _1);
 g(a, b, Y, c, X);
 ```
 
+
 #### Using to `bind` to Reorder Parameters <!-- {{{ -->
 ```cpp
 // normal sort
@@ -1580,6 +1691,7 @@ sort(words.begin(), words.end(), bind(isShorter, _2, _1));
 ```
 
 <!-- }}} -->
+
 #### Binding Reference Parameters <!-- {{{ -->
 We can't use bind directly, because it copies all elements. In this case
 we want to use the library `ref` function:
@@ -1593,6 +1705,7 @@ named bind1st and bind2nd._
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
+
 ## Revisiting Iterators <!-- {{{ -->
 In addition to the iterators defined for each of the containers, the
 library defines several additional kinds in the `iterator` header:  
@@ -1602,6 +1715,7 @@ library defines several additional kinds in the `iterator` header:
 + **stream iterators** - iterate through the associated IO stream  
 + **reverse iterators** - move backward, rather than forward  
 + **move iterators** - move rather than copy their elements  
+
 
 ### Insert Iterators <!-- {{{ -->
 
@@ -1632,6 +1746,7 @@ it = c.insert(it, val); // it points to the newly added element
 
 
 <!-- }}} -->
+
 ### `iostream` Iterators <!-- {{{ -->
 Using a stream iterator, we can use the generic algorithms to read data
 from or write data to stream objects.  
@@ -1661,6 +1776,7 @@ or
 istream_iterator<int> in_iter(cin), eof;    // read ints from cin
 vector<int> vec(in_iter, eof);
 ```
+
 #### Using Stream Iterators with the Algorithms <!-- {{{ -->
 You should already know how to use algorithms and iterators, so here's
 an example:
@@ -1681,6 +1797,7 @@ cout << accumulate(in, eof, 0) << endl;
 + `out = val` - writes _val_ to the _ostream_ using the `<<` operator  
 + `*out`, `++out`, `out++` - These operations exist but do nothing to
   out. Each operator returns _out_.  
+
 
 #### Operations on `ostream_iterators` <!-- {{{ -->
 We may provide a string to print after each element:
@@ -1709,6 +1826,7 @@ cout << endl;
 
 
 <!-- }}} -->
+
 #### Using Stream Iterators with Class Types <!-- {{{ -->
 WE can create an `istream_iterator` and `ostream_iterator` for any type
 as long as it has corresponding operator (`>>`, `<<`)  
@@ -1734,6 +1852,7 @@ out_iter = sum;     // remember to print the last set of records
 <!-- }}} -->
 
 <!-- }}} -->
+
 ### Reverse Iterators <!-- {{{ -->
 A reverse iterator inverts the meaning of increment (and decrement).  
 ```cpp
@@ -1753,6 +1872,7 @@ cout << string(rcomma.base(), line.end()) << endl;
 
 <!-- }}} -->
 <!-- }}} -->
+
 ## Structure of Generic Algorithms <!-- {{{ -->
 The it erator operations required by the algorithms are grouped into
 five **iterator categories**. Each algorithms specifies what kind of
@@ -1766,9 +1886,11 @@ iterator must be supplied for each of its iterator parameters:
 + `random-access iterator` - read and write; multi-pass, full iterator
   arithmetic  
 
+
 ### The Five Iterator Categories <!-- {{{ -->
 For each parameter, the iterator must be at least as powerful as the
 stipulated minimum. Passing an iterator of a lesser power is an error.  
+
 
 #### The Iterator Categories <!-- {{{ -->
 **Input iterators**: can read elements in a sequence. It must provide:  
@@ -1818,6 +1940,7 @@ provide:
 The _sort_ algorithms require random-access iterators.  
 <!-- }}} -->
 <!-- }}} -->
+
 ### Algorithm Parameter Patterns <!-- {{{ -->
 Most of the algorithms have one of the following four forms:
 ```cpp
@@ -1832,6 +1955,7 @@ alg(beg, end, beg2, end, other args);
 ```
 
 <!-- }}} -->
+
 ### Algorithm Naming Conventions <!-- {{{ -->
 Theses conventions deal with how we supply and operation to use in place
 of the default `<` or `==` operator and with whether the algorithm write
@@ -1873,6 +1997,7 @@ remove_copy_if(v1.begin(), v1.end(), back_inserter(v2),
 
 <!-- }}} -->
 <!-- }}} -->
+
 ## Container-Specific Algorithms <!-- {{{ -->
 Unlike the other containers, `list` and `forward_list` define several
 algorithms as members.  
@@ -1898,6 +2023,7 @@ algorithms as members.
 **The List-Specific Operations Do Change the Containers.**  
 <!-- }}} -->
 <!-- }}} -->
+
 # Associative Containers <!-- {{{ -->
 Associative containers support efficient lookup and retrieval by a key.
 The two primary associative-conatiner types are `map` and `set`.  
@@ -1920,9 +2046,11 @@ three dimensions:
 
 Example: unordered_multi_set, multimap, unordered_map  
 
+
 ## Using an Associative Container <!-- {{{ -->
 Like the sequential containers, the associative containers are
 templates.  
+
 ### Using a `map` <!-- {{{ -->
 If key is not already in the map, the subscript operator creates a new
 element with that key.  
@@ -1930,6 +2058,7 @@ When we fetch an element from a `map` we get an object of type `pair` -
 template type that holds two (public) data elements called `first` (key)
 and `second` (value).
 <!-- }}} -->
+
 ### Using a `set` <!-- {{{ -->
 Check that element not exists in set:
 ```cpp
@@ -1938,6 +2067,7 @@ if (set_name.find(element) == set_name.end())
 
 <!-- }}} -->
 <!-- }}} -->
+
 ## Overview of the Associative Containers <!-- {{{ -->
 Differences from sequential containers:  
 
@@ -1946,6 +2076,7 @@ Differences from sequential containers:
   element value and a count  
 + provide operations and type aliases that sequential containers do not  
 + provide operations for tuning their hash performance  
+
 
 ### Defining an Associative Container <!-- {{{ -->
 Initialization:  
@@ -1964,6 +2095,7 @@ map<string, string> authors = { {"Joyce", "James"},
 ```
 
 <!-- }}} -->
+
 ### Initializing a `multimap` or `multiset` <!-- {{{ -->
 ```cpp
 // define a vector holding two copies of each number from 0 to 9
@@ -1982,8 +2114,10 @@ cout << miset.size() << endl;   // prints 20
 ```
 
 <!-- }}} -->
+
 ### Requirements on Key Type <!-- {{{ -->
 Ordered containers require keys to define `<` operator.  
+
 
 #### Key Types for Ordered Containers <!-- {{{ -->
 We can provide our own operation to use in place of the `<` operator.
@@ -1999,6 +2133,7 @@ When used as a key to a `map`, there will be only one element associated
 with those keys, and either key can be used to access the corresponding
 value.  
 <!-- }}} -->
+
 #### Usign a Comparison Function for the Key Type <!-- {{{ -->
 To specify our own operation, we must supply the type of that operation
 when we define the type of an associative container.  
@@ -2014,6 +2149,7 @@ multiset<Sales_data, decltype(compareIsbn)*> bookstore(compareIsbn);
 
 <!-- }}} -->
 <!-- }}} -->
+
 ### The `pair` Type <!-- {{{ -->
 
 `pair` is a template from which we generate specific types. We must
@@ -2061,6 +2197,7 @@ pair<string, int> process(vector<string> &v) {
 
 <!-- }}} -->
 <!-- }}} -->
+
 ## Operations on Associative Containers <!-- {{{ -->
 In addition to the already listed types (like size type or iterator type),
 associative containers define:  
@@ -2069,6 +2206,7 @@ associative containers define:
 + `mapped_type` - type associated with each key; **map types only**  
 + `value_type` - for sets, same as the key type;
   for maps, `pair<const key_type, mapped_type>`  
+
 
 ### Associative Container Iterators <!-- {{{ -->
 When we dereference an iterator, we get a reference to a value of the
@@ -2079,11 +2217,13 @@ Iterators for `set`s Are `const`
 ALthough the `set` types define both the `iterator` and `const_iterator`
 types, both types five us read-only access to the elements in the set.  
 <!-- }}} -->
+
 ### Associative Containers and Algorithms <!-- {{{ -->
 Just don't use algorithms if associative container already has this
 feature (like `find`). Because Generic algorithms actually slower than
 native container's algorithm.  
 <!-- }}} -->
+
 ### Adding Elements <!-- {{{ -->
 `insert` members add one element or a range of elements. Because `map`
 or `set` contain unique keys, inserting an element that is already
@@ -2103,6 +2243,7 @@ Associative Container `insert` Operations:
   the new element should be stored. Returns an iterator to the
   elment with the given key.  
 
+
 #### Adding Elements to a `map` <!-- {{{ -->
 ```cpp
 // four ways to add word to word_count
@@ -2113,12 +2254,14 @@ word_count.insert(map<string, size_t>::value_type(word, 1));
 ```
 
 <!-- }}} -->
+
 #### Adding Elements to `multiset` or `multimap` <!-- {{{ -->
 Assume we want to map authors to titles of the books they have written.
 In this case, there might be multiple entries for each author, so we'd
 use a `multimap` rather than `map`
 <!-- }}} -->
 <!-- }}} -->
+
 ### Erasing Elements <!-- {{{ -->
 + `c.erase(k)` - remove every element with key _k_ from _c_. Returns
   `size_type` indicating the number of elements removed  
@@ -2127,6 +2270,7 @@ use a `multimap` rather than `map`
 + `c.erase(b,e)` - removes the elements in the range denoted by the
   iterator pair _b_, _e_. Returns _e_.  
 <!-- }}} -->
+
 ### Subscripting a `map` <!-- {{{ -->
 + `map` and `unordered_map` provide the subscript operator and a
   corresponding `at` function.  
@@ -2138,6 +2282,7 @@ use a `multimap` rather than `map`
 + `multimap` or `unordered_multimap` do not support, because there may
   be more than one value associated with a given key.  
 <!-- }}} -->
+
 ### Accessing Elements <!-- {{{ -->
 Operations to Find Elements in an Associative Container:  
 
@@ -2153,6 +2298,7 @@ Operations to Find Elements in an Associative Container:
 + `c.equal_range(k)` - returns a `pair` of iterators denoting the
   elements with key _k_. If _k_ is not present, both members are
   _c.end()_  
+
 
 #### Finding Elements in a `multimap` or `multiset` <!-- {{{ -->
 When a `multimap` or `multiset` has multiple lements of a given key,
@@ -2171,6 +2317,7 @@ while (entries) {
 ```
 
 <!-- }}} -->
+
 #### A Different, Iterator-Oriented Solution <!-- {{{ -->
 Using `c.lower_bound(k)` or `c.upper_bound(k)` we can rewrite above
 example as follows:
@@ -2184,6 +2331,7 @@ for (auto beg=authors.lower_bound(search_item),
 ```
 
 <!-- }}} -->
+
 #### The `equal_range` Function <!-- {{{ -->
 ```cpp
 // definitions of authors and search_item as above
@@ -2195,6 +2343,7 @@ for (auto pos = authors.equal_range(search_item);
 
 <!-- }}} -->
 <!-- }}} -->
+
 ### A Word Transformation Map <!-- {{{ -->
 
 ```cpp
@@ -2215,7 +2364,9 @@ map<string, string> buildMap(ifstream &map_file) {
 
 <!-- }}} -->
 <!-- }}} -->
+
 ## The Unordered Containers <!-- {{{ -->
+
 ### Using the Unordered Containers <!-- {{{ -->
 
 They are provide same operations (`find`, `insert`, and so on) as the
@@ -2253,6 +2404,7 @@ set of functions, that let us manage the buckets:
   _rehash_.  
 
 <!-- }}} -->
+
 ### Requirements on Key Type for Unordered Containers <!-- {{{ -->
 By default unordered containers use `==` operator and `hash<key_type>`.
 The library supplies versions of the `hash` template for the built-in
@@ -2294,6 +2446,7 @@ unordered_set<Foo, decltype(FooHash)*> fooSet(10, FooHash);
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
+
 # Dynamic Memory <!-- {{{ -->
 
 + `static` objects are allocated before they are used, and they are
@@ -2306,6 +2459,7 @@ memory that it can use. This memory is referred to as the **free store**
 or `heap`. Programs use the heap for objects that they dynamically
 allocate. The program controls the lifetype of dynamic objects; our code
 must explicitly destroy such objects when they are no longer needed.  
+
 
 ## Dynamic Memory and Smart Pointers <!-- {{{ -->
 Dynamic memory is managed through a pair of operators:  
@@ -2321,6 +2475,7 @@ provides two smart pointer types:
 + `shared_ptr` - allows multiple pointers to refer to the same object.  
 + `unique_ptr` - which "owns" the object to which it points.  
 + `weak_ptr` - weak reference to an object managed by a `share_ptr`.  
+
 
 ### The `shared_ptr` Class <!-- {{{ -->
 Smart pointers are templates. Therefore, when we create one, we must
@@ -2367,6 +2522,7 @@ if (p1 && p1->empty())
 + `p.use_count()` - returns the number of objects sharing with _p_; may
   be a slow operation, intended primarily for debugging purposes.  
 
+
 #### Copying and Assigning `shared_ptr`s <!-- {{{ -->
 Key point is that the class keeps track of how many `shared_ptr`s point
 to the same object and automatically frees that object when appropriate.  
@@ -2376,6 +2532,7 @@ you put `shared_ptr`s in a container and subsequently reorder the
 container so that you don't need all the elements. You should be sure to
 `erase` `shared_ptr` elements once you no longer need those elements.  
 <!-- }}} -->
+
 #### Classes with Resources That Have Dynamic Lifetime <!-- {{{ -->
 
 1. They don't know how many objects they'll need  
@@ -2412,6 +2569,7 @@ Blob<string> b1;    // empty Blob
 
 
 <!-- }}} -->
+
 #### Defining the `StrBlob` Class <!-- {{{ -->
 We can't store the `vector` directly in a Blob object. To ensure that
 the elements continue to exist, we'll store the `vector` in synamic
@@ -2463,10 +2621,12 @@ void StrBlob::check(size_type i, const string &msg) const {
 <!-- }}} -->
 
 <!-- }}} -->
+
 ### Managing Memory Directly <!-- {{{ -->
 
 + `new` operator allocates memory  
 + `delete` frees memory allocated by `new`  
+
 
 #### Using `new` to Dynamically Allocate and Initialize Objects <!-- {{{ -->
 `new` returns a pointer to the object it allocates:
@@ -2503,6 +2663,7 @@ auto p2 = new auto{a,b,c};  // error: must use parentheses for the initializer
 
 
 <!-- }}} -->
+
 #### Dynamically Allocated `const` Objects <!-- {{{ -->
 It is legal to use `new` to allocate `const` objects:
 ```cpp
@@ -2513,6 +2674,7 @@ const string *pcs = new const string;
 ```
 
 <!-- }}} -->
+
 #### Memory Exhaustion <!-- {{{ -->
 Once a program was used all of its available memoryh, `new` expressions
 will fail, and `bad_alloc` exception will be thrown. We can preven `new`
@@ -2524,6 +2686,7 @@ int *p2 = new (nothrow) int;    // if allocation fails, new returns a null point
 ```
 
 <!-- }}} -->
+
 #### Freeing Dynamic Memory <!-- {{{ -->
 We return memory through a `delete` expression. It takes a pointer to
 the object we want to free:
@@ -2534,15 +2697,18 @@ It destroys th eojbect to which its given pointer points, and it frees
 the correspoinding memory.  
 
 <!-- }}} -->
+
 #### Pointer Values and `delete` <!-- {{{ -->
 Directly deleting `int` object will generate error. But deleting pointer
 or reference to dynamically allocated pointer is silently skipped.  
 <!-- }}} -->
+
 #### Dynamically Allocated Objects Exist until They Are Freed <!-- {{{ -->
 Functions that return pointers (rather than smart pointers) to dynamic
 memory put a burden on their callers - the caller must remember to
 delete the memory.  
 <!-- }}} -->
+
 #### Resetting the Value of a Pointer after a `delete` <!-- {{{ -->
 Consider following code:
 ```cpp
@@ -2555,6 +2721,7 @@ _q_ is now invalid pointer. Be sure to not write it in your code.
 
 <!-- }}} -->
 <!-- }}} -->
+
 ### Using `shared_ptr`s with `new` <!-- {{{ -->
 We can also initialize a smart pointer from a pointer returned by `new`:
 ```cpp
@@ -2602,6 +2769,7 @@ shared_ptr<int> clone(int p) {
 }
 ```
 
+
 #### Don't Mix Ordinary Pointers and Smart Pointers <!-- {{{ -->
 ```cpp
 int *x(new int(1024));  // dangerous: x is a plain pointer, not a smart pointer
@@ -2625,6 +2793,7 @@ int foo = *p; // undefined; the memory to which p points was freed
 <!-- }}} -->
 
 <!-- }}} -->
+
 ### Smart Pointers and Exceptions <!-- {{{ -->
 Smart pointers are automatically destroy elements well they're leaving
 their's scope. In other side, built-in pointers can't do that if
@@ -2638,6 +2807,7 @@ void f()
 }
 ```
 
+
 #### Smart Pointers and Dumb Classes <!-- {{{ -->
 Classes that allocate resources and that do not define destructors to
 free those resources - can be subject to the same kind of errors that
@@ -2645,6 +2815,7 @@ arise when we use dynamic memory. It is easy to forget to release the
 resource. Similarly, if an exception happens between when the resource
 is allocated and when it is freed, the program will leak that resource.  
 <!-- }}} -->
+
 #### Using Our Own Deletion Code <!-- {{{ -->
 To use a `shared_ptr` to manage a `connection`, we must first define a
 function to use in place of `delete`. In this case, our deleter must
@@ -2667,6 +2838,7 @@ void f(destination &d /* other parameters */)
 <!-- }}} -->
 
 <!-- }}} -->
+
 ### `unique_ptr` <!-- {{{ -->
 Unlike `shared_ptr`, only one `unique_ptr` at a time can point to a
 given object.  
@@ -2719,6 +2891,7 @@ p2.release();   // WRONG: p2 won't free the memory and we've lost the pointer
 auto p = p2.release();  // ok, but we must remember to delete(p)
 ```
 
+
 #### Passing and Returning `unique_ptr`s <!-- {{{ -->
 There is one exception to the rule that we cannot copy a `unique_ptr`:
 We can copy or assign a `unique_ptr` that is about to be destroyed:
@@ -2742,6 +2915,7 @@ about to be destroyed. In such cases the compiler does a special kind of
 
 
 <!-- }}} -->
+
 #### Passing a Deleter to `unique_ptr` <!-- {{{ -->
 Overridding the deleter in a `unique_ptr` affects the `unique_ptr` type
 as well as how we construct (or `reset`) objects of that type. Thus we
@@ -2764,6 +2938,7 @@ void f(destination &d /* other needed parameters */) {
 <!-- }}} -->
 
 <!-- }}} -->
+
 ### `weak_ptr` <!-- {{{ -->
 A `weak_ptr` is a smart pointer that does not control the lifetime of
 the object to which it points. Instead, a `weak_ptr` points to an object
@@ -2796,6 +2971,7 @@ if (shared_ptr<int> np = wp.lock()) { // true if np is not null
 }
 ```
 
+
 #### Checked Pointer Class <!-- {{{ -->
 Check was vector been destoyed:
 ```cpp
@@ -2814,7 +2990,9 @@ StrBlobPtr::check(std::size_t i, const std::string &msg) const
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
+
 ## Dynamic Arrays <!-- {{{ -->
+
 ### `new` and Arrays <!-- {{{ -->
 We ask `new` to allocate an array of objects by specifying the number of
 objects to allocate in pair of square brackets after a type name. In
@@ -2830,6 +3008,7 @@ array type:
 typedef int arrT[42];   // arrT names the type array of 42 ints
 int *p = new arrT;  // allocates an array of 42 ints; p points to the first one
 ```
+
 
 #### Initializing an Array of Dynamically Allocated Objects <!-- {{{ -->
 ```cpp
@@ -2857,6 +3036,7 @@ Under **c++11** standart **it is legal to dynamically allocate an empty
 array**  
 
 <!-- }}} -->
+
 #### Freeing Dynamic Arrays <!-- {{{ -->
 ```cpp
 delete p;       // p must point to a dynamically allocated object or be null
@@ -2864,6 +3044,7 @@ delete [] pa;   // pa must point to a dynamically allocated array or be null
 ```
 
 <!-- }}} -->
+
 #### Smart Pointers and Dynamic Arrays <!-- {{{ -->
 The library provides a version of `unique_ptr` that can manage arrays
 allocated by `new`. To use a `unique_ptr` to manage a dynamic array, we
@@ -2901,10 +3082,12 @@ for (size_t i = 0; i != 10; ++i)
 
 <!-- }}} -->
 <!-- }}} -->
+
 ### The `allocator` Class <!-- {{{ -->
 When we allocate a block of memory, we often plan to construct objects
 in that memory as needed. In this case, we'd like to decouple memory
 allocation from object construction.  
+
 
 #### The `allocator` Class <!-- {{{ -->
 Standard `allocator` Class and Customized Algorithms:  
@@ -2979,11 +3162,13 @@ uninitialized_fill_n(q, vi.size(), 42);
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
+
 ## Using the Library: A Text-Query Program <!-- {{{ -->
 We'll implement a simple text-query program. Our program will let a user
 search a given file for words that might occur in it. The result of a
 query will be the number of times the word occurs and a list of lines on
 which that word appears.  
+
 
 ### Design of the Query Program <!-- {{{ -->
 A good way to start the design of a program is to list the program's
@@ -3019,11 +3204,13 @@ facilities:
   pointer to containers in main class  
 
 
+
 #### Data Structures <!-- {{{ -->
 We must return number of occurances as well as line number for each of
 occurences. The easiest way to return all the data is define asecond
 clas, which we'll name `QueryResult`.  
 <!-- }}} -->
+
 #### Using the `TextQuery` Class <!-- {{{ -->
 When we design a class, it can be helpful to write programs using the
 class before actually implementing the members. That way, we can see
@@ -3049,6 +3236,7 @@ void runQueries(ifstream &infile) {
 
 <!-- }}} -->
 <!-- }}} -->
+
 ### Defining the Query Program Classes <!-- {{{ -->
 ```cpp
 class QueryResult;  // declaration needed for return type in the query function
@@ -3064,6 +3252,7 @@ private:
              std::stared_ptr<std::set<line_no>>> wm;
 }
 ```
+
 
 #### The `TextQuery` Constructor <!-- {{{ -->
 
@@ -3088,6 +3277,7 @@ TextQuery::TextQuery(ifstream &is): file(new vector<string>) {
 ```
 
 <!-- }}} -->
+
 #### The `QueryResult` Class <!-- {{{ -->
 
 ```cpp
@@ -3106,6 +3296,7 @@ private:
 ```
 
 <!-- }}} -->
+
 #### The `query` Function <!-- {{{ -->
 The only question is: What should we return if the given `string` is not
 found? We'll solve this problem by defining a local `static` object that
@@ -3126,6 +3317,7 @@ TextQuery::query(const string &sought) const {
 ```
 
 <!-- }}} -->
+
 #### Printing the Results <!-- {{{ -->
 ```cpp
 ostream &print(ostream &os, const QueryResult &qr) {
@@ -3146,6 +3338,7 @@ ostream &print(ostream &os, const QueryResult &qr) {
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
+
 # Copy Control <!-- {{{ -->
 Class defines five special member functions:  
 
@@ -3162,7 +3355,9 @@ object of a class type to another object of that same class type.
 + The destructor defines what happens when an object of the type ceases to
 exist.  
 
+
 ## Copy, Assign, and Destroy <!-- {{{ -->
+
 ### The Copy Constructor <!-- {{{ -->
 A constructor is the _copy constructor_ if its first parameter is a
 reference to the class type and any additional parameters have default
@@ -3178,6 +3373,7 @@ public:
 Copy constructor usually should not be `explicit`. Also we can define
 the copy constructor to take a reference to non`const`.  
 
+
 #### The Sunthesized Copy Constructor <!-- {{{ -->
 When we do not define a copy constructor for a class, the compiler
 synthesizes one for us. THe compiler copies each non`static` member in
@@ -3191,6 +3387,7 @@ The type of each member determines how that member is copied:
 + although we cannot directly copy an array, the synthesized copy
   constructor copies members of array type by copying each element.  
 <!-- }}} -->
+
 #### Copy Initialization <!-- {{{ -->
 
 ```cpp
@@ -3215,6 +3412,7 @@ Copy initialization happens not only when we define variables using an `=`, but 
   aggregate class  
 
 <!-- }}} -->
+
 #### Constraints on Copy Initialization <!-- {{{ -->
 ```cpp
 vector<int> v1(10); // ok: direct initialization
@@ -3226,11 +3424,13 @@ f(vector<int>(10)); // ok: directly construct a temporary vector from an int
 
 <!-- }}} -->
 <!-- }}} -->
+
 ### The Copy-Assignment Operator <!-- {{{ -->
 ```cpp
 Sales_data trans, accum;
 trans = accum;  // uses the Sales_data copy-assignment operator
 ```
+
 
 #### Introducing Overloaded Assignment <!-- {{{ -->
 Assignment operator is a function named `operator=`. Like any other
@@ -3248,6 +3448,7 @@ public:
 ```
 
 <!-- }}} -->
+
 #### The Synthesized Copy-Assignment Operator <!-- {{{ -->
 ```cpp
 // equivalent to the synthesized copy-assignment operator
@@ -3262,6 +3463,7 @@ Sales_data& Sales_data::operator=(const Sales_data &rhs) {
 <!-- }}} -->
 
 <!-- }}} -->
+
 ### The Destructor <!-- {{{ -->
 Destructors do whatever work is needed to free the resources used by an
 object and destroy the non`static` data members of the object. The
@@ -3274,10 +3476,12 @@ public:
 }
 ```
 
+
 #### What a Destructor Does <!-- {{{ -->
 Members are destroyed in reverse order from the order in which they were
 initialized.  
 <!-- }}} -->
+
 #### The Synthesized Destructor <!-- {{{ -->
 ```cpp
 class Sales_data {
@@ -3293,11 +3497,13 @@ implicit destruction phase that follows the destructor body.
 <!-- }}} -->
 
 <!-- }}} -->
+
 ### The Rule of Three/Five <!-- {{{ -->
 Classes That Need Destructors Need Copy and Assignment  
 Classes That Need Copy Need Assignment, and Vice Versa  
 
 <!-- }}} -->
+
 ### Using `= default` <!-- {{{ -->
 We can explicitly ask the compiler to generate the synthesized versions
 of the copy-control members by defining them as `= default`.  
@@ -3323,7 +3529,9 @@ default` on the member's definition, as we do in the definition of the
 copy-assignment operator.  
 
 <!-- }}} -->
+
 ### Preventing Copies <!-- {{{ -->
+
 #### Define a Function as Deleted <!-- {{{ -->
 We indicate that we want to define a function as deleted by following
 its parameter list with `= delete`:
@@ -3337,6 +3545,7 @@ struct NoCopy {
 ```
 
 <!-- }}} -->
+
 #### The Destructor Should Not be a Deleted Member <!-- {{{ -->
 The compiler will not let us define variables or create temporaries of a
 type that has a deleted destructor. Although we cann define variables or
@@ -3353,6 +3562,7 @@ delete p;   // error: NoDtor destructor is deleted
 ```
 
 <!-- }}} -->
+
 #### The Copy-Control Members May Be Synthesized as Deleted <!-- {{{ -->
 For some classes, the compiler defines these synthesized members as
 deleted functions:  
@@ -3373,6 +3583,7 @@ deleted functions:
   constructor and that member does not have an in-class initializer.  
 
 <!-- }}} -->
+
 #### `private` Copy Control <!-- {{{ -->
 Prior to the new standard, classes prevented copies by declaring their
 copy constructor and copy-assignment operator as `private`:
@@ -3392,11 +3603,13 @@ public:
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
+
 ## Copy Control and Resource Management <!-- {{{ -->
 To illustrate two approaches (value-/pointer-like), we'll define the
 copy-control members for the HasPtr class used in the exercises. First,
 we'll make the class act like a value; then we'll reimplement the class
 making it behave like a pointer.  
+
 
 ### Classes That Act Like Values <!-- {{{ -->
 
@@ -3422,6 +3635,7 @@ private:
     int i;
 }
 ```
+
 
 #### Valuelike Copy-Assignment Operator <!-- {{{ -->
 Assignment operators typically combine the actions of the destructor and
@@ -3454,10 +3668,12 @@ operand.
 
 
 <!-- }}} -->
+
 ### Defining Classes That Act Like Pointers <!-- {{{ -->
 The easiest way to make a class act like a pointer is to use `shared_ptr`s.
 However, sometimes we want to manage a resource directly. In such cases,
 it can be useful to use a _reference count_.  
+
 
 #### Reference Counts <!-- {{{ -->
 
@@ -3472,6 +3688,7 @@ it can be useful to use a _reference count_.
   left-hand operand.  
 
 <!-- }}} -->
+
 #### Defining a Reference-Counted Class <!-- {{{ -->
 Using a dynamic reference count, we can write the pointerlike version of
 HasPtr as follows:
@@ -3494,6 +3711,7 @@ private:
 ```
 
 <!-- }}} -->
+
 #### Pointerlike Copy Members "Fiddle" the Reference Count <!-- {{{ -->
 
 The destructor cannot unconditionally delete ps:
@@ -3526,6 +3744,7 @@ HasPtr& HasPtr::operator=(const HasPtr &rhs) {
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
+
 ## Swap <!-- {{{ -->
 If a class defines its own `swap`, then the algorithm uses that
 class-specific version. Otherwise, it uses the `swap`function defined by
@@ -3537,6 +3756,7 @@ string* temp = v1.ps;   // make a temporary copy of the pointer in v1.ps
 v1.ps = v2.ps;          // assign the pointer in v2.ps to v1.ps
 v2.ps = temp;           // assign the saved pointer in v1.ps to v2.ps
 ```
+
 
 ### Writing Our Own `swap` Function <!-- {{{ -->
 The typical implementation of swap is:
@@ -3552,6 +3772,7 @@ void swap(HasPtr &lhs, HasPtr &rhs) {
 ```
 
 <!-- }}} -->
+
 ### `swap` Functions Should Call `swap`, Not `std::swap` <!-- {{{ -->
 If you write:
 ```cpp
@@ -3573,6 +3794,7 @@ better match than the one defined in `std`.
 
 
 <!-- }}} -->
+
 ### Using `swap` in Assignment Operators <!-- {{{ -->
 These operators use a technique known as **copy and swap**. This
 technique _swaps the left-hand operand with a copy of the right-hand
@@ -3591,6 +3813,7 @@ HasPtr& HasPtr::operator=(HasPtr rhs) {
 <!-- }}} -->
 
 <!-- }}} -->
+
 ## A Copy-Control Example <!-- {{{ -->
 Some classes have bookkeeping or other actions that the copy-control
 members must perform.  
@@ -3616,6 +3839,7 @@ put a `Message` in a particular `Folder`, we must call `save`.
 Assume `Folder`class has members named `addMsg` and `remMsg` that do
 whatever work is need to add or remove this `Message`, respectively,
 from the set of messages in the given `Folder`.  
+
 
 ### The `Message` Class <!-- {{{ -->
 
@@ -3646,6 +3870,7 @@ private:
 
 
 <!-- }}} -->
+
 ### The `save` and `remove` Members <!-- {{{ -->
 
 ```cpp
@@ -3660,6 +3885,7 @@ void Message::remove(Folder &f) {
 ```
 
 <!-- }}} -->
+
 ### Copy Control for the `Message` Class <!-- {{{ -->
 ```cpp
 // add this Message to Folders that point to m
@@ -3681,6 +3907,7 @@ Message::Message(const Message &m):
 
 
 <!-- }}} -->
+
 ### The `Message` Destructor <!-- {{{ -->
 ```cpp
 // remove this Message from the corresponding Folders
@@ -3699,6 +3926,7 @@ Message::~Message() {
 
 
 <!-- }}} -->
+
 ### `Message` Copy-Assignment Operator <!-- {{{ -->
 To protect against self-assignment you remove pointers to this `Message`
 from the _folders_ of the left-hand operand before inserting pointers in
@@ -3715,6 +3943,7 @@ Message& Message::operator=(const Message &rhs) {
 ```
 
 <!-- }}} -->
+
 ### A `swap` Function for `Message` <!-- {{{ -->
 Our `swap` function must also manage the `Folder` pointers that point to
 the swapped `Messages`. After a call such as `swap(m1, m2)`, the
@@ -3741,6 +3970,7 @@ void swap(Message &lhs, Message &rhs) {
 
 <!-- }}} -->
 <!-- }}} -->
+
 ## Classes That Manage Dynamic Memory <!-- {{{ -->
 Usually classes that use dynamic memory should use a library container
 to hold their data. However, some classes need to do their own
@@ -3748,6 +3978,7 @@ allocation.
 
 As an example, we'll implement a simplification of the library `vector`
 class.  
+
 
 ### `StrVec` Class Design <!-- {{{ -->
 We'll use an `allocoator` to obtain raw memory. Because the memory an
@@ -3774,6 +4005,7 @@ functions:
 + `reallocate` will reallocate the `StrVec` when it runs out of space  
 
 <!-- }}} -->
+
 ### `StrVec` Class Definition <!-- {{{ -->
 
 ```cpp
@@ -3808,6 +4040,7 @@ private:
 
 
 <!-- }}} -->
+
 ### Using `construct` <!-- {{{ -->
 ```cpp
 void StrVec::push_back(const string& s) {
@@ -3818,6 +4051,7 @@ void StrVec::push_back(const string& s) {
 ```
 
 <!-- }}} -->
+
 ### The `alloc_n_copy` Member <!-- {{{ -->
 The `alloc_n_copy` member will allocate enough storage to hold its given
 range of elements and will copy those elements into the newly allocated
@@ -3834,6 +4068,7 @@ StrVec::alloc_n_copy(const string* b, const string* e) {
 ```
 
 <!-- }}} -->
+
 ### The `free` Member <!-- {{{ -->
 ```cpp
 void StrVec::free() {
@@ -3848,6 +4083,7 @@ void StrVec::free() {
 ```
 
 <!-- }}} -->
+
 ### Copy-Control Members <!-- {{{ -->
 ```cpp
 StrVec::StrVec(const StrVec& s) {
@@ -3870,6 +4106,7 @@ StrVec& StrVec::operator = (const StrVec& rhs) {
 ```
 
 <!-- }}} -->
+
 ### Moving, Not Copying, Elements during Reallocation <!-- {{{ -->
 This function must:  
 
@@ -3878,6 +4115,7 @@ This function must:
 + Destroy the elements in the existing memory and deallocate that memory  
 
 <!-- }}} -->
+
 ### Move Constructors and `std::move` <!-- {{{ -->
 ```cpp
 void StrVec::reallocate() {
@@ -3900,7 +4138,9 @@ void StrVec::reallocate() {
 
 <!-- }}} -->
 <!-- }}} -->
+
 ## Moving Objects <!-- {{{ -->
+
 ### Rvalue References <!-- {{{ -->
 An rvalue reference is a reference that must be bound to an rvalue. An
 rvalue reference is obtained by using `&&` rather thatn `&`. As we'll
@@ -3928,6 +4168,7 @@ yield rvalues. We cannot bind an lvalue reference to these expressions,
 but we can bind either an lvalue reference to a `const` or an rvalue
 reference to such expressions.  
 
+
 #### Lvalues Persist; Rvalues Are Ephemeral <!-- {{{ -->
 Because rvalue references can only be bound to temporaries, we know
 that:  
@@ -3939,6 +4180,7 @@ These facts together mean that ocde that uses an rvalue reference is
 free to take over resources from the object to which the reference
 refers.  
 <!-- }}} -->
+
 #### The Library `move` Function <!-- {{{ -->
 The `move` function returns an rvalue reference to its given object:
 ```cpp
@@ -3951,6 +4193,7 @@ we cannot use the value of a moved-from object.
 <!-- }}} -->
 
 <!-- }}} -->
+
 ### Move Constructor and Move Assignment <!-- {{{ -->
 As an example, we'll define the `StrVec` constructor to move rather than
 copy the elements from one `StrVec` to another:
@@ -3964,6 +4207,7 @@ StrVec::StrVec(StrVec &&s) noexcept // promise that move won't throw any excepti
 ```
 
 <!-- }}} -->
+
 ### Move-Assignment Operator <!-- {{{ -->
 As with the move constructor, if our move-assignment operator won't
 throw any exception, we should make it `noexcept`. Like a
@@ -3985,6 +4229,7 @@ StrVec &StrVec::operator=(StrVec &&rhs) noexcept {
 
 
 <!-- }}} -->
+
 ### The Synthesized Move Operations <!-- {{{ -->
 The ocmpiler synthesizes the move constructor and move assignment only
 if a class does not define any of its own copy-control members and only
@@ -3994,6 +4239,7 @@ Classes that define a move constructor or move-assignment operator must
 also define their own copy operations. Otherwise, those members are
 deleted by default.  
 <!-- }}} -->
+
 #### Rvalues Are Moved, Lvalues Are Copies, But Rvalues Are Copied If there Is No Move Constructor. <!-- {{{ -->
 
 ```cpp
@@ -4015,6 +4261,7 @@ Foo y(x);               // copy constructor; x is an lvalue
 Foo z(std::move(x));    // copy constructor, because there is no move constructor
 ```
 <!-- }}} -->
+
 #### Copy-and-Swap Assignment Operators and Move <!-- {{{ -->
 If we add a move constructor to this class, it will effectively get a
 move assignment operator as well:
@@ -4029,6 +4276,7 @@ public:
 ```
 
 <!-- }}} -->
+
 #### Move Operations for the `Message` Class <!-- {{{ -->
 We'll start by defining an operation to do this common work:
 ```cpp
@@ -4072,6 +4320,7 @@ Message& Message::operator=(Message &&rhs) {
 
 
 <!-- }}} -->
+
 ### Move Iterators <!-- {{{ -->
 The new library defines a _move iterator_ adaptor. A move iterator
 adapts its given iterator by changing the behavior of the iterator's
@@ -4100,6 +4349,7 @@ dereference operator yields an rvalue reference, which means `construct`
 will use the move constructor to construct the elements.  
 
 <!-- }}} -->
+
 ### Rvalue References and Member Functions <!-- {{{ -->
 The library containers that define `push_back` provide two versions:
 ```cpp
@@ -4137,6 +4387,7 @@ vec.push_back("done");  // calls push_back(string&&)
 ```
 
 <!-- }}} -->
+
 #### Rvalue and Lvalue Reference Member Functions <!-- {{{ -->
 We can call member function on an object, regardless of whether that
 object is an lvalue or an rvalue:
@@ -4186,6 +4437,7 @@ public:
 
 
 <!-- }}} -->
+
 #### Overloading and Reference Functions <!-- {{{ -->
 We may overload a function by its reference qualifier and by whether it
 is a `const` member. AS an example, we'll give _Foo_ a _vector_ member
@@ -4234,6 +4486,7 @@ public:
 
 <!-- }}} -->
 <!-- }}} -->
+
 # Overloaded Operations and Conversions <!-- {{{ -->
 <!-- TODO: stopped here -->
 <!-- }}} -->

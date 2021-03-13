@@ -9,8 +9,10 @@ Overall:
 
 full upgrade pacman and it's mirrors:
 ```shell
+
 # pacman-mirrors -f && sudo pacman -Syyu
 ```
+
 
 
 
@@ -21,12 +23,14 @@ Mount from live cd and:
 + `fdisk -l` will give you additional info on what to google  
 + `fsck -y /dev/<broken_partition>` **must fix problem**  
 
+
 ### Can't boot, `<important.so>` not fount
 Mount from live cd then:  
 
 + `chroot` into broken partition  
 + `"update mirrors" && pacman -Syyu` - full system update **must fix
   problem**  
+
 
 ### Hard drive cannot be mounted but seen with `lsusb`
 Not enough power to transfer info.  

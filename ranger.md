@@ -1,9 +1,11 @@
+
 # This file describes commands to start use ranger
 <!-- 533 line -->
 <!-- TODO: maybe create structure like Q:A -->
 <!--     what specific file do? -->
 <!--     where to read about mappings -->
 <!--     where are information about commands -->
+
 ## General configuration <!-- {{{ -->
 _line 1500 man page_  
 
@@ -20,11 +22,13 @@ _line 1500 man page_
   by typing `:` or in the _rc.conf_ file.  
 + `%ranger/commands_full.py` - reference for custom commands  
 <!-- }}} -->
+
 ### tags<!-- {{{ -->
 `t` - toggle tags  
 `"<tagname>` - set tag for selected file  
 `ut` - remove any tags of the selection  
 <!-- }}} -->
+
 ### preview<!-- {{{ -->
 __programs to preview__:  
 
@@ -37,16 +41,20 @@ __programs to preview__:
 
 `%rangerdir/data/scope.sh` - contains info detailed.  
 <!-- }}} -->
+
 ### selection<!-- {{{ -->
 The **selection** is defined as "All marked files IF THERE ARE ANY,
 otherwise the current file."  
 Mark files is done by pressing `<Space>`, `v`, etc. __Mrk__ symbol
 at the bottom right indicates there are marked files.  
 <!-- }}} -->
+
 ## Viewing files <!-- {{{ -->
 + show hidden files - `zh`  
 <!-- }}} -->
+
 ## Macros <!-- {{{ -->
+
 ### Abbreviation <!-- {{{ -->
 Macros may be used in commands to abbreviate things:  
 
@@ -81,6 +89,7 @@ Examples: show commands:
 **Note:** macros are expanded twice when using chain. For example, to
 insert a space character in a chained command, you would write `%%space`  
 <!-- }}} -->
+
 ### Mappings <!-- {{{ -->
 When mapping keys you can use the placeholder `<any>`, the key entered
 in that position can be used through the `%any` and `%any_path` pacros.  
@@ -95,6 +104,7 @@ Example: pasting of cut/copied files to a bookmarked directory:
 `map p'<any> paste dest=%any_path`  
 <!-- }}} -->
 <!-- }}} -->
+
 ## Bookmarks <!-- {{{ -->
 `m<key>` - bookmark current directory, you can re-enter this directory
 by typing `` `<key>``  
@@ -102,10 +112,12 @@ Typing "\`\`" gets you back to where you were before.
 
 Note: The bookmarks ' and \` are the same.  
 <!-- }}} -->
+
 ## Rifle <!-- {{{ -->
 Rifle is a file opener of ranger. Rifle can automatically find installed
 programs so it can be used effectively out of the box.  
 <!-- }}} -->
+
 ## Flags <!-- {{{ -->
 Flags give you a way to modify the behavior of the spawned process. they
 are used in the commands `:open_with` (key "r") and `:shell` (key "!")  
@@ -134,6 +146,7 @@ Examples:
   switching back to ranger.  
 
 <!-- }}} -->
+
 ## Plugins <!-- {{{ -->
 Plugins are python files which are located in `~/.config/ranger/plugins/`
 and are imported in alphabetical order when startin g ranger.  
@@ -151,6 +164,7 @@ There are several sample plugins in the `/usr/share/doc/ranger/examples/`
 directory, including a hello-world plugin
 that describes this procedure.  
 <!-- }}} -->
+
 ## Key bindings <!-- {{{ -->
 Key bindings are defined in the `%rangerdir/config/rc.conf`. You can
 copyt it to your local configuration directory with the
@@ -161,6 +175,7 @@ Many key bindings take an additional numeric argument.
 + `5j` - move down 5 lines  
 + `2l` - open a file in mode 2  
 + `10<space>` - to mark 10 files  
+
 
 ### Main bindings <!-- {{{ -->
 <!-- line 441 man page -->
@@ -266,6 +281,7 @@ decide which program to use to open current file selection
 + `M` change line mode (info displaying on same line with filename)  
 <!-- }}} -->
 <!-- }}} -->
+
 ## Settings <!-- {{{ -->
 Settings can be changed in the file `~/.config/ranger/rc.conf`  
 or using command `:set option value`.  
@@ -280,6 +296,7 @@ pressing `3?`.
 
 _read about common settings on line 641 of man page_  
 <!-- }}} -->
+
 ## Commands <!-- {{{ -->
 You can enter the commands in the console which is opened by pressing `:`  
 To get list of currently existing commands type `?c`.  
@@ -293,6 +310,7 @@ Most interesting commands:
   After you edit and save the file, it will generate a shell script
   which does bulk renaming according to the changes you did in the file.  
 <!-- }}} -->
+
 ## Storage <!-- {{{ -->
 _line 1517 man page_  
 what specific file do:  
@@ -304,6 +322,7 @@ what specific file do:
   in.  
 + _tagged_ - contains a list of tagged files.  
 <!-- }}} -->
+
 ## Environment <!-- {{{ -->
 _line 1536 man page_  
 

@@ -433,6 +433,7 @@ date like "2008-01-15" or a relative date "2 years 1 day 3 minutes ago".
 + `path` limit the log output to commits that introduced a change to
   those files (in dir or where path indexing). Preceded by double dashes
   (--)  
++ `-L:<funcname>:<file>` log evaluation of function  
 <!-- }}} -->
 
 ### Undoing Things <!-- {{{ -->

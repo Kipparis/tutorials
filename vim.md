@@ -1,3 +1,5 @@
+
+
 # Options<!-- {{{ -->
 + `:set xxx` - sets the option "xxx"  
 + `:set xxx?` - displays value of "xxx"  
@@ -11,6 +13,8 @@ Use options as variables:
 :set textwidth?
 ```
 <!-- }}} -->
+
+
 # Registers <!-- {{{ -->
 + echoing them  
     `:echo @<register_name>`
@@ -21,15 +25,23 @@ Use options as variables:
 + register after search with its content  
     `:echo @/`  
 <!-- }}} -->
+
+
 # Movement <!-- {{{ -->
+
+
 ## Cursor history position<!-- {{{ -->
 + `C+o` - go to previous position - helpful when got to definition or something else  
 + `C+i` - got to newer position  
 <!-- }}} -->
+
+
 ## Position in file<!-- {{{ -->
 + `G`   - end of file  
 + `gg`  - start of file  
 <!-- }}} -->
+
+
 ## Search<!-- {{{ -->
 + `/` - start search
     useful to define mapping to turn off highlight of search (after you
@@ -39,20 +51,30 @@ Use options as variables:
 + `N` - search backward  
 <!-- }}} -->
 <!-- }}} -->
+
+
 # Vim windows <!-- {{{ -->
 + `C+w` + `C+w` - move btw windows  
+
+
 ## Buffers <!-- {{{ -->
+
+
 ### Split <!-- {{{ -->
 + `:buffers` - view list of buffers  
 + `:vsp | b<number>` - open buffer as split  
 <!-- }}} -->
 <!-- }}} -->
 <!-- }}} -->
+
+
 # Selecting <!-- {{{ -->
 + `v` - visual mode  
 + `C+v` - block visual mode  
 + `V` - select lines  
 <!-- }}} -->
+
+
 # Mappings <!-- {{{ -->
 `:verbose imap <Tab>` -- see which plugin is overriding your map  
 
@@ -61,10 +83,14 @@ Use options as variables:
 + `:execute "normal! gg"`  
   same as: type `gg` in normal mode  
 <!-- }}} -->
+
+
 # Useful things <!-- {{{ -->
 + `:so %` - source current file  
 + `gx` - open link under cursor  
 <!-- }}} -->
+
+
 # Where to read <!-- {{{ -->
 + vimtutor  
 + `:help user-manual`  
@@ -72,12 +98,18 @@ Use options as variables:
 + how to build vimrc - `:help vimrc-intro`  
 + book - learn vim hardway  
 <!-- }}} -->
+
+
 # Pluggins <!-- {{{ -->
+
+
 ## Ultisnips <!-- {{{ -->
 + `:UltiSnipsEdit` - edit snippets for this particular filetype  
 + `:tabedit ~/.vim/Ultisnips/all.snippets` - edit snippets file for all
   filetypes  
 + `:help UltiSnips<tab>` - search for all available help pages  
+
+
 
 ### Snippet syntax <!-- {{{ -->
 ```
@@ -96,6 +128,8 @@ Placeholders:
 + `$0` - where you will at the end  
 <!-- }}} -->
 <!-- }}} -->
+
+
 ## Vim-fugitive <!-- {{{ -->
 + `:G` `:Gstatus` - git status  
 + `:Gedit` - view any blob, tree,
@@ -121,6 +155,8 @@ list
 + `:Git` for running any arbitrary command  
 + `:Git!` to pen the output of a command in a temp file  
 <!-- }}} -->
+
+
 ## Vim-gitgutter <!-- {{{ -->
 _for operating on hunks of code in file pushing to git._  
 
@@ -138,6 +174,8 @@ _for operating on hunks of code in file pushing to git._
 + `:GitGutterLineHighlightsToggle` - toggle line highligning  
 + `g:gitgutter_preview_win_location` - location of the preview window  
 <!-- }}} -->
+
+
 ## gv.vim <!-- {{{ -->
 _primary operating on commit history of git in general_  
 
@@ -160,6 +198,8 @@ In commit mode (via `:GV`):
 + `.` - start command-line with :Git [CURSOR] SHA a la fugitive  
 + `q` - close  
 <!-- }}} -->
+
+
 ## Vimagit <!-- {{{ -->
 _easy way to stage hunks of code in several files_  
 
@@ -168,6 +208,8 @@ _easy way to stage hunks of code in several files_
 + `S` - stage or unstage hunk  
 + `CC` - commit; then in normal mode `cc` or `:w`  
 <!-- }}} -->
+
+
 ## Nerd Tree <!-- {{{ -->
 + `<F2>` focus on nerd tree  
 + `<C-w-w>` focus on vim  
@@ -180,6 +222,8 @@ Mappings:
 + `C+t` - open tree  
 + `S+t` - open file in new tab  
 <!-- }}} -->
+
+
 ## Tcomment <!-- {{{ -->
 + `:gc` comment  
 + `:g<`  
@@ -189,11 +233,15 @@ Mappings:
 
 + `gc` or `gcc` (for line) - comment/comment selected region  
 <!-- }}} -->
+
+
 ## Narrow Region <!-- {{{ -->
 _operating on part of code and upply changes on exit_  
 
 + `:NR` create new region from selected  
 <!-- }}} -->
+
+
 ## Easy allign <!-- {{{ -->
 `[v,ga]ip[ga,][number of occurences]<symbol>[start]`
 Visual select Inner Paragraph $rarr; start easyalign command (ga)
@@ -203,11 +251,15 @@ Examples:
 
 + `ga<symbol>` - allign by symbol  
 <!-- }}} -->
+
+
 ## fzf <!-- {{{ -->
 + `:Files` - opens file manager  
 + `<C-t>`, `<C-x>`, `<C-v>` - opens in new tab \ split \ vertical split  
 <!-- }}} -->
 <!-- }}} -->
+
+
 # Programming <!-- {{{ -->
 
 + `<c-w>gf` - open file under cursor in new tab  
@@ -219,6 +271,8 @@ Examples:
 + `<c-s>` - move split to tab  
 + `S` - merge next and current tabs  
 
+
+
 ## Window moving <!-- {{{ -->
 `:help window-moving`:  
 
@@ -229,6 +283,8 @@ Examples:
 <!-- }}} -->
 
 <!-- }}} -->
+
+
 # Git <!-- {{{ -->
 For more info `tpope/vim-fugitive`  
 
