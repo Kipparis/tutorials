@@ -60,3 +60,23 @@ Always goes in the `SELECT` clause.
 
 `case` actually produces new column. So, when it used inside of aggregate
 function, later will aggregate across column, produced by `case`  
+
+# Date manipulation
+
++ substructing dates lead to `INTERVAL` data type  
++ `EXTRACT('year' FROM cleaned_date) as year`: return only `year` from date  
++ `DATE_TRUNC('year', cleaned_date)`: rounds date to `year`  
+
+Predefined datetime variables:  
+
++ `CURRENT_DATE`  
++ `CURRENT_TIME`  
++ `CURRENT_TIMESTAMP`  
++ `LOCALTIME`  
++ `LOCALTIMESTAMP`  
++ `NOW()`  
++ `CURRENT_TIME AT TIME ZONE 'PST'`: show time in specified [time zone](https://www.postgresql.org/docs/7.2/timezones.html)  
+
+# Handle null values [coalesce]
+
++ `COALESCE(descript, 'No Description')`: display NULL values in this column as something else  
