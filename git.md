@@ -550,7 +550,7 @@ command (`git log --pretty=oneline` will help you)
 
 ### Deleting Tags <!-- {{{ -->
 To delete tag on local machine, use `git tag -d <tagname>`.  
-To remove tag on remove server there are two variations:  
+To remove tag on remote server there are two variations:  
 
 + `git push <remote> :refs/tags/<tagname>` - null value before the colon 
 is being pushed to the remote tag name, effectively deleting it.  
@@ -584,7 +584,7 @@ $ git config --global alias.br branch
 $ git config --global alias.ci commit
 $ git config --global alias.st status
 ```
-This means that, for example, instead of `git commit` you may type `gitci`.  
+This means that, for example, instead of `git commit` you may type `git ci`.  
 You may correct the usability problems:  
 
 + `$ git config --global alias.unstage 'reset HEAD --'`  
@@ -593,6 +593,7 @@ You may correct the usability problems:
 If you want to run external commands - start the command with a `!`
 character:  
 `$ git config --global alias.visual '!gitk'`  
+If you want to remove, edit `$HOME/.gitconfig` file in `alias` section.  
 <!-- }}} -->
 <!-- }}} -->
 
@@ -657,14 +658,16 @@ You can **delete** branch with the `-d` option to `git branch`
 
 ### Basic Merging <!-- {{{ -->
 
+```
 >            v master
 > -C0-C1-C2-C4
 >         \C3-C5
 >              ^ iss53
+```
 
-Suppose you've decided that you iss53 branch work is completed and ready
+Suppose you've decided that your iss53 branch work is completed and ready
 to be merged into your _master_ branch.  
-In order to do tha, you have to check out the branch you wish to merge
+In order to do that, you have to check out the branch you wish to merge
 into &rarr; run the `git merge` command:  
 
 ```shell
@@ -703,7 +706,7 @@ example text example
 This means the version in _HEAD_ (your _master_ branch, because that was
 what you had checked out when you ran your merge command) is the **_top_**
 part of that block, while the version in your _iss53_ branch looks like
-everything in the mottom. To resolve the conflict, you must choose either
+everything in the bottom. To resolve the conflict, you must choose either
 side on merge them manually.  
 
 Afterfwards, staging the file marks it as _resolved_.  
@@ -728,7 +731,7 @@ This section cover some common workflows that this lightweight
 branching makes possible.  
 
 #### Long-Running Branches <!-- {{{ -->
-+ Having code the at is entirely stable in `master` branch  
++ Having code that is entirely stable in `master` branch  
 + Branch you work on - `develop` or `next`. Whenever it gets to a stable
   state, it can be merged into `master`  
 
@@ -753,15 +756,15 @@ You can get a full list of remote references explicitly with:
 Remote-tracking branch names take the form `<remote>/<branch>`. It's
 updated by every network communication with git server.  
 
-To synchronize your work with a given remote, you run a `git fetch
-<remote>` command.  
+To synchronize your work with a given remote, you run a `git fetch <remote>`
+command.  
 
 
 #### Pushing <!-- {{{ -->
 Pushing can be done with `git push <remote> <branch>` command.  
 If you want to push local branch to another remote branch (or just give
-another name on remote server) use command - `git push origin
-<localbranch>:<remotebranch>`  
+another name on remote server) use command -
+`git push origin <localbranch>:<remotebranch>`  
 
 If you use an HTTPS URL to push over, the Git will ask you for your
 username and password every push. To prevent it you may set up cache
@@ -773,25 +776,24 @@ checkout -b <localbranchname> <remotebranchname>`. You can merge remote
 branch into yours as well  
 <!-- }}} -->
 
-#### Tracking Branches <!-- {{{ -->
+#### Tracking Branches
 Checking out a local branch from a remote-tracking branch automatically
 creates what is called a _"tracking branch"_ (and the branch it tracks
 is called an _"upstream branch"_). If you're on a _tracking branch_ and
 type `git pull`, Git automatically knows which from where to fetch to
 merge in. (same happends on `git clone` with _master_ branch)  
 
-To _**create**_ _tracking branch_ run `git checkout -b <branch>
-<remote>/<branch>` or `git checkout --track <remote>/<branch>`  
+To _**create**_ _tracking branch_ run
+`git checkout -b <branch> <remote>/<branch>` or `git checkout --track <remote>/<branch>`  
 
 To **_change upstream branch_** type `git branch -u <remote>/<branch>`  
     When you have a tracking branch, you can reference its upstream
     branch with the `@{upstream}` or `@{u}` shorhand.  
 
 If you want to find your tracking branches and see additional info
-(ahead, begind, both), you can use `-vv` option to `git branch`  
+(ahead, behind, both), you can use `-vv` option to `git branch`  
 
 Good practive for viewing branches is: `git fetch --all; git branch -vv`  
-<!-- }}} -->
 
 #### Pulling <!-- {{{ -->
 It's the same as `git fetch` than `git merge`. Generally it's better to
@@ -806,7 +808,7 @@ _basically it just removes the pointer from the server_
 <!-- }}} -->
 <!-- }}} -->
 
-### Rebasing <!-- {{{ -->
+## Rebasing <!-- {{{ -->
 In Git, there are two main ways to integrate changes from one branch
 into another:  
 
@@ -814,7 +816,7 @@ into another:
 + `rebase`  
 
 
-#### The Basic Rebase <!-- {{{ -->
+### The Basic Rebase
 With the `rebase` command, you can take all the changes that were
 committed on one branch and replay them on a different branch.  
 Rebasing makes a cleaner history. If you examine the log of a rebased
@@ -841,7 +843,7 @@ remote branch - perhaps in a project to which you're trying to
 contribute but that you don't maintain.  
 <!-- }}} -->
 
-#### More Interesting Rebases <!-- {{{ -->
+### More Interesting Rebases <!-- {{{ -->
 Take a history like _A history with a topic branch off another topic
 branch_, for example.  
 
@@ -874,16 +876,14 @@ Then you decide to pull in your server branch. You can use `git rebase
 
 The rest you can do by yourself.
 _Remember delete branches with_ `git branch -d <branch>` _command_  
-<!-- }}} -->
 
-#### The Perils of Rebasing <!-- {{{ -->
+### The Perils of Rebasing
 **Do not rebase commits that exist outside your repository and that
 people may have based work on.**  
 It's really messy and hard to understand without pictures. If you want,
 see page 99 (105 pdf) in book _pro git_.  
-<!-- }}} -->
 
-#### Rebase When You Rebase <!-- {{{ -->
+### Rebase When You Rebase
 If you **do** find yourself in a situation like this, Git has some
 further magic that might help you out.  
 
@@ -897,9 +897,8 @@ You can simplify this by running `git pull --rebase` or `git fetch ; git
 rebase <remote>/<branch>`  
 You can turn this option by default with `git config --global
 pull.rebase true`  
-<!-- }}} -->
 
-#### Rebase vs. Merge <!-- {{{ -->
+## Rebase vs. Merge
 The commit history has two points of view:  
 
 + record of what actually happened.  
@@ -911,10 +910,6 @@ In general the way to get the best of both worlds is to **_rebase local
 changes_** you've made but haven't shared yet before you push them in order
 to clean up your story, but **never** rebase _anything_ you've **_pushed
 somewhere_**  
-<!-- }}} -->
-<!-- }}} -->
-<!-- }}} -->
-<!-- }}} -->
 
 # Git on the Server
 A remote repository is generally a _bare repository_ - a Git repository
