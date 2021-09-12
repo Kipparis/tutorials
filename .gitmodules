@@ -1,0 +1,6 @@
+[submodule "combinatorics"]
+	path = combinatorics
+	url = git@github.com:Kipparis/combinatorics.git
+[submodule "databases"]
+	path = databases
+	url = git@github.com:Kipparis/databases.git
