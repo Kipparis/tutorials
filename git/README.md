@@ -871,8 +871,8 @@ Now you can _fast-forward_ your `master` branch.
 $ git checkout master
 $ git merge client
 ```
-Then you decide to pull in your server branch. You can use `git rebase
-<basebranch> <topicbranch>` command - `$ git rebase master server`  
+Then you decide to pull in your server branch. You can use
+`git rebase <basebranch> <topicbranch>` command - `$ git rebase master server`  
 
 The rest you can do by yourself.
 _Remember delete branches with_ `git branch -d <branch>` _command_  
@@ -888,7 +888,7 @@ If you **do** find yourself in a situation like this, Git has some
 further magic that might help you out.  
 
 If you pull down work that was rewritten and rebase it on top of the new
-commmits  from your partner, Git can often successfully figure out what
+commits  from your partner, Git can often successfully figure out what
 is uniquely yours nad apply them back on top of the new branch. (git
 also computes checksum that is based jsut on the patch introduced with
 the commit - _match-id_)  
@@ -914,7 +914,7 @@ somewhere_**
 # Git on the Server
 A remote repository is generally a _bare repository_ - a Git repository
 that has no working directory. In the simplest terms, a bare repository
-is the ocntents of your project's `.git` directory and nothing else.  
+is the contents of your project's `.git` directory and nothing else.  
 
 ## Protocols <!-- {{{ -->
 Git can use four distinct protocols to transfer data:  
@@ -1196,7 +1196,7 @@ merge in the first one's work before pushing changes up.
    changes.  
 5. The maintainer adds the contributor's repository as a remote and
    merges locally.  
-6. The miantainer pushes merged changes to the main repository.  
+6. The maintainer pushes merged changes to the main repository.  
 
 <!-- }}} -->
 
@@ -1206,8 +1206,8 @@ Common developer pushes his changes to lietenant. Group of lieutenants
 pushes its changes to dictator, which in order pushes to main branch.  
 
 1. Regular developers work on their topic branch and rebase their work
-   on top of master. The mast er branch is that of the reference
-   repository to which dict ator pushes.  
+   on top of master. The master branch is that of the reference
+   repository to which dictator pushes.  
 2. Lieutenants merge the developers' topic branches into their `master`
    branch.  
 3. The dictator merges the lieutenants' `master` branches into the
@@ -1843,7 +1843,7 @@ To list them use `git log --abbrev-commit`
 If commit is on top of some branch, you can simply use that branch name:
 
 ```shell
-$ git shot topic1
+$ git show topic1
 ```
 To see SHA-1 hash to which top commit of branch points to use:
 
