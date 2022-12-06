@@ -4,6 +4,6 @@
 [submodule "databases"]
 	path = databases
 	url = git@github.com:Kipparis/databases.git
-[submodule "databases"]
+[submodule "job"]
 	path = job
 	url = git@github.com:Kipparis/job.git
