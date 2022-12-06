@@ -7,3 +7,6 @@
 [submodule "job"]
 	path = job
 	url = git@github.com:Kipparis/job.git
+[submodule "presents"]
+	path = life/presents
+	url = git@github.com:Kipparis/presents.git
